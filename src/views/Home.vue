@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <v-container>
-            <v-layout row wrap>
+            <v-layout>
                 <v-flex>
                     <v-card height="100%">
                         <v-toolbar color="gray" dark>
@@ -10,7 +10,7 @@
                             <v-toolbar-title>Leagues</v-toolbar-title>
                         </v-toolbar>
                         <v-spacer></v-spacer>
-                        <v-list two-line>
+                        <v-list two-line class="pr-1">
                             <template v-for="league in leagues">
                                 <v-list-tile>
                                     <v-list-tile-content>
@@ -19,7 +19,9 @@
                                         <v-list-tile-sub-title></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
-                                        sign up
+                                        <v-btn icon>
+                                            <v-icon color="grey lighten-1">info</v-icon>
+                                        </v-btn>
                                     </v-list-tile-action>
                                 </v-list-tile>
                             </template>
