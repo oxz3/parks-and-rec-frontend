@@ -1,38 +1,59 @@
 <template>
     <div class="home">
-        <img alt="Vue logo" src="../assets/logo.jpg">
-        <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
-                <v-card>
-                    <v-list two-line>
-                        <template v-for="(sport, index) in sports">
-                            <v-list-tile :key="sport">
-                                <v-list-tile-content>
-                                    <v-list-tile-title v-html="sport.name"></v-list-tile-title>
-                                    <v-list-tile-sub-title v-html="sport.description"></v-list-tile-sub-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
-                        </template>
-                    </v-list>
+        <v-container>
+            <v-layout row wrap>
+                <v-flex>
+                    <v-card height="100%">
+                        <v-toolbar color="gray" dark>
+                            <v-toolbar-side-icon></v-toolbar-side-icon>
 
-                </v-card>
-            </v-flex>
-        </v-layout>
+                            <v-toolbar-title>Leagues</v-toolbar-title>
+                        </v-toolbar>
+                        <v-spacer></v-spacer>
+                        <v-list two-line>
+                            <template v-for="league in leagues">
+                                <v-list-tile>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title v-html="league.name"></v-list-tile-title>
+                                        <v-list-tile-sub-title >{{league.description}}: {{league.currentMembers}} / {{league.maxMembers}}</v-list-tile-sub-title>
+                                        <v-list-tile-sub-title></v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                    <v-list-tile-action>
+                                        sign up
+                                    </v-list-tile-action>
+                                </v-list-tile>
+                            </template>
+                        </v-list>
+                    </v-card>
+                </v-flex>
+                <v-flex>
+                    <v-card>
+                        <img alt="Vue logo" src="../assets/logo.jpg" class="pt-0">
+                    </v-card>
+                </v-flex>
+
+            </v-layout>
+        </v-container>
     </div>
 </template>
 
 <script>
     // @ is an alias to /src
     import HelloWorld from '@/components/HelloWorld.vue'
+    import VListTileAction from "vuetify/src/components/VList/VListTileAction";
 
     export default {
         name: 'home',
         components: {
+            VListTileAction,
             HelloWorld
         },
         computed: {
             sports() {
                 return this.$store.state.sports;
+            },
+            leagues() {
+                return this.$store.state.leagues;
             }
         }
     }
@@ -42,4 +63,6 @@
     img {
         padding-top: 2rem;
     }
+
+
 </style>

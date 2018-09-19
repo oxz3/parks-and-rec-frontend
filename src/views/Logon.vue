@@ -1,23 +1,17 @@
 <template>
-    <v-card>
+    <v-card class="ma-3">
         <v-card-title primary-title>
             <div>
                 <h3 class="headline mb-0">Logon to Parks and Rec</h3>
             </div>
         </v-card-title>
-        <form>
+        <form class="ma-1">
             <v-text-field
-                    v-model="name"
-                    :error-messages="nameErrors"
-                    :counter="10"
                     label="Username"
                     required
-                    @input="$v.name.$touch()"
-                    @blur="$v.name.$touch()"
-            ></v-text-field>
+                    @input="$v.email.$touch()"
+                    @blur="$v.email.$touch()"></v-text-field>
             <v-text-field
-                    v-model="email"
-                    :error-messages="emailErrors"
                     label="Password"
                     required
                     @input="$v.email.$touch()"
