@@ -22,7 +22,7 @@
         <router-view/>
 
         <v-footer app>
-            <span>&copy; SWENG 897 Group 4 2018</span>
+            <span>&copy; SWENG 894 Group 7 2018</span>
         </v-footer>
     </v-app>
 </template>
