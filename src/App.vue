@@ -1,31 +1,60 @@
 <template>
     <v-app id="app">
         <v-toolbar>
-            <!--<v-btn icon @click.stop="fixed = !fixed">-->
-            <!--<v-icon>remove</v-icon>-->
-            <!--</v-btn>-->
-            <!--<router-link to="/">Home</router-link> |-->
-            <!--<router-link to="/about">About</router-link>-->
             <v-toolbar-title>Parks and Rec Application</v-toolbar-title>
             <v-spacer></v-spacer>
+            <!--go to sign up screen-->
             <v-btn flat color="primary" to="/signup">
                 SIGN UP
             </v-btn>
+            <!--go to logon screen-->
             <v-btn flat color="primary" to="/logon">
                 LOG ON
             </v-btn>
+            <!--go to home screen-->
             <v-btn flat color="primary" to="/">
                 <v-icon>home</v-icon>
             </v-btn>
+            <!--toggle menu-->
+            <v-btn
+                    color="primary"
+                    flat
+                    @click.stop="menu = !menu">
+                <v-icon>menu</v-icon>
+            </v-btn>
         </v-toolbar>
 
+        <!--Vue-Router tag that holds all views-->
         <router-view/>
+
+        <!--menu that slides out with options-->
+        <v-navigation-drawer
+                v-model="menu"
+                absolute
+                temporary
+                right>
+            <!--Menu component-->
+            <Menu></Menu>
+        </v-navigation-drawer>
 
         <v-footer app>
             <span>&copy; SWENG 894 Group 7 2018</span>
         </v-footer>
     </v-app>
 </template>
+
+<script>
+    import Menu from '@/components/Menu.vue'
+
+    export default {
+        components: {
+            Menu
+        },
+        data: () => ({
+            menu: null,
+        })
+    }
+</script>
 
 <style>
     #app {
