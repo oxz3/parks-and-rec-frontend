@@ -5,12 +5,17 @@
                 <v-flex>
                     <v-card height="100%">
                         <v-toolbar color="gray" dark>
-                            <v-toolbar-side-icon></v-toolbar-side-icon>
-
-                            <v-toolbar-title>Leagues</v-toolbar-title>
+                            <v-toolbar-title v-if="settings.selectedOption == 'activities'">Activities</v-toolbar-title>
+                            <v-toolbar-title v-if="settings.selectedOption == 'leagues'">Leagues</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-btn icon>
+                                <v-icon>add</v-icon>
+                            </v-btn>
                         </v-toolbar>
                         <v-spacer></v-spacer>
-                        <v-list two-line class="pr-1">
+
+                        <!--list of leagues-->
+                        <v-list two-line class="pr-1" v-if="settings.selectedOption == 'leagues'">
                             <template v-for="league in leagues">
                                 <v-list-tile>
                                     <v-list-tile-content>
@@ -20,7 +25,43 @@
                                     </v-list-tile-content>
                                     <v-list-tile-action>
                                         <v-btn icon>
-                                            <v-icon color="grey lighten-1">info</v-icon>
+                                            <v-icon>
+                                                edit
+                                            </v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                    <v-list-tile-action>
+                                        <v-btn icon>
+                                            <v-icon>
+                                                delete
+                                            </v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </v-list-tile>
+                            </template>
+                        </v-list>
+
+                        <!--list of activities-->
+                        <v-list two-line class="pr-1" v-if="settings.selectedOption == 'activities'">
+                            <template v-for="activity in activities">
+                                <v-list-tile>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title v-html="activity.name"></v-list-tile-title>
+                                        <v-list-tile-sub-title >{{activity.description}}: '$'{{activity.price}}</v-list-tile-sub-title>
+                                        <v-list-tile-sub-title></v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                    <v-list-tile-action>
+                                        <v-btn icon>
+                                            <v-icon>
+                                                edit
+                                            </v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                    <v-list-tile-action>
+                                        <v-btn icon>
+                                            <v-icon>
+                                                delete
+                                            </v-icon>
                                         </v-btn>
                                     </v-list-tile-action>
                                 </v-list-tile>
@@ -42,17 +83,23 @@
 <script>
     // @ is an alias to /src
     import HelloWorld from '@/components/HelloWorld.vue'
-    import VListTileAction from "vuetify/src/components/VList/VListTileAction";
 
     export default {
         name: 'home',
         components: {
-            VListTileAction,
             HelloWorld
         },
+        data: () => {
+            return {
+                menu: false
+            }
+        },
         computed: {
-            sports() {
-                return this.$store.state.sports;
+            settings() {
+                return this.$store.state.settings;
+            },
+            activities() {
+                return this.$store.state.activities;
             },
             leagues() {
                 return this.$store.state.leagues;

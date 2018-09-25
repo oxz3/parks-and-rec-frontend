@@ -34,7 +34,7 @@
                 temporary
                 right>
             <!--Menu component-->
-            <Menu></Menu>
+            <settings-menu></settings-menu>
         </v-navigation-drawer>
 
         <v-footer app>
@@ -44,11 +44,11 @@
 </template>
 
 <script>
-    import Menu from '@/components/Menu.vue'
+    import settingsMenu from '@/components/SettingsMenu.vue'
 
     export default {
         components: {
-            Menu
+            settingsMenu
         },
         data: () => ({
             menu: null,
