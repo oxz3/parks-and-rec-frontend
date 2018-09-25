@@ -6,8 +6,7 @@
         <v-spacer></v-spacer>
         <v-list>
             <template v-for="option in settings.options">
-                <v-list-tile
-                        @click="setManagedOption(option)">
+                <v-list-tile>
                     <v-list-tile-action>
                         <v-menu
                                 :close-on-content-click="false"
@@ -22,11 +21,11 @@
                         </v-menu>
                     </v-list-tile-action>
 
-                    <v-list-tile-content>
-                        <v-list-tile-title>Manage {{ option | capitalize }}</v-list-tile-title>
+                    <v-list-tile-content  @click="setManagedOption(option)">
+                        <v-list-tile-title class="font-weight-bold">Manage {{ option | capitalize }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-
+                <v-divider></v-divider>
             </template>
         </v-list>
     </v-card>
@@ -43,7 +42,9 @@
             PopoverMenu
         },
         data: function () {
-            return {}
+            return {
+                settingsMenuOpen: false
+            }
         },
         computed: {
             settings() {
@@ -52,8 +53,8 @@
         },
         methods: {
             setManagedOption: function (option) {
-                console.log(option);
                 this.$store.dispatch("setManagedOption", option);
+                this.$emit('close-settings-menu', false);
             }
         },
         filters: {

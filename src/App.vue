@@ -3,13 +3,9 @@
         <v-toolbar>
             <v-toolbar-title>Parks and Rec Application</v-toolbar-title>
             <v-spacer></v-spacer>
-            <!--go to sign up screen-->
-            <v-btn flat color="primary" to="/signup">
-                SIGN UP
-            </v-btn>
             <!--go to logon screen-->
             <v-btn flat color="primary" to="/logon">
-                LOG ON
+                <v-icon>power_settings_new</v-icon>
             </v-btn>
             <!--go to home screen-->
             <v-btn flat color="primary" to="/">
@@ -19,7 +15,7 @@
             <v-btn
                     color="primary"
                     flat
-                    @click.stop="menu = !menu">
+                    @click.stop="settingsMenuOpen = !settingsMenuOpen">
                 <v-icon>menu</v-icon>
             </v-btn>
         </v-toolbar>
@@ -29,12 +25,16 @@
 
         <!--menu that slides out with options-->
         <v-navigation-drawer
-                v-model="menu"
+                v-model="settingsMenuOpen"
                 absolute
                 temporary
+                height="50%"
                 right>
             <!--Menu component-->
-            <settings-menu></settings-menu>
+            <settings-menu
+                    v-model="settingsMenuOpen"
+                    @close-settings-menu="closeSettingsMenu">
+            </settings-menu>
         </v-navigation-drawer>
 
         <v-footer app>
@@ -51,8 +51,13 @@
             settingsMenu
         },
         data: () => ({
-            menu: null,
-        })
+            settingsMenuOpen: false,
+        }),
+        methods: {
+            closeSettingsMenu(value) {
+                this.$data.settingsMenuOpen = value;
+            }
+        }
     }
 </script>
 

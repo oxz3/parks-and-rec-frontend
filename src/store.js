@@ -22,7 +22,7 @@ export const store = new Vuex.Store({
                 "activities",
                 "leagues"
             ],
-            selectedOption: "leagues",
+            selectedOption: "activities",
             userIsAdmin: true
         }
     },

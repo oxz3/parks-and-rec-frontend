@@ -4,7 +4,7 @@
         <v-card>
             <v-card-title>
                 <div>
-                    <span class="blue--text">
+                    <span>
                         Select this option to view, created, edit, or delete
                         <span>{{settings.selectedOption}}</span>
                     </span>
