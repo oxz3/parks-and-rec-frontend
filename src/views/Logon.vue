@@ -11,11 +11,13 @@
             <div v-if="isNewUser">
                 <v-text-field
                         label="Create New Username"
-                        required>
+                        required
+                        v-model="registerUserName">
                 </v-text-field>
                 <v-text-field
                         label="Create New Password"
-                        required>
+                        required
+                        v-model="registerPassword">
                 </v-text-field>
             </div>
             <div v-if="!isNewUser">
@@ -31,7 +33,7 @@
                 </v-text-field>
             </div>
             <v-btn v-if="!isNewUser" color="primary" to="/" type="submit" @click="login">LOGON</v-btn>
-            <v-btn v-if="isNewUser" color="primary" to="/" type="submit">SIGN UP</v-btn>
+            <v-btn v-if="isNewUser" color="primary" to="/" type="submit" @click="register">SIGN UP</v-btn>
             <v-btn to="/">cancel</v-btn>
         </form>
     </v-card>
@@ -51,7 +53,9 @@
             passwordConfirmation: '',
             passwordRules: [
                 v => !!v || 'Password is required',
-            ]
+            ],
+            registerUserName: 'TestUserE1',
+            registerPassword: 'TestPassE1'
         }),
         methods: {
             login: function () {
@@ -65,8 +69,8 @@
             },
             register: function () {
                 let data = {
-                    username: this.$data.username,
-                    password: this.$data.password,
+                    username: this.$data.registerUserName,
+                    password: this.$data.registerPassword,
                     isAdmin: this.$data.isAdmin
                 };
                 this.$store.dispatch('register', data)

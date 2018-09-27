@@ -9,6 +9,20 @@ Vue.use(Vuex, VueLocalStorage);
 
 const localStorage = window.localStorage;
 
+const settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/login",
+    "method": "POST",
+    "headers": {
+        "cache-control": "no-cache",
+        "content-type": "application/json",
+        "authorization": "Basic QWRtaW46QWRtaW4="
+    },
+    "processData": false,
+    "data": ""
+};
+
 export const store = new Vuex.Store({
     strict: true,
     state: {
@@ -56,8 +70,8 @@ export const store = new Vuex.Store({
             state.token = payload.token;
             state.user = payload.user;
         },
-        AUTH_ERROR(state) {
-            console.log('auth error');
+        AUTH_ERROR(state, error) {
+            console.log('auth error', error);
             state.status = 'error'
         },
         LOGOUT(state) {
@@ -72,36 +86,26 @@ export const store = new Vuex.Store({
         },
         login({commit}, user) {
             return new Promise((resolve, reject) => {
-                var settings = {
-                    "async": true,
-                    "crossDomain": true,
-                    "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/login",
-                    "method": "POST",
-                    "headers": {
-                        "cache-control": "no-cache",
-                        "content-type": "application/json",
-                        "authorization": "Basic QWRtaW46QWRtaW4="
-                    },
-                    "processData": false,
-                    "data": JSON.stringify(user)
-                };
+
 
                 //const userName = user;
+                let loginSettings = settings;
+                loginSettings.data = JSON.stringify(user);
 
-                $.ajax(settings).then(function (resp) {
+                $.ajax(loginSettings).then(function (resp) {
                     console.log(resp);
                     const token = resp;
 
                     //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
                     localStorage.setItem('token', token);
+                    console.log(localStorage.getItem('token'))
                     //axios.defaults.headers.common['Authorization'] = token;
                     // $http.defaults.headers.post['X-CSRF-TOKEN'] = response.headers("X-CSRF-TOKEN");
                     // $http.defaults.headers.put['X-CSRF-TOKEN'] = response.headers("X-CSRF-TOKEN");
                     //attempt to set subsequent ajax calls with token header
                     $.ajaxSetup({
-                        beforeSend: function (xhr)
-                        {
-                            xhr.setRequestHeader("Authorization",token);
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("token", token);
                         }
                     });
                     console.log(user);
@@ -112,7 +116,7 @@ export const store = new Vuex.Store({
                     commit('AUTH_SUCCESS', payload);
                     resolve(resp)
                 }).catch(err => {
-                    commit('AUTH_ERROR');
+                    commit('AUTH_ERROR', err);
                     localStorage.removeItem('token');
                     reject(err)
                 })
@@ -142,32 +146,75 @@ export const store = new Vuex.Store({
             })
         },
         register({commit}, user) {
+
+            console.log('registering new user: ', user);
             return new Promise((resolve, reject) => {
-                commit('auth_request');
-                axios({
-                    url: "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/login",
-                    data: user,
-                    method: 'POST'
+                commit('AUTH_REQUEST');
+
+                //const userName = user;
+                let registerSettings = settings;
+                registerSettings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/createUser",
+                    "method": "POST",
+                    "headers": {
+                        "cache-control": "no-cache",
+                        "content-type": "application/json",
+                        "token": "546ce251-9009-445c-a69b-dd4c69b91aaf",
+                        "postman-token": "0437f360-4dc7-3162-ab64-87c4b9c0d26f"
+                    },
+                    "processData": false,
+                    "data": "{\n    \"id\": null,\n    \"userId\": 20,\n    \"username\": \"TestUserE1\",\n    \"password\": \"TestUserE2\",\n     \"roles\": [\n        {\n            \"roleId\": 1,\n             \"userId\": 1\n        },\n        {\n            \"roleId\": 2,\n            \"userId\": 2\n        }\n    ]\n\n}"
+                };
+                console.log(localStorage.getItem('token'));
+                registerSettings.headers.token = localStorage.getItem('token');
+                console.log(registerSettings);
+
+                $.ajax(registerSettings).then(function (resp) {
+                    console.log(resp);
+                    const token = resp;
+
+                    //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
+                    localStorage.setItem('token', token);
+
+                    console.log(user);
+                    let payload = {
+                        token: token,
+                        user: user
+                    };
+                    commit('AUTH_SUCCESS', payload);
+                    resolve(resp)
+                }).catch(err => {
+                    commit('AUTH_ERROR', err);
+                    localStorage.removeItem('token');
+                    reject(err)
                 })
-                    .then(resp => {
-                        const token = resp.data.token;
-                        const user = resp.data.user;
-                        localStorage.setItem('token', token);
-                        axios.defaults.headers.common['Authorization'] = token;
-                        commit('AUTH_SUCCESS', token, user);
-                        resolve(resp)
-                    })
-                    .catch(err => {
-                        commit('AUTH_ERROR', err);
-                        localStorage.removeItem('token');
-                        reject(err)
-                    })
+                // axios({
+                //     url: "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/login",
+                //     data: user,
+                //     method: 'POST'
+                // })
+                //     .then(resp => {
+                //         const token = resp.data.token;
+                //         const user = resp.data.user;
+                //         localStorage.setItem('token', token);
+                //         axios.defaults.headers.common['Authorization'] = token;
+                //         commit('AUTH_SUCCESS', token, user);
+                //         resolve(resp)
+                //     })
+                //     .catch(err => {
+                //         commit('AUTH_ERROR', err);
+                //         localStorage.removeItem('token');
+                //         reject(err)
+                //     })
             })
         },
         logout({commit}) {
             return new Promise((resolve, reject) => {
                 commit('LOGOUT');
                 localStorage.removeItem('token');
+                console.log(localStorage.getItem('token'))
                 delete axios.defaults.headers.common['Authorization'];
                 resolve()
             })
