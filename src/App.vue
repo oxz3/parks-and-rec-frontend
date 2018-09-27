@@ -1,31 +1,65 @@
 <template>
     <v-app id="app">
         <v-toolbar>
-            <!--<v-btn icon @click.stop="fixed = !fixed">-->
-            <!--<v-icon>remove</v-icon>-->
-            <!--</v-btn>-->
-            <!--<router-link to="/">Home</router-link> |-->
-            <!--<router-link to="/about">About</router-link>-->
             <v-toolbar-title>Parks and Rec Application</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn flat color="primary" to="/signup">
-                SIGN UP
-            </v-btn>
+            <!--go to logon screen-->
             <v-btn flat color="primary" to="/logon">
-                LOG ON
+                <v-icon>power_settings_new</v-icon>
             </v-btn>
+            <!--go to home screen-->
             <v-btn flat color="primary" to="/">
                 <v-icon>home</v-icon>
             </v-btn>
+            <!--toggle menu-->
+            <v-btn
+                    color="primary"
+                    flat
+                    @click.stop="settingsMenuOpen = !settingsMenuOpen">
+                <v-icon>menu</v-icon>
+            </v-btn>
         </v-toolbar>
 
+        <!--Vue-Router tag that holds all views-->
         <router-view/>
+
+        <!--menu that slides out with options-->
+        <v-navigation-drawer
+                v-model="settingsMenuOpen"
+                absolute
+                temporary
+                height="50%"
+                right>
+            <!--Menu component-->
+            <settings-menu
+                    v-model="settingsMenuOpen"
+                    @close-settings-menu="closeSettingsMenu">
+            </settings-menu>
+        </v-navigation-drawer>
 
         <v-footer app>
             <span>&copy; SWENG 894 Group 7 2018</span>
         </v-footer>
     </v-app>
 </template>
+
+<script>
+    import settingsMenu from '@/components/SettingsMenu.vue'
+
+    export default {
+        components: {
+            settingsMenu
+        },
+        data: () => ({
+            settingsMenuOpen: false,
+        }),
+        methods: {
+            closeSettingsMenu(value) {
+                this.$data.settingsMenuOpen = value;
+            }
+        }
+    }
+</script>
 
 <style>
     #app {
