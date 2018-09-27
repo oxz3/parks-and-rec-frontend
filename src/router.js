@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from './store.js'
 import Home from './views/Home.vue'
+import Logon from './views/Logon.vue'
+import Secure from './components/SecureLoggedIn.vue'
 
-Vue.use(Router)
+Vue.use(Router);
 
-export default new Router({
+let router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
@@ -16,10 +19,30 @@ export default new Router({
         {
             path: '/logon',
             name: 'logon',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "logon" */ './views/Logon.vue')
+            component: Logon
+        },
+        {
+            path: '/secureLoggedIn',
+            name: 'secureLoggedIn',
+            component: Secure,
+            meta: {
+                requiresAuth: true
+            }
         }
     ]
-})
+});
+
+//Make sure user is authenticated before hitting a route (to control certain pages if need be)
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (store.getters.isLoggedIn) {
+            next();
+            return
+        }
+        next('/logon')
+    } else {
+        next()
+    }
+});
+
+export default router;

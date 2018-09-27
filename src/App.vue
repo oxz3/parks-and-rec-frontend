@@ -3,6 +3,9 @@
         <v-toolbar>
             <v-toolbar-title>Parks and Rec Application</v-toolbar-title>
             <v-spacer></v-spacer>
+
+            <!--if use is logged in-->
+            <span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span>
             <!--go to logon screen-->
             <v-btn flat color="primary" to="/logon">
                 <v-icon>power_settings_new</v-icon>
@@ -53,10 +56,33 @@
         data: () => ({
             settingsMenuOpen: false,
         }),
+        computed: {
+            isLoggedIn: function () {
+                return this.$store.getters.isLoggedIn
+            }
+        },
         methods: {
             closeSettingsMenu(value) {
                 this.$data.settingsMenuOpen = value;
+            },
+            logout: function () {
+                this.$store.dispatch('logout')
+                    .then(() => {
+                        //after logout, send the user to the login page for now
+                        this.$router.push('/login')
+                    })
             }
+        },
+        //Created lifecycle hook, runs when App.vue is created but before it is displayed in DOM
+        created: function () {
+            this.$http.interceptors.response.use(undefined, function (err) {
+                return new Promise(function (resolve, reject) {
+                    if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+                        this.$store.dispatch(logout)
+                    }
+                    throw err;
+                });
+            });
         }
     }
 </script>
