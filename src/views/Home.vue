@@ -14,13 +14,35 @@
                         </v-toolbar>
                         <v-spacer></v-spacer>
 
+                        <!--loading message-->
+                        <v-dialog
+                                v-model="authStatus"
+                                hide-overlay
+                                width="300">
+                            <v-card
+                                    color="primary"
+                                    dark
+                                    v-if="authStatus == 'logging in'">
+                                <v-card-text>
+                                    Logging on...
+                                    <v-progress-linear
+                                            indeterminate
+                                            color="white"
+                                            class="mb-0"
+                                    ></v-progress-linear>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
+
                         <!--list of leagues-->
                         <v-list two-line class="pr-1" v-if="settings.selectedOption == 'leagues'">
                             <template v-for="league in leagues">
                                 <v-list-tile>
                                     <v-list-tile-content>
                                         <v-list-tile-title v-html="league.name"></v-list-tile-title>
-                                        <v-list-tile-sub-title >{{league.description}}: {{league.currentMembers}} / {{league.maxMembers}}</v-list-tile-sub-title>
+                                        <v-list-tile-sub-title>
+                                            {{league.description}}: {{league.currentMembers}} / {{league.maxMembers}}
+                                        </v-list-tile-sub-title>
                                         <v-list-tile-sub-title></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
@@ -58,7 +80,8 @@
                                 <v-list-tile>
                                     <v-list-tile-content>
                                         <v-list-tile-title v-html="activity.name"></v-list-tile-title>
-                                        <v-list-tile-sub-title >{{activity.description}}: '$'{{activity.price}}</v-list-tile-sub-title>
+                                        <v-list-tile-sub-title>{{activity.description}}: '$'{{activity.price}}
+                                        </v-list-tile-sub-title>
                                         <v-list-tile-sub-title></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
@@ -75,7 +98,7 @@
                                                 dark>
                                             <v-btn icon
                                                    slot="activator"
-                                            @click="showDeleteModal = !showDeleteModal">
+                                                   @click="showDeleteModal = !showDeleteModal">
                                                 <v-icon>
                                                     delete
                                                 </v-icon>
@@ -121,6 +144,9 @@
             settings() {
                 return this.$store.state.settings;
             },
+            authStatus: function () {
+                return this.$store.state.status;
+            },
             activities() {
                 return this.$store.state.activities;
             },
@@ -129,7 +155,7 @@
             }
         },
         methods: {
-            closeConfirmDeletePopover(value){
+            closeConfirmDeletePopover(value) {
                 console.log('got event', value);
                 this.$data.showDeleteModal = value;
             }

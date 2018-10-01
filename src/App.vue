@@ -4,8 +4,15 @@
             <v-toolbar-title>Parks and Rec Application</v-toolbar-title>
             <v-spacer></v-spacer>
 
+            <!--show if user clicks logout button-->
+            <v-snackbar
+                    v-model="authStatus"
+                    :timeout="1000"
+                    v-if="authStatus == 'logged off'">
+                Logging Off...
+            </v-snackbar>
             <!--if use is logged in-->
-            <span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span>
+            <span v-if="isLoggedIn"><a @click="logout">Logout</a></span>
             <!--go to logon screen-->
             <v-btn flat color="primary" to="/logon">
                 <v-icon>power_settings_new</v-icon>
@@ -51,14 +58,18 @@
 
     export default {
         components: {
-            settingsMenu
+            settingsMenu,
         },
         data: () => ({
             settingsMenuOpen: false,
+            loadingPopover: false
         }),
         computed: {
             isLoggedIn: function () {
                 return this.$store.getters.isLoggedIn
+            },
+            authStatus: function () {
+                return this.$store.state.status
             }
         },
         methods: {
@@ -69,7 +80,7 @@
                 this.$store.dispatch('logout')
                     .then(() => {
                         //after logout, send the user to the login page for now
-                        this.$router.push('/login')
+                       // this.$router.push('/home')
                     })
             }
         },

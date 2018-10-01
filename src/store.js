@@ -8,6 +8,7 @@ import VueLocalStorage from 'vue-localstorage'
 Vue.use(Vuex, VueLocalStorage);
 
 const localStorage = window.localStorage;
+let token = '';
 
 const settings = {
     "async": true,
@@ -26,7 +27,8 @@ const settings = {
 export const store = new Vuex.Store({
     strict: true,
     state: {
-        status: '',
+        //indicates the status of user logon
+        status: "",
         token: localStorage.getItem('token') || '',
         user: {
             // id: null,
@@ -54,19 +56,22 @@ export const store = new Vuex.Store({
     },
     getters: {
         isLoggedIn: state => !!state.token,
-        authStatus: state => state.status,
+        //authStatus: state => state.status,
     },
     mutations: {
+        //Whether Sports or Leagues (users next?) are selected in the settings panel
         SET_MANAGED_OPTION: (state, payload) => {
             console.log(payload);
             state.settings.selectedOption = payload;
         },
-        AUTH_REQUEST(state) {
-            state.status = 'loading'
+        //Set status to
+        AUTH_REQUEST(state, payload) {
+            state.status = payload;
         },
+        //After successful logon
         AUTH_SUCCESS(state, payload) {
             console.log(payload);
-            state.status = 'success';
+            state.status = 'successfulLogon';
             state.token = payload.token;
             state.user = payload.user;
         },
@@ -75,8 +80,8 @@ export const store = new Vuex.Store({
             state.status = 'error'
         },
         LOGOUT(state) {
-            state.status = '';
-            state.token = ''
+            state.status = "logged off";
+            state.token = ""
         }
     },
     actions: {
@@ -87,18 +92,17 @@ export const store = new Vuex.Store({
         login({commit}, user) {
             return new Promise((resolve, reject) => {
 
-
-                //const userName = user;
+                commit('AUTH_REQUEST', 'logging in');
                 let loginSettings = settings;
                 loginSettings.data = JSON.stringify(user);
 
                 $.ajax(loginSettings).then(function (resp) {
                     console.log(resp);
-                    const token = resp;
+                    token = resp;
 
                     //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
                     localStorage.setItem('token', token);
-                    console.log(localStorage.getItem('token'))
+                    console.log(localStorage.getItem('token'));
                     //axios.defaults.headers.common['Authorization'] = token;
                     // $http.defaults.headers.post['X-CSRF-TOKEN'] = response.headers("X-CSRF-TOKEN");
                     // $http.defaults.headers.put['X-CSRF-TOKEN'] = response.headers("X-CSRF-TOKEN");
@@ -149,7 +153,7 @@ export const store = new Vuex.Store({
 
             console.log('registering new user: ', user);
             return new Promise((resolve, reject) => {
-                commit('AUTH_REQUEST');
+                commit('AUTH_REQUEST', 'registering user');
 
                 //const userName = user;
                 let registerSettings = settings;
@@ -214,8 +218,8 @@ export const store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 commit('LOGOUT');
                 localStorage.removeItem('token');
-                console.log(localStorage.getItem('token'))
-                delete axios.defaults.headers.common['Authorization'];
+                console.log(localStorage.getItem('token'));
+               // delete axios.defaults.headers.common['Authorization'];
                 resolve()
             })
         }
