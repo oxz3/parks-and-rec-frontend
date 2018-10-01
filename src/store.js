@@ -1,11 +1,9 @@
 /* eslint-disable no-console */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
 import $ from 'jquery'
-import VueLocalStorage from 'vue-localstorage'
 
-Vue.use(Vuex, VueLocalStorage);
+Vue.use(Vuex);
 
 const localStorage = window.localStorage;
 let token = '';
@@ -29,12 +27,6 @@ export const store = new Vuex.Store({
     state: {
         //indicates the status of user logon
         status: "",
-        token: localStorage.getItem('token') || '',
-        user: {
-            // id: null,
-            // username: "",
-            // password: ""
-        },
         activities: [
             {name: 'Soccer', description: "kick the ball", price: 20},
             {name: 'Football', description: "score touchdowns", price: 20},
@@ -51,12 +43,13 @@ export const store = new Vuex.Store({
                 "leagues"
             ],
             selectedOption: "activities",
-            userIsAdmin: true
+            userIsAdmin: true,
+            user: {},
+            token:  localStorage.getItem('token') || ''
         }
     },
     getters: {
-        isLoggedIn: state => !!state.token,
-        //authStatus: state => state.status,
+        isLoggedIn: state => !!state.settings.token,
     },
     mutations: {
         //Whether Sports or Leagues (users next?) are selected in the settings panel
@@ -71,9 +64,9 @@ export const store = new Vuex.Store({
         //After successful logon
         AUTH_SUCCESS(state, payload) {
             console.log(payload);
-            state.status = 'successfulLogon';
-            state.token = payload.token;
-            state.user = payload.user;
+            state.status = 'successful logon';
+            state.settings.token = payload.token;
+            state.settings.user = payload.user;
         },
         AUTH_ERROR(state, error) {
             console.log('auth error', error);
@@ -81,7 +74,7 @@ export const store = new Vuex.Store({
         },
         LOGOUT(state) {
             state.status = "logged off";
-            state.token = ""
+            state.settings.token = ""
         }
     },
     actions: {
@@ -103,15 +96,6 @@ export const store = new Vuex.Store({
                     //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
                     localStorage.setItem('token', token);
                     console.log(localStorage.getItem('token'));
-                    //axios.defaults.headers.common['Authorization'] = token;
-                    // $http.defaults.headers.post['X-CSRF-TOKEN'] = response.headers("X-CSRF-TOKEN");
-                    // $http.defaults.headers.put['X-CSRF-TOKEN'] = response.headers("X-CSRF-TOKEN");
-                    //attempt to set subsequent ajax calls with token header
-                    $.ajaxSetup({
-                        beforeSend: function (xhr) {
-                            xhr.setRequestHeader("token", token);
-                        }
-                    });
                     console.log(user);
                     let payload = {
                         token: token,
@@ -124,29 +108,6 @@ export const store = new Vuex.Store({
                     localStorage.removeItem('token');
                     reject(err)
                 })
-
-                // axios({
-                //     url: "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/login",
-                //     data: JSON.stringify(user),
-                //     withCredentials: true,
-                //     method: 'POST'
-                // })
-                //     .then(resp => {
-                //         console.log(resp);
-                //         const token = resp.data.token;
-                //         const user = resp.data.user;
-                //         console.log('logged in here is token: ', token, user, resp);
-                //         //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
-                //         localStorage.setItem('token', token);
-                //         axios.defaults.headers.common['Authorization'] = token;
-                //         commit('AUTH_SUCCESS', token, user);
-                //         resolve(resp)
-                //     })
-                //     .catch(err => {
-                //         commit('AUTH_ERROR');
-                //         localStorage.removeItem('token');
-                //         reject(err)
-                //     })
             })
         },
         register({commit}, user) {
@@ -169,11 +130,13 @@ export const store = new Vuex.Store({
                         "postman-token": "0437f360-4dc7-3162-ab64-87c4b9c0d26f"
                     },
                     "processData": false,
-                    "data": "{\n    \"id\": null,\n    \"userId\": 20,\n    \"username\": \"TestUserE1\",\n    \"password\": \"TestUserE2\",\n     \"roles\": [\n        {\n            \"roleId\": 1,\n             \"userId\": 1\n        },\n        {\n            \"roleId\": 2,\n            \"userId\": 2\n        }\n    ]\n\n}"
+                    "data": "{\n  \"id\": null,\n  \"username\": \"TestUserEJG6\",\n  \"password\": \"password\",\n   \"roles\": [\n      {\n           \"id\": null,\n          \"role_id\": 1,\n          \"user_id\":null\n\n      },\n      {\n          \"id\": null,\n          \"role_id\": 2,\n          \"user_id\":null\n      }\n  ]}"
                 };
+
                 console.log(localStorage.getItem('token'));
                 registerSettings.headers.token = localStorage.getItem('token');
                 console.log(registerSettings);
+                registerSettings.data = JSON.stringify(user);
 
                 $.ajax(registerSettings).then(function (resp) {
                     console.log(resp);
@@ -194,24 +157,6 @@ export const store = new Vuex.Store({
                     localStorage.removeItem('token');
                     reject(err)
                 })
-                // axios({
-                //     url: "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/login",
-                //     data: user,
-                //     method: 'POST'
-                // })
-                //     .then(resp => {
-                //         const token = resp.data.token;
-                //         const user = resp.data.user;
-                //         localStorage.setItem('token', token);
-                //         axios.defaults.headers.common['Authorization'] = token;
-                //         commit('AUTH_SUCCESS', token, user);
-                //         resolve(resp)
-                //     })
-                //     .catch(err => {
-                //         commit('AUTH_ERROR', err);
-                //         localStorage.removeItem('token');
-                //         reject(err)
-                //     })
             })
         },
         logout({commit}) {
@@ -219,7 +164,6 @@ export const store = new Vuex.Store({
                 commit('LOGOUT');
                 localStorage.removeItem('token');
                 console.log(localStorage.getItem('token'));
-               // delete axios.defaults.headers.common['Authorization'];
                 resolve()
             })
         }

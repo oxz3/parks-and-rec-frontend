@@ -14,13 +14,12 @@
                         </v-toolbar>
                         <v-spacer></v-spacer>
 
-                        <!--loading message-->
+                        <!--displays message while user is logging in-->
                         <v-dialog
                                 v-model="authStatus"
                                 hide-overlay
                                 width="300">
                             <v-card
-                                    color="primary"
                                     dark
                                     v-if="authStatus == 'logging in'">
                                 <v-card-text>

@@ -11,6 +11,15 @@
                     v-if="authStatus == 'logged off'">
                 Logging Off...
             </v-snackbar>
+
+            <!--show if use succesfully logs on-->
+            <v-snackbar
+                    v-model="authStatus"
+                    :timeout="1500"
+                    top
+                    v-if="authStatus == 'successful logon'">
+                welcome {{settings.user.username}}
+            </v-snackbar>
             <!--if use is logged in-->
             <span v-if="isLoggedIn"><a @click="logout">Logout</a></span>
             <!--go to logon screen-->
@@ -65,6 +74,9 @@
             loadingPopover: false
         }),
         computed: {
+            settings() {
+                return this.$store.state.settings;
+            },
             isLoggedIn: function () {
                 return this.$store.getters.isLoggedIn
             },
@@ -80,20 +92,9 @@
                 this.$store.dispatch('logout')
                     .then(() => {
                         //after logout, send the user to the login page for now
-                       // this.$router.push('/home')
+                        this.$router.push('/logon')
                     })
             }
-        },
-        //Created lifecycle hook, runs when App.vue is created but before it is displayed in DOM
-        created: function () {
-            this.$http.interceptors.response.use(undefined, function (err) {
-                return new Promise(function (resolve, reject) {
-                    if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-                        this.$store.dispatch(logout)
-                    }
-                    throw err;
-                });
-            });
         }
     }
 </script>

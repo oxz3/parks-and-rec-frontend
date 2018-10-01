@@ -54,8 +54,8 @@
             passwordRules: [
                 v => !!v || 'Password is required',
             ],
-            registerUserName: 'TestUserE1',
-            registerPassword: 'TestPassE1'
+            registerUserName: 'TestUserEJG6',
+            registerPassword: 'password'
         }),
         methods: {
             login: function () {
