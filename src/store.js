@@ -2,32 +2,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import $ from 'jquery'
+import router from './router'
+import adminLogonRequest from './data/rest-requests/admin-logon-request.json'
+import registerUserRequest from './data/rest-requests/register-new-user-request.json'
 
 Vue.use(Vuex);
 
 const localStorage = window.localStorage;
 let token = '';
 
-const settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/login",
-    "method": "POST",
-    "headers": {
-        "cache-control": "no-cache",
-        "content-type": "application/json",
-        "authorization": "Basic QWRtaW46QWRtaW4="
-    },
-    "processData": false,
-    "data": ""
-};
 
 export const store = new Vuex.Store({
     strict: true,
     state: {
         //indicates the status of user logon
         status: "",
-        activities: [
+        sports: [
             {name: 'Soccer', description: "kick the ball", price: 20},
             {name: 'Football', description: "score touchdowns", price: 20},
             {name: 'Basketball', description: 'shoot the ball', price: 30}
@@ -39,13 +29,17 @@ export const store = new Vuex.Store({
         ],
         settings: {
             options: [
-                "activities",
+                "sports",
                 "leagues"
             ],
-            selectedOption: "activities",
+            info: {
+                "selected": "",
+            },
+            selectedOption: "sports",
             userIsAdmin: true,
             user: {},
-            token:  localStorage.getItem('token') || ''
+            editUser: false,
+            token: localStorage.getItem('token') || ''
         }
     },
     getters: {
@@ -56,6 +50,15 @@ export const store = new Vuex.Store({
         SET_MANAGED_OPTION: (state, payload) => {
             console.log(payload);
             state.settings.selectedOption = payload;
+        },
+        SET_SETTING_INFO: (state, payload) => {
+            state.settings.info.selected = payload;
+        },
+        EDIT_USER: (state, payload) => {
+            console.log(payload);
+            state.settings.user = payload;
+            state.settings.editUser = true;
+            router.push('/logon')
         },
         //Set status to
         AUTH_REQUEST(state, payload) {
@@ -74,6 +77,8 @@ export const store = new Vuex.Store({
         },
         LOGOUT(state) {
             state.status = "logged off";
+            state.settings.user = {};
+            state.settings.editUser = false;
             state.settings.token = ""
         }
     },
@@ -82,11 +87,18 @@ export const store = new Vuex.Store({
             console.log(payload);
             context.commit("SET_MANAGED_OPTION", payload);
         },
+        setSettingInfo: (context, payload) => {
+            context.commit("SET_SETTING_INFO", payload);
+        },
+        editUser: (context, payload) => {
+            console.log(payload);
+            context.commit("EDIT_USER", payload);
+        },
         login({commit}, user) {
             return new Promise((resolve, reject) => {
 
                 commit('AUTH_REQUEST', 'logging in');
-                let loginSettings = settings;
+                let loginSettings = adminLogonRequest;
                 loginSettings.data = JSON.stringify(user);
 
                 $.ajax(loginSettings).then(function (resp) {
@@ -117,22 +129,7 @@ export const store = new Vuex.Store({
                 commit('AUTH_REQUEST', 'registering user');
 
                 //const userName = user;
-                let registerSettings = settings;
-                registerSettings = {
-                    "async": true,
-                    "crossDomain": true,
-                    "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/createUser",
-                    "method": "POST",
-                    "headers": {
-                        "cache-control": "no-cache",
-                        "content-type": "application/json",
-                        "token": "546ce251-9009-445c-a69b-dd4c69b91aaf",
-                        "postman-token": "0437f360-4dc7-3162-ab64-87c4b9c0d26f"
-                    },
-                    "processData": false,
-                    "data": "{\n  \"id\": null,\n  \"username\": \"TestUserEJG6\",\n  \"password\": \"password\",\n   \"roles\": [\n      {\n           \"id\": null,\n          \"role_id\": 1,\n          \"user_id\":null\n\n      },\n      {\n          \"id\": null,\n          \"role_id\": 2,\n          \"user_id\":null\n      }\n  ]}"
-                };
-
+                let registerSettings = registerUserRequest;
                 console.log(localStorage.getItem('token'));
                 registerSettings.headers.token = localStorage.getItem('token');
                 console.log(registerSettings);
@@ -160,7 +157,7 @@ export const store = new Vuex.Store({
             })
         },
         logout({commit}) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 commit('LOGOUT');
                 localStorage.removeItem('token');
                 console.log(localStorage.getItem('token'));

@@ -21,10 +21,11 @@
                 welcome {{settings.user.username}}
             </v-snackbar>
             <!--if use is logged in-->
-            <span v-if="isLoggedIn"><a @click="logout">Logout</a></span>
+            <v-btn flat color="primary" v-if="isLoggedIn" @click="logout">LOGOUT</v-btn>
             <!--go to logon screen-->
             <v-btn flat color="primary" to="/logon">
-                <v-icon>power_settings_new</v-icon>
+                LOGON
+                <!--<v-icon>power_settings_new</v-icon>-->
             </v-btn>
             <!--go to home screen-->
             <v-btn flat color="primary" to="/">

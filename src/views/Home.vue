@@ -5,7 +5,7 @@
                 <v-flex>
                     <v-card height="100%">
                         <v-toolbar color="gray" dark>
-                            <v-toolbar-title v-if="settings.selectedOption == 'activities'">Activities</v-toolbar-title>
+                            <v-toolbar-title v-if="settings.selectedOption == 'sports'">sports</v-toolbar-title>
                             <v-toolbar-title v-if="settings.selectedOption == 'leagues'">Leagues</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-btn icon>
@@ -73,9 +73,9 @@
                             </template>
                         </v-list>
 
-                        <!--list of activities-->
-                        <v-list two-line class="pr-1" v-if="settings.selectedOption == 'activities'">
-                            <template v-for="activity in activities">
+                        <!--list of sports-->
+                        <v-list two-line class="pr-1" v-if="settings.selectedOption == 'sports'">
+                            <template v-for="activity in sports">
                                 <v-list-tile>
                                     <v-list-tile-content>
                                         <v-list-tile-title v-html="activity.name"></v-list-tile-title>
@@ -146,8 +146,8 @@
             authStatus: function () {
                 return this.$store.state.status;
             },
-            activities() {
-                return this.$store.state.activities;
+            sports() {
+                return this.$store.state.sports;
             },
             leagues() {
                 return this.$store.state.leagues;

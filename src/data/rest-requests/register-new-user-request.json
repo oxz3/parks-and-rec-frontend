@@ -1,0 +1,14 @@
+{
+  "async": true,
+  "crossDomain": true,
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/createUser",
+  "method": "POST",
+  "headers": {
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "token": "546ce251-9009-445c-a69b-dd4c69b91aaf",
+    "postman-token": "0437f360-4dc7-3162-ab64-87c4b9c0d26f"
+  },
+  "processData": false,
+  "data": "{\n  \"id\": null,\n  \"username\": \"TestUserEJG6\",\n  \"password\": \"password\",\n   \"roles\": [\n      {\n           \"id\": null,\n          \"role_id\": 1,\n          \"user_id\":null\n\n      },\n      {\n          \"id\": null,\n          \"role_id\": 2,\n          \"user_id\":null\n      }\n  ]}"
+}
