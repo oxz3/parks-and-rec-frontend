@@ -12,20 +12,51 @@
                 Logging Off...
             </v-snackbar>
 
-            <!--show if use succesfully logs on-->
+            <!--show if Admin successfully logs on-->
             <v-snackbar
                     v-model="authStatus"
                     :timeout="1500"
                     top
-                    v-if="authStatus == 'successful logon'">
-                welcome {{settings.user.username}}
+                    v-if="authStatus == 'logonSuccess'">
+                Welcome {{settings.user.username}}
             </v-snackbar>
+
+            <!--show if Admin successfully creates a new user-->
+            <v-snackbar
+                    v-model="authStatus"
+                    :timeout="1500"
+                    top
+                    v-if="authStatus == 'registrationSuccess'">
+                Successfully Registered User: {{settings.newRegisteredUser}}
+            </v-snackbar>
+
+            <!--show if Admin successfully updates a user -->
+            <v-snackbar
+                    v-model="authStatus"
+                    :timeout="1500"
+                    top
+                    v-if="authStatus == 'updateUserSuccess'">
+                Successfully Updated User: {{settings.updatedUser}}
+            </v-snackbar>
+
+            <!--show if error in rest request-->
+            <v-snackbar
+                    v-model="error"
+                    top
+                    v-if="authStatus == 'error'"
+                    color: red>
+                ERROR: {{error}}
+            </v-snackbar>
+
             <!--if use is logged in-->
-            <v-btn flat color="primary" v-if="isLoggedIn" @click="logout">LOGOUT</v-btn>
+            <v-btn flat color="primary" v-if="settings.token != null" @click="logout">LOGOUT</v-btn>
             <!--go to logon screen-->
-            <v-btn flat color="primary" to="/logon">
+            <v-btn flat color="primary" to="/logon" v-if="settings.token == null">
                 LOGON
-                <!--<v-icon>power_settings_new</v-icon>-->
+            </v-btn>
+            <v-btn flat color="primary" v-if="settings.token != null"
+                   @click="openRegisterForm">
+                REGISTER
             </v-btn>
             <!--go to home screen-->
             <v-btn flat color="primary" to="/">
@@ -35,7 +66,15 @@
             <v-btn
                     color="primary"
                     flat
-                    @click.stop="settingsMenuOpen = !settingsMenuOpen">
+                    @click.stop="settingsMenuOpen = !settingsMenuOpen"
+                    v-if="this.$router.currentRoute.name != 'logon'">
+                <v-icon>menu</v-icon>
+            </v-btn>
+            <!--placehoolder menu button if logon form is open so user can't access settings-->
+            <v-btn
+                    color="primary"
+                    flat
+                    v-if="this.$router.currentRoute.name == 'logon'">
                 <v-icon>menu</v-icon>
             </v-btn>
         </v-toolbar>
@@ -83,6 +122,9 @@
             },
             authStatus: function () {
                 return this.$store.state.status
+            },
+            error: function () {
+                return this.$store.state.error
             }
         },
         methods: {
@@ -95,6 +137,10 @@
                         //after logout, send the user to the login page for now
                         this.$router.push('/logon')
                     })
+            },
+            openRegisterForm: function () {
+                this.$store.dispatch('openRegisterForm');
+                this.$router.push('/logon');
             }
         }
     }

@@ -5,11 +5,13 @@ import $ from 'jquery'
 import router from './router'
 import adminLogonRequest from './data/rest-requests/admin-logon-request.json'
 import registerUserRequest from './data/rest-requests/register-new-user-request.json'
+import updateUserRequest from './data/rest-requests/update-user-request.json'
+
 
 Vue.use(Vuex);
 
 const localStorage = window.localStorage;
-let token = '';
+let token = null;
 
 
 export const store = new Vuex.Store({
@@ -38,9 +40,13 @@ export const store = new Vuex.Store({
             selectedOption: "sports",
             userIsAdmin: true,
             user: {},
+            newRegisteredUser: "",
+            updatedUser: "",
+            registerUser: false,
             editUser: false,
-            token: localStorage.getItem('token') || ''
-        }
+            token: localStorage.getItem('token') || null
+        },
+        error: undefined
     },
     getters: {
         isLoggedIn: state => !!state.settings.token,
@@ -48,17 +54,18 @@ export const store = new Vuex.Store({
     mutations: {
         //Whether Sports or Leagues (users next?) are selected in the settings panel
         SET_MANAGED_OPTION: (state, payload) => {
-            console.log(payload);
             state.settings.selectedOption = payload;
         },
         SET_SETTING_INFO: (state, payload) => {
             state.settings.info.selected = payload;
         },
         EDIT_USER: (state, payload) => {
-            console.log(payload);
             state.settings.user = payload;
             state.settings.editUser = true;
             router.push('/logon')
+        },
+        REGISTER(state) {
+            state.settings.registerUser = true;
         },
         //Set status to
         AUTH_REQUEST(state, payload) {
@@ -66,54 +73,101 @@ export const store = new Vuex.Store({
         },
         //After successful logon
         AUTH_SUCCESS(state, payload) {
-            console.log(payload);
-            state.status = 'successful logon';
             state.settings.token = payload.token;
+            state.status = 'logonSuccess';
             state.settings.user = payload.user;
+        },
+        REGISTRATION_SUCCESS(state, payload) {
+            state.settings.newRegisteredUser = payload.username;
+            state.settings.registerUser = false;
+            state.status = 'registrationSuccess';
+        },
+        UPDATE_USER_SUCCESS(state, payload) {
+            console.log(payload);
+            state.settings.updatedUser = payload.username;
+            state.settings.editUser = false;
+            state.status = 'updateUserSuccess';
         },
         AUTH_ERROR(state, error) {
             console.log('auth error', error);
-            state.status = 'error'
+            state.status = 'error';
+            state.error = error;
         },
         LOGOUT(state) {
             state.status = "logged off";
             state.settings.user = {};
             state.settings.editUser = false;
-            state.settings.token = ""
+            state.settings.token = null
+        },
+        CANCEL_LOGON_FORM(state) {
+            state.settings.editUser = false;
+            state.settings.registerUser = false;
         }
     },
     actions: {
         setManagedOption: (context, payload) => {
-            console.log(payload);
             context.commit("SET_MANAGED_OPTION", payload);
         },
         setSettingInfo: (context, payload) => {
             context.commit("SET_SETTING_INFO", payload);
         },
         editUser: (context, payload) => {
-            console.log(payload);
             context.commit("EDIT_USER", payload);
+        },
+        openRegisterForm: (context) => {
+            context.commit("REGISTER");
+        },
+        cancelLogonForm: (context) => {
+            context.commit("CANCEL_LOGON_FORM")
         },
         login({commit}, user) {
             return new Promise((resolve, reject) => {
 
                 commit('AUTH_REQUEST', 'logging in');
-                let loginSettings = adminLogonRequest;
+                let loginSettings = Object.assign({}, adminLogonRequest);
                 loginSettings.data = JSON.stringify(user);
 
                 $.ajax(loginSettings).then(function (resp) {
-                    console.log(resp);
                     token = resp;
+                    if(token.length > 1) {
+                        //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
+                        localStorage.setItem('token', token);
+                        console.log(localStorage.getItem('token'));
+                        let payload = {
+                            token: token,
+                            user: user
+                        };
+                        commit('AUTH_SUCCESS', payload);
+                        resolve(resp)
+                    }
+                    else{
+                        commit('AUTH_ERROR', "Invalid Admin User or Password Entered!");
+                        localStorage.removeItem('token');
+                    }
+                }).catch(err => {
+                    commit('AUTH_ERROR', err);
+                    localStorage.removeItem('token');
+                    reject(err)
+                })
 
-                    //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
-                    localStorage.setItem('token', token);
-                    console.log(localStorage.getItem('token'));
-                    console.log(user);
-                    let payload = {
-                        token: token,
-                        user: user
-                    };
-                    commit('AUTH_SUCCESS', payload);
+
+            })
+        },
+        register({commit}, user) {
+
+            console.log('registering new user: ', user);
+            return new Promise((resolve, reject) => {
+                commit('AUTH_REQUEST', 'registeringUser');
+
+                //const userName = user;
+                let registerSettings = Object.assign({}, registerUserRequest);
+                console.log(localStorage.getItem('token'));
+                registerSettings.headers.token = localStorage.getItem('token');
+                registerSettings.data = JSON.stringify(user);
+
+                $.ajax(registerSettings).then(function (resp) {
+                    let user = resp;
+                    commit('REGISTRATION_SUCCESS', user);
                     resolve(resp)
                 }).catch(err => {
                     commit('AUTH_ERROR', err);
@@ -122,32 +176,21 @@ export const store = new Vuex.Store({
                 })
             })
         },
-        register({commit}, user) {
-
-            console.log('registering new user: ', user);
+        updateUser({commit}, user) {
             return new Promise((resolve, reject) => {
-                commit('AUTH_REQUEST', 'registering user');
 
-                //const userName = user;
-                let registerSettings = registerUserRequest;
-                console.log(localStorage.getItem('token'));
-                registerSettings.headers.token = localStorage.getItem('token');
-                console.log(registerSettings);
-                registerSettings.data = JSON.stringify(user);
+                commit('AUTH_REQUEST', 'updatingUser');
 
-                $.ajax(registerSettings).then(function (resp) {
-                    console.log(resp);
-                    const token = resp;
+                let updateUserSettings = Object.assign({}, updateUserRequest);
+                updateUserSettings.headers.token = localStorage.getItem('token');
+                updateUserSettings.data.username = user.username;
+                updateUserSettings.data.password = user.password;
+                updateUserSettings.data = JSON.stringify(updateUserSettings.data);
 
-                    //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
-                    localStorage.setItem('token', token);
-
-                    console.log(user);
-                    let payload = {
-                        token: token,
-                        user: user
-                    };
-                    commit('AUTH_SUCCESS', payload);
+                $.ajax(updateUserSettings).then(function (resp) {
+                    console.log('resp from server: ', resp)
+                    let user = resp;
+                    commit('UPDATE_USER_SUCCESS', user);
                     resolve(resp)
                 }).catch(err => {
                     commit('AUTH_ERROR', err);
@@ -161,6 +204,7 @@ export const store = new Vuex.Store({
                 commit('LOGOUT');
                 localStorage.removeItem('token');
                 console.log(localStorage.getItem('token'));
+                console.log(this.state.settings.token);
                 resolve()
             })
         }

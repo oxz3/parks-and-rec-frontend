@@ -1,0 +1,29 @@
+{
+  "async": true,
+  "crossDomain": true,
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/updateUser",
+  "method": "PUT",
+  "headers": {
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "token": "c65eb621-c2fa-4dea-897d-5a43767ec58b"
+  },
+  "processData": false,
+  "data": {
+    "userId": 2,
+    "username": "TestUserEJG4",
+    "password": "pwUpdated",
+    "roles": [
+      {
+        "id": 3,
+        "role_id": 1,
+        "user_id": null
+      },
+      {
+        "id": 4,
+        "role_id": 2,
+        "user_id": null
+      }
+    ]
+  }
+}

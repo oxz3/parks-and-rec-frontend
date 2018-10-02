@@ -21,7 +21,7 @@
                     </v-menu>
                 </v-list-tile-action>
                 <v-list-tile-content @click="openEditUserForm(settings.user)">
-                    <v-list-tile-title class="font-weight-bold">Manage User Profile</v-list-tile-title>
+                    <v-list-tile-title class="font-weight-bold">Manage User</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -80,7 +80,6 @@
                 this.$store.dispatch("setSettingInfo", option);
             },
             openEditUserForm: function (user){
-                console.log(user);
                 this.$store.dispatch("editUser", user);
             }
         },

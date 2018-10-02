@@ -79,7 +79,7 @@
                                 <v-list-tile>
                                     <v-list-tile-content>
                                         <v-list-tile-title v-html="activity.name"></v-list-tile-title>
-                                        <v-list-tile-sub-title>{{activity.description}}: '$'{{activity.price}}
+                                        <v-list-tile-sub-title>{{activity.description}}: ${{activity.price}}
                                         </v-list-tile-sub-title>
                                         <v-list-tile-sub-title></v-list-tile-sub-title>
                                     </v-list-tile-content>
@@ -155,7 +155,6 @@
         },
         methods: {
             closeConfirmDeletePopover(value) {
-                console.log('got event', value);
                 this.$data.showDeleteModal = value;
             }
         }
