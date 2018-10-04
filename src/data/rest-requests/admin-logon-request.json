@@ -1,0 +1,13 @@
+{
+  "async": true,
+  "crossDomain": true,
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/login",
+  "method": "POST",
+  "headers": {
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "authorization": "Basic QWRtaW46QWRtaW4="
+  },
+  "processData": false,
+  "data": ""
+}

@@ -5,6 +5,26 @@
         </v-toolbar>
         <v-spacer></v-spacer>
         <v-list>
+            <v-list-tile>
+                <v-list-tile-action>
+                    <v-menu
+                            :close-on-content-click="false"
+                            :nudge-width="200"
+                            offset-x
+                            dark>
+                        <v-btn icon
+                               slot="activator"
+                               @click="setSettingInfo('user')">
+                            <v-icon color="grey lighten-1">info</v-icon>
+                        </v-btn>
+                        <popover-menu></popover-menu>
+                    </v-menu>
+                </v-list-tile-action>
+                <v-list-tile-content @click="openEditUserForm(settings.user)">
+                    <v-list-tile-title class="font-weight-bold">Manage User</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
             <template v-for="option in settings.options">
                 <v-list-tile>
                     <v-list-tile-action>
@@ -14,14 +34,14 @@
                                 offset-x
                                 dark>
                             <v-btn icon
-                                   slot="activator">
+                                   slot="activator"
+                                   @click="setSettingInfo(option)">
                                 <v-icon color="grey lighten-1">info</v-icon>
                             </v-btn>
                             <popover-menu></popover-menu>
                         </v-menu>
                     </v-list-tile-action>
-
-                    <v-list-tile-content  @click="setManagedOption(option)">
+                    <v-list-tile-content @click="setManagedOption(option)">
                         <v-list-tile-title class="font-weight-bold">Manage {{ option | capitalize }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
@@ -34,7 +54,7 @@
 
 <script>
 
-    import PopoverMenu from "@/components/PopoverMenu.vue";
+    import PopoverMenu from "@/components/SettingsInfoPopover.vue";
 
     export default {
         name: 'settings-menu',
@@ -43,7 +63,7 @@
         },
         data: function () {
             return {
-                settingsMenuOpen: false
+                settingsMenuOpen: false,
             }
         },
         computed: {
@@ -55,6 +75,12 @@
             setManagedOption: function (option) {
                 this.$store.dispatch("setManagedOption", option);
                 this.$emit('close-settings-menu', false);
+            },
+            setSettingInfo: function (option){
+                this.$store.dispatch("setSettingInfo", option);
+            },
+            openEditUserForm: function (user){
+                this.$store.dispatch("editUser", user);
             }
         },
         filters: {
