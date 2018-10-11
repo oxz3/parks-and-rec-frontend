@@ -6,6 +6,7 @@ import router from './router'
 import adminLogonRequest from './data/rest-requests/admin-logon-request.json'
 import registerUserRequest from './data/rest-requests/register-new-user-request.json'
 import updateUserRequest from './data/rest-requests/update-user-request.json'
+import getUserRequest from './data/rest-requests/get-user-request.json'
 
 
 Vue.use(Vuex);
@@ -83,13 +84,12 @@ export const store = new Vuex.Store({
             state.status = 'registrationSuccess';
         },
         UPDATE_USER_SUCCESS(state, payload) {
-            console.log(payload);
             state.settings.updatedUser = payload.username;
             state.settings.editUser = false;
             state.status = 'updateUserSuccess';
         },
         AUTH_ERROR(state, error) {
-            console.log('auth error', error);
+            console.warn('auth error', error);
             state.status = 'error';
             state.error = error;
         },
@@ -129,7 +129,7 @@ export const store = new Vuex.Store({
 
                 $.ajax(loginSettings).then(function (resp) {
                     token = resp;
-                    if(token.length > 1) {
+                    if (token.length > 1) {
                         //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
                         localStorage.setItem('token', token);
                         console.log(localStorage.getItem('token'));
@@ -140,7 +140,7 @@ export const store = new Vuex.Store({
                         commit('AUTH_SUCCESS', payload);
                         resolve(resp)
                     }
-                    else{
+                    else {
                         commit('AUTH_ERROR', "Invalid Admin User or Password Entered!");
                         localStorage.removeItem('token');
                     }
@@ -176,6 +176,24 @@ export const store = new Vuex.Store({
                 })
             })
         },
+        getUser({commit}, user) {
+            return new Promise((resolve, reject) => {
+
+                commit('AUTH_REQUEST', 'gettingUser');
+
+                let getUserSettings = Object.assign({}, getUserRequest);
+                getUserSettings.headers.token = localStorage.getItem('token');
+                let url = getUserSettings.url.substr(0, getUserSettings.url.lastIndexOf("=") + 1);
+                getUserSettings.url = url + user;
+
+                $.ajax(getUserSettings).then(function (response) {
+                    resolve(response);
+                }).catch(err => {
+                    commit('AUTH_ERROR', err);
+                    reject(err)
+                })
+            })
+        },
         updateUser({commit}, user) {
             return new Promise((resolve, reject) => {
 
@@ -183,14 +201,11 @@ export const store = new Vuex.Store({
 
                 let updateUserSettings = Object.assign({}, updateUserRequest);
                 updateUserSettings.headers.token = localStorage.getItem('token');
-                updateUserSettings.data.username = user.username;
-                updateUserSettings.data.password = user.password;
-                updateUserSettings.data = JSON.stringify(updateUserSettings.data);
+                updateUserSettings.data = JSON.stringify(user);
 
                 $.ajax(updateUserSettings).then(function (resp) {
-                    console.log('resp from server: ', resp)
-                    let user = resp;
-                    commit('UPDATE_USER_SUCCESS', user);
+                    console.log('resp from server: ', resp);
+                    commit('UPDATE_USER_SUCCESS', resp);
                     resolve(resp)
                 }).catch(err => {
                     commit('AUTH_ERROR', err);
@@ -203,8 +218,7 @@ export const store = new Vuex.Store({
             return new Promise((resolve) => {
                 commit('LOGOUT');
                 localStorage.removeItem('token');
-                console.log(localStorage.getItem('token'));
-                console.log(this.state.settings.token);
+                console.log('logged out token removed: ', localStorage.getItem('token'));
                 resolve()
             })
         }

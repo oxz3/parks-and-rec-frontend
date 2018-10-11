@@ -1,0 +1,5 @@
+import $ from 'jquery'
+import router from './router'
+import adminLogonRequest from './data/rest-requests/admin-logon-request.json'
+import registerUserRequest from './data/rest-requests/register-new-user-request.json'
+import updateUserRequest from './data/rest-requests/update-user-request.json'
