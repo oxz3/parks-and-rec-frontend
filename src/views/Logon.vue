@@ -98,13 +98,18 @@
                     .catch(err => console.log(err))
             },
             updateUser: function (user) {
-                let data = {
-                    username: user.username,
-                    password: user.password
-                };
-                this.$store.dispatch('updateUser', data)
-                    .then(() => this.$router.push('/'))
-                    .catch(err => console.log(err))
+
+                //perform Get first then use the result for the update payload
+                let that = this;
+                that.$store.dispatch('getUser', user.username)
+                    .then(function (result) {
+                        //set data to the result of the GetUser
+                        result[0].password = user.password;
+                        that.$store.dispatch('updateUser', result[0])
+                            .then(() => that.$router.push('/'))
+                            .catch(err => console.log(err))
+                    })
+
             },
             cancel: function () {
                 this.$store.dispatch('cancelLogonForm')

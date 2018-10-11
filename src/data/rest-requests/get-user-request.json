@@ -1,0 +1,11 @@
+{
+  "async": true,
+  "crossDomain": true,
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/getUserByName?userName=TestUserEJG61",
+  "method": "GET",
+  "headers": {
+    "cache-control": "no-cache",
+    "postman-token": "18a01d89-6be9-42fb-fb87-d360df990170",
+    "token": "1a2a7eb4-94ed-427e-9c7d-aa928e49d550"
+  }
+}
