@@ -71,8 +71,8 @@
         data: () => ({
             isAdmin: false,
             user: {
-                username: "Admin",
-                password: "Admin"
+                username: "",
+                password: ""
             }
         }),
         computed: {
