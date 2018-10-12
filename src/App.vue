@@ -3,9 +3,60 @@
         <v-toolbar>
             <v-toolbar-title>Parks and Rec Application</v-toolbar-title>
             <v-spacer></v-spacer>
+
+            <!--show if user clicks logout button-->
+            <v-snackbar
+                    v-model="authStatus"
+                    :timeout="1000"
+                    v-if="authStatus == 'logged off'">
+                Logging Off...
+            </v-snackbar>
+
+            <!--show if Admin successfully logs on-->
+            <v-snackbar
+                    v-model="authStatus"
+                    :timeout="1500"
+                    top
+                    v-if="authStatus == 'logonSuccess'">
+                Welcome {{settings.user.username}}
+            </v-snackbar>
+
+            <!--show if Admin successfully creates a new user-->
+            <v-snackbar
+                    v-model="authStatus"
+                    :timeout="1500"
+                    top
+                    v-if="authStatus == 'registrationSuccess'">
+                Successfully Registered User: {{settings.newRegisteredUser}}
+            </v-snackbar>
+
+            <!--show if Admin successfully updates a user -->
+            <v-snackbar
+                    v-model="authStatus"
+                    :timeout="1500"
+                    top
+                    v-if="authStatus == 'updateUserSuccess'">
+                Successfully Updated User: {{settings.updatedUser}}
+            </v-snackbar>
+
+            <!--show if error in rest request-->
+            <v-snackbar
+                    v-model="error"
+                    top
+                    v-if="authStatus == 'error'"
+                    color: red>
+                ERROR: {{error}}
+            </v-snackbar>
+
+            <!--if use is logged in-->
+            <v-btn flat color="primary" v-if="settings.token != null" @click="logout">LOGOUT</v-btn>
             <!--go to logon screen-->
-            <v-btn flat color="primary" to="/logon">
-                <v-icon>power_settings_new</v-icon>
+            <v-btn flat color="primary" to="/logon" v-if="settings.token == null">
+                LOGON
+            </v-btn>
+            <v-btn flat color="primary" v-if="settings.token != null"
+                   @click="openRegisterForm">
+                REGISTER
             </v-btn>
             <!--go to home screen-->
             <v-btn flat color="primary" to="/">
@@ -15,7 +66,15 @@
             <v-btn
                     color="primary"
                     flat
-                    @click.stop="settingsMenuOpen = !settingsMenuOpen">
+                    @click.stop="settingsMenuOpen = !settingsMenuOpen"
+                    v-if="this.$router.currentRoute.name != 'logon'">
+                <v-icon>menu</v-icon>
+            </v-btn>
+            <!--placehoolder menu button if logon form is open so user can't access settings-->
+            <v-btn
+                    color="primary"
+                    flat
+                    v-if="this.$router.currentRoute.name == 'logon'">
                 <v-icon>menu</v-icon>
             </v-btn>
         </v-toolbar>
@@ -48,14 +107,40 @@
 
     export default {
         components: {
-            settingsMenu
+            settingsMenu,
         },
         data: () => ({
             settingsMenuOpen: false,
+            loadingPopover: false
         }),
+        computed: {
+            settings() {
+                return this.$store.state.settings;
+            },
+            isLoggedIn: function () {
+                return this.$store.getters.isLoggedIn
+            },
+            authStatus: function () {
+                return this.$store.state.status
+            },
+            error: function () {
+                return this.$store.state.error
+            }
+        },
         methods: {
             closeSettingsMenu(value) {
                 this.$data.settingsMenuOpen = value;
+            },
+            logout: function () {
+                this.$store.dispatch('logout')
+                    .then(() => {
+                        //after logout, send the user to the login page for now
+                        this.$router.push('/logon')
+                    })
+            },
+            openRegisterForm: function () {
+                this.$store.dispatch('openRegisterForm');
+                this.$router.push('/logon');
             }
         }
     }

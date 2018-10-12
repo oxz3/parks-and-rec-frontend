@@ -40,21 +40,14 @@
             },
         },
         methods: {
-            closeModal: function(event){
+            closeModal: function (event) {
                 console.log('closing', event);
                 this.$emit('close-delete-modal', false);
             }
         },
         filters: {
             singular: function (value) {
-                console.log(value);
-                if(value === "activities") {
-                    let partial = value.substring(0, value.length - 3);
-                    return partial + 'y';
-                }
-                else{
-                    return  value.substring(0, value.length - 1);
-                }
+                return value.substring(0, value.length - 1);
             }
         }
     }
