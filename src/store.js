@@ -1,19 +1,15 @@
 /* eslint-disable no-console */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import $ from 'jquery'
 import router from './router'
-import adminLogonRequest from './data/rest-requests/admin-logon-request.json'
-import registerUserRequest from './data/rest-requests/register-new-user-request.json'
-import updateUserRequest from './data/rest-requests/update-user-request.json'
-import getUserRequest from './data/rest-requests/get-user-request.json'
+import usersObject from './restHelperObjects/UsersRestObject'
 
 
 Vue.use(Vuex);
 
-const localStorage = window.localStorage;
-let token = null;
 
+// let token = null;
+const localStorage = window.localStorage;
 
 export const store = new Vuex.Store({
     strict: true,
@@ -120,107 +116,21 @@ export const store = new Vuex.Store({
         cancelLogonForm: (context) => {
             context.commit("CANCEL_LOGON_FORM")
         },
-        login({commit}, user) {
-            return new Promise((resolve, reject) => {
-
-                commit('AUTH_REQUEST', 'logging in');
-                let loginSettings = Object.assign({}, adminLogonRequest);
-                loginSettings.data = JSON.stringify(user);
-
-                $.ajax(loginSettings).then(function (resp) {
-                    token = resp;
-                    if (token.length > 1) {
-                        //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
-                        localStorage.setItem('token', token);
-                        console.log(localStorage.getItem('token'));
-                        let payload = {
-                            token: token,
-                            user: user
-                        };
-                        commit('AUTH_SUCCESS', payload);
-                        resolve(resp)
-                    }
-                    else {
-                        commit('AUTH_ERROR', "Invalid Admin User or Password Entered!");
-                        localStorage.removeItem('token');
-                    }
-                }).catch(err => {
-                    commit('AUTH_ERROR', err);
-                    localStorage.removeItem('token');
-                    reject(err)
-                })
-
-
-            })
+        login(context, user) {
+            console.log('user in action:', user);
+            usersObject.login(context, user);
         },
-        register({commit}, user) {
-
-            console.log('registering new user: ', user);
-            return new Promise((resolve, reject) => {
-                commit('AUTH_REQUEST', 'registeringUser');
-
-                //const userName = user;
-                let registerSettings = Object.assign({}, registerUserRequest);
-                console.log(localStorage.getItem('token'));
-                registerSettings.headers.token = localStorage.getItem('token');
-                registerSettings.data = JSON.stringify(user);
-
-                $.ajax(registerSettings).then(function (resp) {
-                    let user = resp;
-                    commit('REGISTRATION_SUCCESS', user);
-                    resolve(resp)
-                }).catch(err => {
-                    commit('AUTH_ERROR', err);
-                    localStorage.removeItem('token');
-                    reject(err)
-                })
-            })
+        register(context, user) {
+            usersObject.register(context, user);
         },
-        getUser({commit}, user) {
-            return new Promise((resolve, reject) => {
-
-                commit('AUTH_REQUEST', 'gettingUser');
-
-                let getUserSettings = Object.assign({}, getUserRequest);
-                getUserSettings.headers.token = localStorage.getItem('token');
-                let url = getUserSettings.url.substr(0, getUserSettings.url.lastIndexOf("=") + 1);
-                getUserSettings.url = url + user;
-
-                $.ajax(getUserSettings).then(function (response) {
-                    resolve(response);
-                }).catch(err => {
-                    commit('AUTH_ERROR', err);
-                    reject(err)
-                })
-            })
+        getUser(context, user) {
+            return usersObject.getUser(context, user);
         },
-        updateUser({commit}, user) {
-            return new Promise((resolve, reject) => {
-
-                commit('AUTH_REQUEST', 'updatingUser');
-
-                let updateUserSettings = Object.assign({}, updateUserRequest);
-                updateUserSettings.headers.token = localStorage.getItem('token');
-                updateUserSettings.data = JSON.stringify(user);
-
-                $.ajax(updateUserSettings).then(function (resp) {
-                    console.log('resp from server: ', resp);
-                    commit('UPDATE_USER_SUCCESS', resp);
-                    resolve(resp)
-                }).catch(err => {
-                    commit('AUTH_ERROR', err);
-                    localStorage.removeItem('token');
-                    reject(err)
-                })
-            })
+        updateUser(context, user) {
+            usersObject.updateUser(context, user);
         },
-        logout({commit}) {
-            return new Promise((resolve) => {
-                commit('LOGOUT');
-                localStorage.removeItem('token');
-                console.log('logged out token removed: ', localStorage.getItem('token'));
-                resolve()
-            })
+        logout(context) {
+            usersObject.logout(context);
         }
     }
 

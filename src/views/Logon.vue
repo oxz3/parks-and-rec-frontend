@@ -82,6 +82,7 @@
         },
         methods: {
             login: function (user) {
+                console.log('user in form: ', user);
                 let username = user.username;
                 let password = user.password;
                 this.$store.dispatch('login', {username, password})
@@ -104,6 +105,7 @@
                 that.$store.dispatch('getUser', user.username)
                     .then(function (result) {
                         //set data to the result of the GetUser
+                        console.log('result in logon: ', result);
                         result[0].password = user.password;
                         that.$store.dispatch('updateUser', result[0])
                             .then(() => that.$router.push('/'))
