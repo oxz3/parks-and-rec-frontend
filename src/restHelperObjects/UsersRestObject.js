@@ -65,6 +65,8 @@ export default {
             registerSettings.headers.token = localStorage.getItem('token');
             registerSettings.data = JSON.stringify(user);
 
+            console.log('new user: ', registerSettings.data);
+
             $.ajax(registerSettings).then(function (resp) {
                 store.commit('REGISTRATION_SUCCESS', resp);
                 resolve(resp)
@@ -93,7 +95,6 @@ export default {
             getUserSettings.url = url + user;
 
             $.ajax(getUserSettings).then(function (response) {
-                console.log('update result in object:', response);
                 resolve(response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
@@ -116,6 +117,8 @@ export default {
             let updateUserSettings = Object.assign({}, updateUserRequest);
             updateUserSettings.headers.token = localStorage.getItem('token');
             updateUserSettings.data = JSON.stringify(user);
+
+            console.log('updating user: ', user);
 
             $.ajax(updateUserSettings).then(function (resp) {
                 store.commit('UPDATE_USER_SUCCESS', resp);

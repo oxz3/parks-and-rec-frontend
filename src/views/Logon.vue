@@ -14,6 +14,7 @@
         <form class="ma-1" @submit.prevent="login">
             <v-checkbox label="New to Parks and Rec?" v-model="settings.registerUser"
                         v-if="settings.registerUser && !settings.editUser"></v-checkbox>
+            <!--Register User-->
             <div v-if="settings.registerUser && !settings.editUser">
                 <v-text-field
                         label="Create New Username"
@@ -25,7 +26,28 @@
                         required
                         v-model="user.password">
                 </v-text-field>
+                <v-text-field
+                        label="Enter Organization Name"
+                        required
+                        v-model="user.orgname">
+                </v-text-field>
+                <v-text-field
+                        label="Create New Email"
+                        required
+                        v-model="user.email">
+                </v-text-field>
+                <v-text-field
+                        label="Create New Phone"
+                        required
+                        v-model="user.phone">
+                </v-text-field>
+                <v-text-field
+                        label="Create New Address"
+                        required
+                        v-model="user.address">
+                </v-text-field>
             </div>
+            <!--Admin Logon-->
             <div v-if="!settings.registerUser && !settings.editUser">
                 <v-text-field
                         label="Enter Username"
@@ -38,6 +60,7 @@
                         v-model="user.password">
                 </v-text-field>
             </div>
+            <!--Update User-->
             <div v-if="settings.editUser">
                 <v-text-field
                         label="Enter Username"
@@ -45,9 +68,29 @@
                         v-model="user.username">
                 </v-text-field>
                 <v-text-field
-                        label="Enter a NEW Password"
+                        label="Enter a New Password"
                         required
                         v-model="user.password">
+                </v-text-field>
+                <v-text-field
+                        label="Enter a New Organization Name"
+                        required
+                        v-model="user.orgname">
+                </v-text-field>
+                <v-text-field
+                        label="Enter New Email"
+                        required
+                        v-model="user.email">
+                </v-text-field>
+                <v-text-field
+                        label="Enter New Phone"
+                        required
+                        v-model="user.phone">
+                </v-text-field>
+                <v-text-field
+                        label="Enter New Address"
+                        required
+                        v-model="user.address">
                 </v-text-field>
             </div>
             <v-btn v-if="!settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
@@ -72,7 +115,11 @@
             isAdmin: false,
             user: {
                 username: "",
-                password: ""
+                password: "",
+                email: "",
+                phone: "",
+                orgname: "",
+                address: ""
             }
         }),
         computed: {
@@ -90,11 +137,12 @@
                     .catch(err => console.log(err))
             },
             register: function (user) {
-                let data = {
-                    username: user.username,
-                    password: user.password
-                };
-                this.$store.dispatch('register', data)
+                console.log(user);
+//                let data = {
+//                    username: user.username,
+//                    password: user.password
+//                };
+                this.$store.dispatch('register', user)
                     .then(() => this.$router.push('/'))
                     .catch(err => console.log(err))
             },
@@ -105,9 +153,14 @@
                 that.$store.dispatch('getUser', user.username)
                     .then(function (result) {
                         //set data to the result of the GetUser
-                        console.log('result in logon: ', result);
-                        result[0].password = user.password;
-                        that.$store.dispatch('updateUser', result[0])
+                        console.log('result in logon: ', result[0]);
+                        let updateUser = result[0];
+                        Object.keys(user).forEach(function (key) {
+                            if (user[key].length > 0) {
+                                updateUser[key] = user[key];
+                            }
+                        });
+                        that.$store.dispatch('updateUser', updateUser)
                             .then(() => that.$router.push('/'))
                             .catch(err => console.log(err))
                     })
