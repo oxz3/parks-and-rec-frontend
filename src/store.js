@@ -34,7 +34,7 @@ export const store = new Vuex.Store({
             info: {
                 "selected": "",
             },
-            selectedOption: "sports",
+            selectedOption: "leagues",
             userIsAdmin: true,
             user: {},
             newRegisteredUser: "",

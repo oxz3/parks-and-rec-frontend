@@ -16,36 +16,42 @@
                         v-if="settings.registerUser && !settings.editUser"></v-checkbox>
             <!--Register User-->
             <div v-if="settings.registerUser && !settings.editUser">
-                <v-text-field
-                        label="Create New Username"
-                        required
-                        v-model="user.username">
-                </v-text-field>
-                <v-text-field
-                        label="Create New Password"
-                        required
-                        v-model="user.password">
-                </v-text-field>
-                <v-text-field
-                        label="Enter Organization Name"
-                        required
-                        v-model="user.orgname">
-                </v-text-field>
-                <v-text-field
-                        label="Create New Email"
-                        required
-                        v-model="user.email">
-                </v-text-field>
-                <v-text-field
-                        label="Create New Phone"
-                        required
-                        v-model="user.phone">
-                </v-text-field>
-                <v-text-field
-                        label="Create New Address"
-                        required
-                        v-model="user.address">
-                </v-text-field>
+                <v-layout>
+                    <v-flex>
+                        <v-text-field
+                                label="Create New Username"
+                                required
+                                v-model="user.username">
+                        </v-text-field>
+                        <v-text-field
+                                label="Create New Password"
+                                required
+                                v-model="user.password">
+                        </v-text-field>
+                        <v-text-field
+                                label="Enter Organization Name"
+                                required
+                                v-model="user.orgname">
+                        </v-text-field>
+                    </v-flex>
+                    <v-flex>
+                        <v-text-field
+                                label="Create New Email"
+                                required
+                                v-model="user.email">
+                        </v-text-field>
+                        <v-text-field
+                                label="Create New Phone"
+                                required
+                                v-model="user.phone">
+                        </v-text-field>
+                        <v-text-field
+                                label="Create New Address"
+                                required
+                                v-model="user.address">
+                        </v-text-field>
+                    </v-flex>
+                </v-layout>
             </div>
             <!--Admin Logon-->
             <div v-if="!settings.registerUser && !settings.editUser">
