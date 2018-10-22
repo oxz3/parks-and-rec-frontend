@@ -8,7 +8,11 @@
                             <v-toolbar-title v-if="settings.selectedOption == 'sports'">sports</v-toolbar-title>
                             <v-toolbar-title v-if="settings.selectedOption == 'leagues'">Leagues</v-toolbar-title>
                             <v-spacer></v-spacer>
-                            <v-btn icon>
+                            <v-btn icon v-if="settings.selectedOption == 'leagues'"
+                            @click="openLeagues">
+                                <v-icon>add</v-icon>
+                            </v-btn>
+                            <v-btn icon v-if="settings.selectedOption == 'sports'">
                                 <v-icon>add</v-icon>
                             </v-btn>
                         </v-toolbar>
@@ -156,6 +160,9 @@
         methods: {
             closeConfirmDeletePopover(value) {
                 this.$data.showDeleteModal = value;
+            },
+            openLeagues() {
+                console.log('open leagues')
             }
         }
     }

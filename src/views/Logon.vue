@@ -16,8 +16,8 @@
                         v-if="settings.registerUser && !settings.editUser"></v-checkbox>
             <!--Register User-->
             <div v-if="settings.registerUser && !settings.editUser">
-                <v-layout>
-                    <v-flex>
+                <v-layout pb-3>
+                    <v-flex pr-3>
                         <v-text-field
                                 label="Create New Username"
                                 required
@@ -34,7 +34,8 @@
                                 v-model="user.orgname">
                         </v-text-field>
                     </v-flex>
-                    <v-flex>
+                    <v-divider vertical></v-divider>
+                    <v-flex pl-3>
                         <v-text-field
                                 label="Create New Email"
                                 required
@@ -67,50 +68,59 @@
                 </v-text-field>
             </div>
             <!--Update User-->
-            <div v-if="settings.editUser">
-                <v-text-field
-                        label="Enter Username"
-                        required
-                        v-model="user.username">
-                </v-text-field>
-                <v-text-field
-                        label="Enter a New Password"
-                        required
-                        v-model="user.password">
-                </v-text-field>
-                <v-text-field
-                        label="Enter a New Organization Name"
-                        required
-                        v-model="user.orgname">
-                </v-text-field>
-                <v-text-field
-                        label="Enter New Email"
-                        required
-                        v-model="user.email">
-                </v-text-field>
-                <v-text-field
-                        label="Enter New Phone"
-                        required
-                        v-model="user.phone">
-                </v-text-field>
-                <v-text-field
-                        label="Enter New Address"
-                        required
-                        v-model="user.address">
-                </v-text-field>
+            <div v-if="settings.editUser && !settings.registerUser">
+                <v-layout pb-3>
+                    <v-flex pr-3>
+                        <v-text-field
+                                label="Enter Username"
+                                required
+                                v-model="user.username">
+                        </v-text-field>
+                        <v-text-field
+                                label="Enter a New Password"
+                                required
+                                v-model="user.password">
+                        </v-text-field>
+                        <v-text-field
+                                label="Enter a New Organization Name"
+                                required
+                                v-model="user.orgname">
+                        </v-text-field>
+                    </v-flex>
+                    <v-divider vertical></v-divider>
+                    <v-flex pl-3>
+                        <v-text-field
+                                label="Enter New Email"
+                                required
+                                v-model="user.email">
+                        </v-text-field>
+                        <v-text-field
+                                label="Enter New Phone"
+                                required
+                                v-model="user.phone">
+                        </v-text-field>
+                        <v-text-field
+                                label="Enter New Address"
+                                required
+                                v-model="user.address">
+                        </v-text-field>
+                    </v-flex>
+                </v-layout>
             </div>
-            <v-btn v-if="!settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
-                   @click="login(user)">
-                LOGON
-            </v-btn>
-            <v-btn v-if="settings.registerUser && !settings.editUser" color="primary" to="/" type="submit"
-                   @click="register(user)">
-                REGISTER
-            </v-btn>
-            <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
-                   @click="updateUser(user)">UPDATE
-            </v-btn>
-            <v-btn @click="cancel">cancel</v-btn>
+            <div class="pb-4">
+                <v-btn v-if="!settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
+                       @click="login(user)">
+                    LOGON
+                </v-btn>
+                <v-btn v-if="settings.registerUser && !settings.editUser" color="primary" to="/" type="submit"
+                       @click="register(user)">
+                    REGISTER
+                </v-btn>
+                <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
+                       @click="updateUser(user)">UPDATE
+                </v-btn>
+                <v-btn @click="cancel">cancel</v-btn>
+            </div>
         </form>
     </v-card>
 </template>

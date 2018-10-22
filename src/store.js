@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from './router'
 import usersObject from './restHelperObjects/UsersRestObject'
+import leaguesObject from './restHelperObjects/LeaguesRestObject'
 
 
 Vue.use(Vuex);
@@ -41,6 +42,8 @@ export const store = new Vuex.Store({
             updatedUser: "",
             registerUser: false,
             editUser: false,
+            createLeague: false,
+            editLeague: false,
             token: localStorage.getItem('token') || null
         },
         error: undefined
@@ -98,6 +101,9 @@ export const store = new Vuex.Store({
         CANCEL_LOGON_FORM(state) {
             state.settings.editUser = false;
             state.settings.registerUser = false;
+        },
+        CREATE_LEAGUE(state) {
+            state.settings.createLeague = true;
         }
     },
     actions: {
@@ -131,6 +137,10 @@ export const store = new Vuex.Store({
         },
         logout(context) {
             usersObject.logout(context);
+        },
+        //leagues
+        createLeague(context) {
+            leaguesObject.createLeague(context);
         }
     }
 
