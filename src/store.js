@@ -27,6 +27,21 @@ export const store = new Vuex.Store({
             {leagueName: 'Football', description: "Fall Football League", teamMax: 50, teamMin: 0},
             {leagueName: 'Basketball', description: "Fall Basketball League", teamMax: 30, teamMin: 25}
         ],
+        templateLeague: {
+            leagueId: 1,
+            leagueName: "Test League E2",
+            description: "test league E Fun",
+            sportId: 3,
+            ageMin: 15,
+            ageMax: 16,
+            coed: 1,
+            teamMin: 2,
+            teamMax: 6,
+            leagueSchedule: "test league E schedule",
+            leagueRules: "Play Fair have Fun",
+            orgid: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
+            userId: 2
+        },
         settings: {
             options: [
                 "sports",
@@ -38,6 +53,21 @@ export const store = new Vuex.Store({
             selectedOption: "leagues",
             userIsAdmin: true,
             user: {},
+            league: {
+                leagueId: 1,
+                leagueName: "Test League E2",
+                description: "test league E Fun",
+                sportId: 3,
+                ageMin: 15,
+                ageMax: 16,
+                coed: 1,
+                teamMin: 2,
+                teamMax: 6,
+                leagueSchedule: "test league E schedule",
+                leagueRules: "Play Fair have Fun",
+                orgid: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
+                userId: 2
+            },
             newRegisteredUser: "",
             updatedUser: "",
             registerUser: false,
@@ -103,15 +133,23 @@ export const store = new Vuex.Store({
             state.settings.editUser = false;
             state.settings.registerUser = false;
         },
-        GET_LEAGUES_SUCCESS(state, payload){
+        GET_LEAGUES_SUCCESS(state, payload) {
             state.leagues = payload;
         },
         OPEN_CREATE_LEAGUE(state) {
+            state.league = state.templateLeague;
             state.settings.createLeague = true;
+        },
+        OPEN_EDIT_LEAGUE(state, payload) {
+            console.log('payload in edit mutation', payload);
+            state.settings.editLeague = true;
+            state.settings.league = payload;
+            router.push('/leagues');
         },
         CANCEL_LEAGUES_FORM(state) {
             state.settings.createLeague = false;
             state.settings.editLeague = false;
+            state.settings.league = state.templateLeague;
         },
         LEAGUE_CREATE_SUCCESS(state, payload) {
             state.settings.newLeague = payload.leagueName;
@@ -120,6 +158,7 @@ export const store = new Vuex.Store({
             state.status = 'leagueCreateSuccess';
         },
         LEAGUE_UPDATE_SUCCESS(state, payload) {
+            console.log('updating league', payload);
             state.settings.updatedLeague = payload.leagueName;
             //update the local array by key or value to show update in UI
             //let obj = state.leagues.find(obj => obj.leagueId === payload.leagueId);
@@ -138,6 +177,7 @@ export const store = new Vuex.Store({
         setSettingInfo: (context, payload) => {
             context.commit("SET_SETTING_INFO", payload);
         },
+        //users
         editUser: (context, payload) => {
             context.commit("EDIT_USER", payload);
         },
@@ -164,8 +204,7 @@ export const store = new Vuex.Store({
             usersObject.logout(context);
         },
         //leagues
-        getLeagues(context, token){
-            console.log(token);
+        getLeagues(context, token) {
             leaguesObject.getLeagues(context, token);
         },
         openCreateLeague(context) {
@@ -174,8 +213,11 @@ export const store = new Vuex.Store({
         createLeague(context, league) {
             leaguesObject.createLeague(context, league);
         },
-        updateLeague(context, league) {
-            leaguesObject.updateLeague(context, league);
+        openUpdateLeague(context, league) {
+            context.commit('OPEN_EDIT_LEAGUE', league);
+        },
+        updateLeague(context, league){
+           leaguesObject.updateLeague(context, league);
         },
         cancelLeaguesForm(context) {
             context.commit("CANCEL_LEAGUES_FORM");

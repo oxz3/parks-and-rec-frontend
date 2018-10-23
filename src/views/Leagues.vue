@@ -1,8 +1,18 @@
 <template>
     <v-card class="ma-3">
+        <v-card-title class="justify-center">
+            <div>
+                <h3 class="headline mb-0" v-if="settings.createLeague && !settings.editLeague">
+                    Create a New League</h3>
+                <h3 class="headline mb-0" v-if="!settings.createLeague && settings.editLeague">
+                    Edit League</h3>
+
+            </div>
+        </v-card-title>
         <form class="ma-3">
             <!--Register League-->
-            <div v-if="settings.createLeague && !settings.editLeague">
+            TEST: {{league.leagueId}}, {{league.orgid}}
+            <div>
                 <v-layout class="pb-3">
                     <v-flex class="pr-3">
                         <v-text-field
@@ -61,9 +71,13 @@
                 </v-layout>
             </div>
             <div class="pb-4">
-                <v-btn v-if="!settings.editleague && settings.createLeague" color="primary" to="/" type="submit"
+                <v-btn v-if="!settings.editLeague && settings.createLeague" color="primary" to="/" type="submit"
                        @click="createLeague(league)">
                     CREATE LEAGUE
+                </v-btn>
+                <v-btn v-if="settings.editLeague && !settings.createLeague" color="primary" to="/" type="submit"
+                       @click="updateLeague(league)">
+                    EDIT LEAGUE
                 </v-btn>
                 <v-btn @click="cancel">cancel</v-btn>
             </div>
@@ -73,6 +87,14 @@
 
 <script>
     export default {
+
+        created: function () {
+            // `this` points to the vm instance
+            console.log('a is: ' + this);
+            this.league = Object.assign({}, this.$store.state.settings.league);
+            console.log('league in create league component', this.league);
+        }
+        ,
         data: () => ({
             league: {
                 leagueId: 1,
@@ -86,8 +108,8 @@
                 teamMax: 6,
                 leagueSchedule: "test league E schedule",
                 leagueRules: "Play Fair have Fun",
-                orgId: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
-                userID: 2
+                orgid: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
+                userId: 2
             }
         }),
         computed: {

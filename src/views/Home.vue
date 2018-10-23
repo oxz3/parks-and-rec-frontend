@@ -49,7 +49,7 @@
                                         <v-list-tile-sub-title></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
-                                        <v-btn icon>
+                                        <v-btn icon @click="updateLeague(league)">
                                             <v-icon>
                                                 edit
                                             </v-icon>
@@ -165,6 +165,9 @@
             openLeagues(){
                 this.$store.dispatch("openCreateLeague");
                 router.push('/leagues');
+            },
+            updateLeague(league){
+                this.$store.dispatch("openUpdateLeague", league);
             }
         }
     }

@@ -44,11 +44,15 @@ export default {
 
             store.commit('AUTH_REQUEST', 'updatingleague');
 
-            let updateleagueSettings = Object.assign({}, updateLeagueRequest);
-            updateleagueSettings.headers.token = localStorage.getItem('token');
-            updateleagueSettings.data = JSON.stringify(league);
+            let updateLeagueSettings = Object.assign({}, updateLeagueRequest);
+            updateLeagueSettings.headers.token = localStorage.getItem('token');
+            //TODO: update when backend bug is fixed for get leagues API
+            league.orgid = "9bbeb119-659e-495b-a04e-2a84a4ba3a03";
+            updateLeagueSettings.data = JSON.stringify(league);
 
-            $.ajax(updateleagueSettings).then(function (response) {
+
+            console.log(updateLeagueSettings, 'update league payload');
+            $.ajax(updateLeagueSettings).then(function (response) {
                 console.log('update league response', response);
                 store.commit('LEAGUE_UPDATE_SUCCESS', response);
                 resolve(response);
