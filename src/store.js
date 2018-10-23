@@ -2,8 +2,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import router from './router'
-import usersObject from './restHelperObjects/UsersRestObject'
-import leaguesObject from './restHelperObjects/LeaguesRestObject'
+import usersObject from './restHelperObjects/objects/UsersRestObject'
+import leaguesObject from './restHelperObjects/objects/LeaguesRestObject'
 
 
 Vue.use(Vuex);
@@ -44,6 +44,7 @@ export const store = new Vuex.Store({
             editUser: false,
             createLeague: false,
             editLeague: false,
+            newLeague: "",
             token: localStorage.getItem('token') || null
         },
         error: undefined
@@ -102,8 +103,17 @@ export const store = new Vuex.Store({
             state.settings.editUser = false;
             state.settings.registerUser = false;
         },
-        CREATE_LEAGUE(state) {
+        OPEN_CREATE_LEAGUE(state) {
             state.settings.createLeague = true;
+        },
+        CANCEL_LEAGUES_FORM(state){
+            state.settings.createLeague = false;
+            state.settings.editLeague = false;
+        },
+        LEAGUE_CREATE_SUCCESS(state, payload){
+            state.settings.newLeague = payload.leagueName;
+            state.createLeague = false;
+            state.status = 'leagueCreateSuccess';
         }
     },
     actions: {
@@ -139,8 +149,14 @@ export const store = new Vuex.Store({
             usersObject.logout(context);
         },
         //leagues
-        createLeague(context) {
-            leaguesObject.createLeague(context);
+        openCreateLeague(context){
+            context.commit("OPEN_CREATE_LEAGUE");
+        },
+        createLeague(context, league) {
+            leaguesObject.createLeague(context, league);
+        },
+        cancelLeaguesForm(context){
+            context.commit("CANCEL_LEAGUES_FORM");
         }
     }
 

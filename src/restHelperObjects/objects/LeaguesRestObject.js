@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import createLeagueRequest from './rest-requests/leagues/create-league-request.json'
+import createLeagueRequest from '../rest-requests/leagues/create-league-request.json'
 
 /* eslint-disable no-console */
 /**
@@ -16,6 +16,8 @@ export default {
     createLeague: function (store, league) {
         return new Promise((resolve, reject) => {
 
+            console.log("league in object create: ", league);
+
             store.commit('AUTH_REQUEST', 'creatingleague');
 
             let createleagueSettings = Object.assign({}, createLeagueRequest);
@@ -23,7 +25,8 @@ export default {
             createleagueSettings.data = JSON.stringify(league);
 
             $.ajax(createleagueSettings).then(function (response) {
-                console.log('create league response');
+                console.log('create league response', response);
+                store.commit('LEAGUE_CREATE_SUCCESS', response);
                 resolve(response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);

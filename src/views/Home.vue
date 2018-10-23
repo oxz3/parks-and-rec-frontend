@@ -132,6 +132,7 @@
 <script>
 
     import DeleteConfirmPopover from "@/components/DeleteConfirmPopover.vue";
+    import router from '../router';
 
     export default {
         name: 'home',
@@ -161,8 +162,9 @@
             closeConfirmDeletePopover(value) {
                 this.$data.showDeleteModal = value;
             },
-            openLeagues() {
-                console.log('open leagues')
+            openLeagues(){
+                this.$store.dispatch("openCreateLeague");
+                router.push('/leagues');
             }
         }
     }

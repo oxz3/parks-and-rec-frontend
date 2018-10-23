@@ -1,8 +1,8 @@
 import $ from 'jquery'
-import adminLogonRequest from './rest-requests/admin-logon-request.json'
-import registerUserRequest from './rest-requests/users/register-new-user-request.json'
-import updateUserRequest from './rest-requests/users/update-user-request.json'
-import getUserRequest from './rest-requests/users/get-user-request.json'
+import adminLogonRequest from '../rest-requests/admin-logon-request.json'
+import registerUserRequest from '../rest-requests/users/register-new-user-request.json'
+import updateUserRequest from '../rest-requests/users/update-user-request.json'
+import getUserRequest from '../rest-requests/users/get-user-request.json'
 
 let token = null;
 

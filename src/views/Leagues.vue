@@ -1,15 +1,14 @@
 <template>
     <v-card class="ma-3">
-        <!--@submit.prevent associates login to the form-->
-        <form class="ma-1">
+        <form class="ma-3">
             <!--Register League-->
             <div v-if="settings.createLeague && !settings.editLeague">
-                <v-layout pb-3>
-                    <v-flex pr-3>
+                <v-layout class="pb-3">
+                    <v-flex class="pr-3">
                         <v-text-field
                                 label="League Name"
                                 required
-                                v-model="league.leaguename">
+                                v-model="league.leagueName">
                         </v-text-field>
                         <v-text-field
                                 label="Description"
@@ -31,20 +30,23 @@
                                 required
                                 v-model="league.ageMax">
                         </v-text-field>
-                        <v-checkbox label="Co Ed?" v-model="league.coed"></v-checkbox>
                     </v-flex>
                     <v-divider vertical></v-divider>
-                    <v-flex pl-3>
-                        <v-text-field
-                                label="Minimum Teams"
-                                required
-                                v-model="league.teamMin">
-                        </v-text-field>
-                        <v-text-field
-                                label="Maximum Teams"
-                                required
-                                v-model="league.teamMax">
-                        </v-text-field>
+                    <v-flex class="pl-3">
+                        <v-checkbox label="Co Ed?" v-model="league.coed"></v-checkbox>
+                        <v-flex>
+                            <v-text-field
+                                    label="Minimum Teams"
+                                    required
+                                    v-model="league.teamMin">
+                            </v-text-field>
+                            <v-text-field
+                                    label="Maximum Teams"
+                                    required
+                                    v-model="league.teamMax">
+                            </v-text-field>
+                        </v-flex>
+
                         <v-text-field
                                 label="Schedule"
                                 required
@@ -58,11 +60,13 @@
                     </v-flex>
                 </v-layout>
             </div>
-            <v-btn v-if="!settings.editleague && !settings.registerleague" color="primary" to="/" type="submit"
-                   @click="login(league)">
-                CREATE LEAGUE
-            </v-btn>
-            <v-btn @click="cancel">cancel</v-btn>
+            <div class="pb-4">
+                <v-btn v-if="!settings.editleague && settings.createLeague" color="primary" to="/" type="submit"
+                       @click="createLeague(league)">
+                    CREATE LEAGUE
+                </v-btn>
+                <v-btn @click="cancel">cancel</v-btn>
+            </div>
         </form>
     </v-card>
 </template>
@@ -70,6 +74,19 @@
 <script>
     export default {
         data: () => ({
+            league: {
+               leagueId: 1,
+               leagueName: "Test League E2",
+               description: "test league E Fun",
+               sportId: 3,
+               ageMin: 15,
+               ageMax: 16,
+               coed: 1,
+               teamMin: 2,
+               teamMax: 6,
+               leagueSchedule: "test league E schedule",
+               leagueRules: "Play Fair have Fun"
+            }
         }),
         computed: {
             settings() {
@@ -80,14 +97,14 @@
             createLeague: function (league) {
                 console.log(league);
                 this.$store.dispatch('createLeague', league)
-                    .then(() => console.log('creating leaugue'))
+                    .then(() => console.log('creating league'))
                     .catch(err => console.log(err))
             },
             updateLeague: function (league) {
 
             },
             cancel: function () {
-                this.$store.dispatch('cancelLeagueForm')
+                this.$store.dispatch('cancelLeaguesForm')
                     .then(() => this.$router.push('/'))
                     .catch(err => console.log(err))
             }
