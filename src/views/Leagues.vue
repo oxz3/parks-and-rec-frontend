@@ -75,17 +75,19 @@
     export default {
         data: () => ({
             league: {
-               leagueId: 1,
-               leagueName: "Test League E2",
-               description: "test league E Fun",
-               sportId: 3,
-               ageMin: 15,
-               ageMax: 16,
-               coed: 1,
-               teamMin: 2,
-               teamMax: 6,
-               leagueSchedule: "test league E schedule",
-               leagueRules: "Play Fair have Fun"
+                leagueId: 1,
+                leagueName: "Test League E2",
+                description: "test league E Fun",
+                sportId: 3,
+                ageMin: 15,
+                ageMax: 16,
+                coed: 1,
+                teamMin: 2,
+                teamMax: 6,
+                leagueSchedule: "test league E schedule",
+                leagueRules: "Play Fair have Fun",
+                orgId: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
+                userID: 2
             }
         }),
         computed: {
@@ -101,7 +103,10 @@
                     .catch(err => console.log(err))
             },
             updateLeague: function (league) {
-
+                console.log(league);
+                this.$store.dispatch('updateLeague', league)
+                    .then(() => console.log('updating league'))
+                    .catch(err => console.log(err))
             },
             cancel: function () {
                 this.$store.dispatch('cancelLeaguesForm')

@@ -42,9 +42,9 @@
                             <template v-for="league in leagues">
                                 <v-list-tile>
                                     <v-list-tile-content>
-                                        <v-list-tile-title v-html="league.name"></v-list-tile-title>
+                                        <v-list-tile-title v-html="league.leagueName"></v-list-tile-title>
                                         <v-list-tile-sub-title>
-                                            {{league.description}}: {{league.currentMembers}} / {{league.maxMembers}}
+                                            {{league.description}}: {{league.teamMin}} / {{league.teamMax}}
                                         </v-list-tile-sub-title>
                                         <v-list-tile-sub-title></v-list-tile-sub-title>
                                     </v-list-tile-content>

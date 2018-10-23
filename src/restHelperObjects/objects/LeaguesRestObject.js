@@ -1,5 +1,8 @@
 import $ from 'jquery'
 import createLeagueRequest from '../rest-requests/leagues/create-league-request.json'
+import updateLeagueRequest from '../rest-requests/leagues/update-league-request.json'
+import getLeaguesRequest from '../rest-requests/leagues/get-leagues-request.json'
+
 
 /* eslint-disable no-console */
 /**
@@ -33,5 +36,44 @@ export default {
                 reject(err)
             })
         })
+    },
+    updateLeague: function (store, league) {
+        return new Promise((resolve, reject) => {
+
+            console.log("league in object update: ", league);
+
+            store.commit('AUTH_REQUEST', 'updatingleague');
+
+            let updateleagueSettings = Object.assign({}, updateLeagueRequest);
+            updateleagueSettings.headers.token = localStorage.getItem('token');
+            updateleagueSettings.data = JSON.stringify(league);
+
+            $.ajax(updateleagueSettings).then(function (response) {
+                console.log('update league response', response);
+                store.commit('LEAGUE_UPDATE_SUCCESS', response);
+                resolve(response);
+            }).catch(err => {
+                store.commit('AUTH_ERROR', err);
+                reject(err)
+            })
+        })
+    },
+    getLeagues: function (store, token) {
+        return new Promise((resolve, reject) => {
+            store.commit('AUTH_REQUEST', 'gettingLeagues');
+            console.log('token in leagues object: ', token);
+            let request = Object.assign({}, getLeaguesRequest);
+            request.headers.token = localStorage.getItem('token');
+
+            $.ajax(request).then(function (response) {
+                resolve(response);
+                console.log('leagues response: ', response);
+                store.commit('GET_LEAGUES_SUCCESS', response);
+            }).catch(err => {
+                store.commit('AUTH_ERROR', err);
+                reject(err)
+            })
+        })
+
     }
 }

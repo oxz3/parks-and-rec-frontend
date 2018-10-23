@@ -1,0 +1,11 @@
+{
+  "async": true,
+  "crossDomain": true,
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/getLeagueByUserId",
+  "method": "GET",
+  "headers": {
+    "cache-control": "no-cache",
+    "postman-token": "5db20b1c-821a-523b-f2b4-c30d0be98b71",
+    "token": "7a4d8ff6-8d90-44cb-92a6-31270a88cf3c"
+  }
+}

@@ -23,9 +23,9 @@ export const store = new Vuex.Store({
             {name: 'Basketball', description: 'shoot the ball', price: 30}
         ],
         leagues: [
-            {name: 'Soccer', description: "Fall Soccer League", maxMembers: 20, currentMembers: 18},
-            {name: 'Football', description: "Fall Football League", maxMembers: 50, currentMembers: 0},
-            {name: 'Basketball', description: "Fall Basketball League", maxMembers: 30, currentMembers: 25}
+            {leagueName: 'Soccer', description: "Fall Soccer League", teamMax: 20, teamMin: 18},
+            {leagueName: 'Football', description: "Fall Football League", teamMax: 50, teamMin: 0},
+            {leagueName: 'Basketball', description: "Fall Basketball League", teamMax: 30, teamMin: 25}
         ],
         settings: {
             options: [
@@ -103,17 +103,32 @@ export const store = new Vuex.Store({
             state.settings.editUser = false;
             state.settings.registerUser = false;
         },
+        GET_LEAGUES_SUCCESS(state, payload){
+            state.leagues = payload;
+        },
         OPEN_CREATE_LEAGUE(state) {
             state.settings.createLeague = true;
         },
-        CANCEL_LEAGUES_FORM(state){
+        CANCEL_LEAGUES_FORM(state) {
             state.settings.createLeague = false;
             state.settings.editLeague = false;
         },
-        LEAGUE_CREATE_SUCCESS(state, payload){
+        LEAGUE_CREATE_SUCCESS(state, payload) {
             state.settings.newLeague = payload.leagueName;
+            state.leagues.push(payload);
             state.createLeague = false;
             state.status = 'leagueCreateSuccess';
+        },
+        LEAGUE_UPDATE_SUCCESS(state, payload) {
+            state.settings.updatedLeague = payload.leagueName;
+            //update the local array by key or value to show update in UI
+            //let obj = state.leagues.find(obj => obj.leagueId === payload.leagueId);
+            let foundIndex = state.leagues.findIndex(x => x.leagueId === payload.leagueId);
+            console.log('mutation update league: ', foundIndex);
+            state.leagues[foundIndex] = payload;
+            console.log('updated leagues list: ', state.leagues);
+            state.editLeague = false;
+            state.status = 'updateLeagueSuccess';
         }
     },
     actions: {
@@ -134,7 +149,7 @@ export const store = new Vuex.Store({
         },
         login(context, user) {
             console.log('user in action:', user);
-            usersObject.login(context, user);
+            return usersObject.login(context, user);
         },
         register(context, user) {
             usersObject.register(context, user);
@@ -149,13 +164,20 @@ export const store = new Vuex.Store({
             usersObject.logout(context);
         },
         //leagues
-        openCreateLeague(context){
+        getLeagues(context, token){
+            console.log(token);
+            leaguesObject.getLeagues(context, token);
+        },
+        openCreateLeague(context) {
             context.commit("OPEN_CREATE_LEAGUE");
         },
         createLeague(context, league) {
             leaguesObject.createLeague(context, league);
         },
-        cancelLeaguesForm(context){
+        updateLeague(context, league) {
+            leaguesObject.updateLeague(context, league);
+        },
+        cancelLeaguesForm(context) {
             context.commit("CANCEL_LEAGUES_FORM");
         }
     }

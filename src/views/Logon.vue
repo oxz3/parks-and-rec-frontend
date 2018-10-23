@@ -11,7 +11,7 @@
             </div>
         </v-card-title>
         <!--@submit.prevent associates login to the form-->
-        <form class="ma-1" @submit.prevent="login">
+        <form class="ma-3" @submit.prevent="login">
             <v-checkbox label="New to Parks and Rec?" v-model="settings.registerUser"
                         v-if="settings.registerUser && !settings.editUser"></v-checkbox>
             <!--Register User-->
@@ -130,8 +130,8 @@
         data: () => ({
             isAdmin: false,
             user: {
-                username: "",
-                password: "",
+                username: "Admin",
+                password: "Admin",
                 email: "",
                 phone: "",
                 orgname: "",
@@ -148,16 +148,21 @@
                 console.log('user in form: ', user);
                 let username = user.username;
                 let password = user.password;
-                this.$store.dispatch('login', {username, password})
-                    .then(() => this.$router.push('/'))
-                    .catch(err => console.log(err))
+                let store = this.$store;
+                let router = this.$router;
+                store.dispatch('login', {username, password})
+                    .then(function (response) {
+                        console.log(response);
+                        store.dispatch('getLeagues', response)
+                            .then(function () {
+                                router.push('/');
+                            })
+                    }).catch(function (error) {
+                    console.log(error);
+                })
             },
             register: function (user) {
                 console.log(user);
-//                let data = {
-//                    username: user.username,
-//                    password: user.password
-//                };
                 this.$store.dispatch('register', user)
                     .then(() => this.$router.push('/'))
                     .catch(err => console.log(err))
