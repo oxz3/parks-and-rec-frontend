@@ -8,7 +8,11 @@
                             <v-toolbar-title v-if="settings.selectedOption == 'sports'">sports</v-toolbar-title>
                             <v-toolbar-title v-if="settings.selectedOption == 'leagues'">Leagues</v-toolbar-title>
                             <v-spacer></v-spacer>
-                            <v-btn icon>
+                            <v-btn icon v-if="settings.selectedOption == 'leagues'"
+                            @click="openLeagues">
+                                <v-icon>add</v-icon>
+                            </v-btn>
+                            <v-btn icon v-if="settings.selectedOption == 'sports'">
                                 <v-icon>add</v-icon>
                             </v-btn>
                         </v-toolbar>
@@ -38,14 +42,14 @@
                             <template v-for="league in leagues">
                                 <v-list-tile>
                                     <v-list-tile-content>
-                                        <v-list-tile-title v-html="league.name"></v-list-tile-title>
+                                        <v-list-tile-title v-html="league.leagueName"></v-list-tile-title>
                                         <v-list-tile-sub-title>
-                                            {{league.description}}: {{league.currentMembers}} / {{league.maxMembers}}
+                                            {{league.description}}: {{league.teamMin}} / {{league.teamMax}}
                                         </v-list-tile-sub-title>
                                         <v-list-tile-sub-title></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
-                                        <v-btn icon>
+                                        <v-btn icon @click="updateLeague(league)">
                                             <v-icon>
                                                 edit
                                             </v-icon>
@@ -128,6 +132,7 @@
 <script>
 
     import DeleteConfirmPopover from "@/components/DeleteConfirmPopover.vue";
+    import router from '../router';
 
     export default {
         name: 'home',
@@ -156,6 +161,13 @@
         methods: {
             closeConfirmDeletePopover(value) {
                 this.$data.showDeleteModal = value;
+            },
+            openLeagues(){
+                this.$store.dispatch("openCreateLeague");
+                router.push('/leagues');
+            },
+            updateLeague(league){
+                this.$store.dispatch("openUpdateLeague", league);
             }
         }
     }
