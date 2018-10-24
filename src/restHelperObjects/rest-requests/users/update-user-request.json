@@ -10,20 +10,25 @@
   },
   "processData": false,
   "data": {
-    "userId": 2,
-    "username": "TestUserEJG4",
-    "password": "pwUpdated",
+    "userId": 11,
+    "username": "TestUserEJG61",
+    "password": "updated",
     "roles": [
       {
-        "id": 3,
+        "id": 5,
         "role_id": 1,
         "user_id": null
       },
       {
-        "id": 4,
+        "id": 6,
         "role_id": 2,
         "user_id": null
       }
-    ]
+    ],
+    "orgid": "aa1edef2-4fe7-4224-8885-4e738350118f",
+    "orgname": "Test Org",
+    "email": "ejg60Test@test.com",
+    "address": "TestUserEJG61",
+    "phone": "222-333-4444"
   }
 }

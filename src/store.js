@@ -1,19 +1,16 @@
 /* eslint-disable no-console */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import $ from 'jquery'
 import router from './router'
-import adminLogonRequest from './data/rest-requests/admin-logon-request.json'
-import registerUserRequest from './data/rest-requests/register-new-user-request.json'
-import updateUserRequest from './data/rest-requests/update-user-request.json'
-import getUserRequest from './data/rest-requests/get-user-request.json'
+import usersObject from './restHelperObjects/objects/UsersRestObject'
+import leaguesObject from './restHelperObjects/objects/LeaguesRestObject'
 
 
 Vue.use(Vuex);
 
-const localStorage = window.localStorage;
-let token = null;
 
+// let token = null;
+const localStorage = window.localStorage;
 
 export const store = new Vuex.Store({
     strict: true,
@@ -26,10 +23,25 @@ export const store = new Vuex.Store({
             {name: 'Basketball', description: 'shoot the ball', price: 30}
         ],
         leagues: [
-            {name: 'Soccer', description: "Fall Soccer League", maxMembers: 20, currentMembers: 18},
-            {name: 'Football', description: "Fall Football League", maxMembers: 50, currentMembers: 0},
-            {name: 'Basketball', description: "Fall Basketball League", maxMembers: 30, currentMembers: 25}
+            {leagueName: 'Soccer', description: "Fall Soccer League", teamMax: 20, teamMin: 18},
+            {leagueName: 'Football', description: "Fall Football League", teamMax: 50, teamMin: 0},
+            {leagueName: 'Basketball', description: "Fall Basketball League", teamMax: 30, teamMin: 25}
         ],
+        templateLeague: {
+            leagueId: 1,
+            leagueName: "Test League E2",
+            description: "test league E Fun",
+            sportId: 3,
+            ageMin: 15,
+            ageMax: 16,
+            coed: 1,
+            teamMin: 2,
+            teamMax: 6,
+            leagueSchedule: "test league E schedule",
+            leagueRules: "Play Fair have Fun",
+            orgid: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
+            userId: 2
+        },
         settings: {
             options: [
                 "sports",
@@ -38,13 +50,32 @@ export const store = new Vuex.Store({
             info: {
                 "selected": "",
             },
-            selectedOption: "sports",
+            selectedOption: "leagues",
             userIsAdmin: true,
             user: {},
+            league: {
+                leagueId: 1,
+                leagueName: "Test League E2",
+                description: "test league E Fun",
+                sportId: 3,
+                ageMin: 15,
+                ageMax: 16,
+                coed: 1,
+                teamMin: 2,
+                teamMax: 6,
+                leagueSchedule: "test league E schedule",
+                leagueRules: "Play Fair have Fun",
+                orgid: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
+                userId: 2
+            },
             newRegisteredUser: "",
             updatedUser: "",
             registerUser: false,
             editUser: false,
+            createLeague: false,
+            editLeague: false,
+            newLeague: "",
+            updatedLeague: "",
             token: localStorage.getItem('token') || null
         },
         error: undefined
@@ -102,6 +133,44 @@ export const store = new Vuex.Store({
         CANCEL_LOGON_FORM(state) {
             state.settings.editUser = false;
             state.settings.registerUser = false;
+        },
+        GET_LEAGUES_SUCCESS(state, payload) {
+            state.leagues = payload;
+        },
+        OPEN_CREATE_LEAGUE(state) {
+            state.league = state.templateLeague;
+            state.settings.createLeague = true;
+            state.settings.editLeague = false;
+        },
+        OPEN_EDIT_LEAGUE(state, payload) {
+            console.log('payload in edit mutation', payload);
+            state.settings.editLeague = true;
+            state.settings.createLeague = false;
+            state.settings.league = payload;
+            router.push('/leagues');
+        },
+        CANCEL_LEAGUES_FORM(state) {
+            state.settings.createLeague = false;
+            state.settings.editLeague = false;
+            state.settings.league = state.templateLeague;
+        },
+        LEAGUE_CREATE_SUCCESS(state, payload) {
+            state.settings.newLeague = payload.leagueName;
+            state.leagues.push(payload);
+            state.createLeague = false;
+            state.status = 'leagueCreateSuccess';
+        },
+        LEAGUE_UPDATE_SUCCESS(state, payload) {
+            console.log('updating league', payload);
+            state.settings.updatedLeague = payload.leagueName;
+            //update the local array by key or value to show update in UI
+            //let obj = state.leagues.find(obj => obj.leagueId === payload.leagueId);
+            let foundIndex = state.leagues.findIndex(x => x.leagueId === payload.leagueId);
+            console.log('mutation update league: ', foundIndex);
+            state.leagues[foundIndex] = payload;
+            console.log('updated leagues list: ', state.leagues);
+            state.editLeague = false;
+            state.status = 'updateLeagueSuccess';
         }
     },
     actions: {
@@ -111,6 +180,7 @@ export const store = new Vuex.Store({
         setSettingInfo: (context, payload) => {
             context.commit("SET_SETTING_INFO", payload);
         },
+        //users
         editUser: (context, payload) => {
             context.commit("EDIT_USER", payload);
         },
@@ -120,107 +190,40 @@ export const store = new Vuex.Store({
         cancelLogonForm: (context) => {
             context.commit("CANCEL_LOGON_FORM")
         },
-        login({commit}, user) {
-            return new Promise((resolve, reject) => {
-
-                commit('AUTH_REQUEST', 'logging in');
-                let loginSettings = Object.assign({}, adminLogonRequest);
-                loginSettings.data = JSON.stringify(user);
-
-                $.ajax(loginSettings).then(function (resp) {
-                    token = resp;
-                    if (token.length > 1) {
-                        //saving token in local storage (user can leave app and not have to login again as long as in time that token is valid)
-                        localStorage.setItem('token', token);
-                        console.log(localStorage.getItem('token'));
-                        let payload = {
-                            token: token,
-                            user: user
-                        };
-                        commit('AUTH_SUCCESS', payload);
-                        resolve(resp)
-                    }
-                    else {
-                        commit('AUTH_ERROR', "Invalid Admin User or Password Entered!");
-                        localStorage.removeItem('token');
-                    }
-                }).catch(err => {
-                    commit('AUTH_ERROR', err);
-                    localStorage.removeItem('token');
-                    reject(err)
-                })
-
-
-            })
+        login(context, user) {
+            console.log('user in action:', user);
+            return usersObject.login(context, user);
         },
-        register({commit}, user) {
-
-            console.log('registering new user: ', user);
-            return new Promise((resolve, reject) => {
-                commit('AUTH_REQUEST', 'registeringUser');
-
-                //const userName = user;
-                let registerSettings = Object.assign({}, registerUserRequest);
-                console.log(localStorage.getItem('token'));
-                registerSettings.headers.token = localStorage.getItem('token');
-                registerSettings.data = JSON.stringify(user);
-
-                $.ajax(registerSettings).then(function (resp) {
-                    let user = resp;
-                    commit('REGISTRATION_SUCCESS', user);
-                    resolve(resp)
-                }).catch(err => {
-                    commit('AUTH_ERROR', err);
-                    localStorage.removeItem('token');
-                    reject(err)
-                })
-            })
+        register(context, user) {
+            usersObject.register(context, user);
         },
-        getUser({commit}, user) {
-            return new Promise((resolve, reject) => {
-
-                commit('AUTH_REQUEST', 'gettingUser');
-
-                let getUserSettings = Object.assign({}, getUserRequest);
-                getUserSettings.headers.token = localStorage.getItem('token');
-                let url = getUserSettings.url.substr(0, getUserSettings.url.lastIndexOf("=") + 1);
-                getUserSettings.url = url + user;
-
-                $.ajax(getUserSettings).then(function (response) {
-                    resolve(response);
-                }).catch(err => {
-                    commit('AUTH_ERROR', err);
-                    reject(err)
-                })
-            })
+        getUser(context, user) {
+            return usersObject.getUser(context, user);
         },
-        updateUser({commit}, user) {
-            return new Promise((resolve, reject) => {
-
-                commit('AUTH_REQUEST', 'updatingUser');
-
-                let updateUserSettings = Object.assign({}, updateUserRequest);
-                updateUserSettings.headers.token = localStorage.getItem('token');
-                updateUserSettings.data = JSON.stringify(user);
-
-                $.ajax(updateUserSettings).then(function (resp) {
-                    console.log('resp from server: ', resp);
-                    commit('UPDATE_USER_SUCCESS', resp);
-                    resolve(resp)
-                }).catch(err => {
-                    commit('AUTH_ERROR', err);
-                    localStorage.removeItem('token');
-                    reject(err)
-                })
-            })
+        updateUser(context, user) {
+            usersObject.updateUser(context, user);
         },
-        logout({commit}) {
-            return new Promise((resolve) => {
-                commit('LOGOUT');
-                localStorage.removeItem('token');
-                console.log('logged out token removed: ', localStorage.getItem('token'));
-                resolve()
-            })
+        logout(context) {
+            usersObject.logout(context);
+        },
+        //leagues
+        getLeagues(context, token) {
+            leaguesObject.getLeagues(context, token);
+        },
+        openCreateLeague(context) {
+            context.commit("OPEN_CREATE_LEAGUE");
+        },
+        createLeague(context, league) {
+            leaguesObject.createLeague(context, league);
+        },
+        openUpdateLeague(context, league) {
+            context.commit('OPEN_EDIT_LEAGUE', league);
+        },
+        updateLeague(context, league){
+           leaguesObject.updateLeague(context, league);
+        },
+        cancelLeaguesForm(context) {
+            context.commit("CANCEL_LEAGUES_FORM");
         }
     }
 
