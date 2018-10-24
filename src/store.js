@@ -75,6 +75,7 @@ export const store = new Vuex.Store({
             createLeague: false,
             editLeague: false,
             newLeague: "",
+            updatedLeague: "",
             token: localStorage.getItem('token') || null
         },
         error: undefined
@@ -139,10 +140,12 @@ export const store = new Vuex.Store({
         OPEN_CREATE_LEAGUE(state) {
             state.league = state.templateLeague;
             state.settings.createLeague = true;
+            state.settings.editLeague = false;
         },
         OPEN_EDIT_LEAGUE(state, payload) {
             console.log('payload in edit mutation', payload);
             state.settings.editLeague = true;
+            state.settings.createLeague = false;
             state.settings.league = payload;
             router.push('/leagues');
         },

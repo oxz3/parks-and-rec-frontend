@@ -11,7 +11,6 @@
         </v-card-title>
         <form class="ma-3">
             <!--Register League-->
-            TEST: {{league.leagueId}}, {{league.orgid}}
             <div>
                 <v-layout class="pb-3">
                     <v-flex class="pr-3">

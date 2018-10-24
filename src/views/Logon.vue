@@ -135,7 +135,8 @@
                 email: "",
                 phone: "",
                 orgname: "",
-                address: ""
+                address: "",
+                role_id: 1
             }
         }),
         computed: {
