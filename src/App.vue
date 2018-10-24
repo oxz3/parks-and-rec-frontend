@@ -157,7 +157,6 @@
             },
             openRegisterForm: function () {
                 this.$store.dispatch('openRegisterForm');
-                this.$router.push('/logon');
             }
         }
     }

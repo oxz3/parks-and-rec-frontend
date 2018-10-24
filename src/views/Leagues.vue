@@ -88,6 +88,17 @@
     export default {
 
         created: function () {
+
+            if (this.$store.state.settings.createLeague) {
+                this.league = Object.assign({}, this.$store.state.settings.templateLeague);
+                console.log('league in logon form create', this.league);
+            }
+            if (this.$store.state.settings.editLeague) {
+                this.league = Object.assign({}, this.$store.state.settings.league);
+                console.log('league in logon form edit', this.league);
+            }
+
+
             // `this` points to the vm instance
             console.log('a is: ' + this);
             this.league = Object.assign({}, this.$store.state.settings.league);
@@ -95,21 +106,7 @@
         }
         ,
         data: () => ({
-            league: {
-                leagueId: 1,
-                leagueName: "Test League E2",
-                description: "test league E Fun",
-                sportId: 3,
-                ageMin: 15,
-                ageMax: 16,
-                coed: 1,
-                teamMin: 2,
-                teamMax: 6,
-                leagueSchedule: "test league E schedule",
-                leagueRules: "Play Fair have Fun",
-                orgid: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
-                userId: 2
-            }
+            league: {}
         }),
         computed: {
             settings() {

@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 import router from './router'
 import usersObject from './restHelperObjects/objects/UsersRestObject'
 import leaguesObject from './restHelperObjects/objects/LeaguesRestObject'
+import templateUser from './data/template-user.json'
+import templateLeague from './data/template-league.json'
 
 
 Vue.use(Vuex);
@@ -27,21 +29,8 @@ export const store = new Vuex.Store({
             {leagueName: 'Football', description: "Fall Football League", teamMax: 50, teamMin: 0},
             {leagueName: 'Basketball', description: "Fall Basketball League", teamMax: 30, teamMin: 25}
         ],
-        templateLeague: {
-            leagueId: 1,
-            leagueName: "Test League E2",
-            description: "test league E Fun",
-            sportId: 3,
-            ageMin: 15,
-            ageMax: 16,
-            coed: 1,
-            teamMin: 2,
-            teamMax: 6,
-            leagueSchedule: "test league E schedule",
-            leagueRules: "Play Fair have Fun",
-            orgid: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
-            userId: 2
-        },
+        templateUser: templateUser,
+        templateLeague: templateLeague,
         settings: {
             options: [
                 "sports",
@@ -53,21 +42,7 @@ export const store = new Vuex.Store({
             selectedOption: "leagues",
             userIsAdmin: true,
             user: {},
-            league: {
-                leagueId: 1,
-                leagueName: "Test League E2",
-                description: "test league E Fun",
-                sportId: 3,
-                ageMin: 15,
-                ageMax: 16,
-                coed: 1,
-                teamMin: 2,
-                teamMax: 6,
-                leagueSchedule: "test league E schedule",
-                leagueRules: "Play Fair have Fun",
-                orgid: "9bbeb119-659e-495b-a04e-2a84a4ba3a03",
-                userId: 2
-            },
+            league: {},
             newRegisteredUser: "",
             updatedUser: "",
             registerUser: false,
@@ -91,6 +66,10 @@ export const store = new Vuex.Store({
         SET_SETTING_INFO: (state, payload) => {
             state.settings.info.selected = payload;
         },
+        SET_USER: (state, payload) => {
+            state.settings.user = payload;
+            console.log('updated settings user: ', state.settings.user);
+        },
         EDIT_USER: (state, payload) => {
             state.settings.user = payload;
             state.settings.editUser = true;
@@ -98,6 +77,8 @@ export const store = new Vuex.Store({
         },
         REGISTER(state) {
             state.settings.registerUser = true;
+            state.user = state.templateUser;
+            router.push('/logon')
         },
         //Set status to
         AUTH_REQUEST(state, payload) {
@@ -108,6 +89,7 @@ export const store = new Vuex.Store({
             state.settings.token = payload.token;
             state.status = 'logonSuccess';
             state.settings.user = payload.user;
+            state.settings.authenticatedUser = payload.user;
         },
         REGISTRATION_SUCCESS(state, payload) {
             state.settings.newRegisteredUser = payload.username;
@@ -117,6 +99,7 @@ export const store = new Vuex.Store({
         UPDATE_USER_SUCCESS(state, payload) {
             state.settings.updatedUser = payload.username;
             state.settings.editUser = false;
+            state.settings.user = payload;
             state.status = 'updateUserSuccess';
         },
         AUTH_ERROR(state, error) {
@@ -133,6 +116,7 @@ export const store = new Vuex.Store({
         CANCEL_LOGON_FORM(state) {
             state.settings.editUser = false;
             state.settings.registerUser = false;
+            //state.settings.user = state.templateUser;
         },
         GET_LEAGUES_SUCCESS(state, payload) {
             state.leagues = payload;
@@ -163,8 +147,6 @@ export const store = new Vuex.Store({
         LEAGUE_UPDATE_SUCCESS(state, payload) {
             console.log('updating league', payload);
             state.settings.updatedLeague = payload.leagueName;
-            //update the local array by key or value to show update in UI
-            //let obj = state.leagues.find(obj => obj.leagueId === payload.leagueId);
             let foundIndex = state.leagues.findIndex(x => x.leagueId === payload.leagueId);
             console.log('mutation update league: ', foundIndex);
             state.leagues[foundIndex] = payload;
@@ -200,6 +182,9 @@ export const store = new Vuex.Store({
         getUser(context, user) {
             return usersObject.getUser(context, user);
         },
+        setUser(context, user) {
+            context.commit("SET_USER", user);
+        },
         updateUser(context, user) {
             usersObject.updateUser(context, user);
         },
@@ -219,8 +204,8 @@ export const store = new Vuex.Store({
         openUpdateLeague(context, league) {
             context.commit('OPEN_EDIT_LEAGUE', league);
         },
-        updateLeague(context, league){
-           leaguesObject.updateLeague(context, league);
+        updateLeague(context, league) {
+            leaguesObject.updateLeague(context, league);
         },
         cancelLeaguesForm(context) {
             context.commit("CANCEL_LEAGUES_FORM");

@@ -1,0 +1,14 @@
+{
+  "leagueId": 1,
+  "leagueName": "",
+  "description": "",
+  "sportId": 3,
+  "ageMin": 1,
+  "ageMax": 1,
+  "coed": 1,
+  "teamMin": 1,
+  "teamMax": 1,
+  "leagueSchedule": "",
+  "leagueRules": "",
+  "userId": 2
+}

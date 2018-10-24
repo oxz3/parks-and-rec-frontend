@@ -28,6 +28,17 @@
                                 required
                                 v-model="user.password">
                         </v-text-field>
+
+                        <!--roles dropdown-->
+                        <v-select
+                                item-text="value"
+                                item-value="key"
+                                v-model="user.role_id"
+                                :items="roles"
+                                solo
+                                label="Role"
+                        ></v-select>
+
                         <v-text-field
                                 label="Enter Organization Name"
                                 required
@@ -81,6 +92,17 @@
                                 required
                                 v-model="user.password">
                         </v-text-field>
+
+                        <!--roles dropdown-->
+                        <v-select
+                                item-text="value"
+                                item-value="key"
+                                v-model="user.role_id"
+                                :items="roles"
+                                solo
+                                label="Role"
+                        ></v-select>
+
                         <v-text-field
                                 label="Enter a New Organization Name"
                                 required
@@ -127,17 +149,26 @@
 
 <script>
     export default {
+
+        created: function () {
+            console.log('a is: ' + this);
+            if (this.$store.state.settings.registerUser) {
+                this.user = Object.assign({}, this.$store.state.settings.templateUser);
+                console.log('user in logon form register', this.user);
+            }
+            if (this.$store.state.settings.editUser) {
+                this.user = Object.assign({}, this.$store.state.settings.user);
+                console.log('user in logon form edit', this.user);
+            }
+        },
+
         data: () => ({
             isAdmin: false,
-            user: {
-                username: "Admin",
-                password: "Admin",
-                email: "",
-                phone: "",
-                orgname: "",
-                address: "",
-                role_id: 1
-            }
+            user: {},
+            roles: [
+                {key: 1, value: "Admin"},
+                {key: 2, value: "User"}
+            ]
         }),
         computed: {
             settings() {
@@ -151,13 +182,32 @@
                 let password = user.password;
                 let store = this.$store;
                 let router = this.$router;
+                let that = this;
                 store.dispatch('login', {username, password})
                     .then(function (response) {
                         console.log(response);
-                        store.dispatch('getLeagues', response)
-                            .then(function () {
-                                router.push('/');
-                            })
+                        //get user info
+                        //perform Get first then use the result for the update payload
+                        that.$store.dispatch('getUser', user.username)
+                            .then(function (result) {
+                                //set data to the result of the GetUser
+                                console.log('result in logon: ', result[0]);
+                                let currentUser = result[0];
+                                Object.keys(user).forEach(function (key) {
+                                    if (user[key].length > 0) {
+                                        currentUser[key] = user[key];
+                                    }
+                                });
+                                console.log('this is the current user: ', currentUser, user);
+                                that.$store.dispatch('setUser', currentUser);
+                            }).then(function () {
+                            store.dispatch('getLeagues', response)
+                                .then(function () {
+                                    router.push('/');
+                                })
+                        }).catch(function (error) {
+                            console.log(error);
+                        })
                     }).catch(function (error) {
                     console.log(error);
                 })
@@ -168,25 +218,10 @@
                     .then(() => this.$router.push('/'))
                     .catch(err => console.log(err))
             },
-            updateUser: function (user) {
-
-                //perform Get first then use the result for the update payload
-                let that = this;
-                that.$store.dispatch('getUser', user.username)
-                    .then(function (result) {
-                        //set data to the result of the GetUser
-                        console.log('result in logon: ', result[0]);
-                        let updateUser = result[0];
-                        Object.keys(user).forEach(function (key) {
-                            if (user[key].length > 0) {
-                                updateUser[key] = user[key];
-                            }
-                        });
-                        that.$store.dispatch('updateUser', updateUser)
-                            .then(() => that.$router.push('/'))
-                            .catch(err => console.log(err))
-                    })
-
+            updateUser: function (updateUser) {
+                this.$store.dispatch('updateUser', updateUser)
+                    .then(() => this.$router.push('/'))
+                    .catch(err => console.log(err))
             },
             cancel: function () {
                 this.$store.dispatch('cancelLogonForm')
