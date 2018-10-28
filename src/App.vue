@@ -48,6 +48,23 @@
                 ERROR: {{error}}
             </v-snackbar>
 
+            <!--show if league is created successfully-->
+            <v-snackbar
+                    v-model="authStatus"
+                    top
+                    v-if="authStatus == 'leagueCreateSuccess'">
+                Successfully created league: {{settings.newLeague}}
+            </v-snackbar>
+
+
+            <!--show if league is updated successfully-->
+            <v-snackbar
+                    v-model="authStatus"
+                    top
+                    v-if="authStatus == 'leagueUpdateSuccess'">
+                Successfully created league: {{settings.updatedLeague}}
+            </v-snackbar>
+
             <!--if use is logged in-->
             <v-btn flat color="primary" v-if="settings.token != null" @click="logout">LOGOUT</v-btn>
             <!--go to logon screen-->

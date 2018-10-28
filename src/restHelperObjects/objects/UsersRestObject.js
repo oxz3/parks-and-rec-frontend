@@ -1,8 +1,8 @@
 import $ from 'jquery'
-import adminLogonRequest from './rest-requests/admin-logon-request.json'
-import registerUserRequest from './rest-requests/users/register-new-user-request.json'
-import updateUserRequest from './rest-requests/users/update-user-request.json'
-import getUserRequest from './rest-requests/users/get-user-request.json'
+import adminLogonRequest from '../rest-requests/admin-logon-request.json'
+import registerUserRequest from '../rest-requests/users/register-new-user-request.json'
+import updateUserRequest from '../rest-requests/users/update-user-request.json'
+import getUserRequest from '../rest-requests/users/get-user-request.json'
 
 let token = null;
 
@@ -23,7 +23,6 @@ export default {
             store.commit('AUTH_REQUEST', 'logging in');
             let loginSettings = Object.assign({}, adminLogonRequest);
             loginSettings.data = JSON.stringify(user);
-
             $.ajax(loginSettings).then(function (resp) {
                 token = resp;
                 if (token.length > 1) {
