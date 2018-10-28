@@ -212,6 +212,7 @@ export const store = new Vuex.Store({
         },
         //leagues
         getLeagues(context, token) {
+            alert("ok")
             leaguesObject.getLeagues(context, token);
         },
         getSports(context, token) {

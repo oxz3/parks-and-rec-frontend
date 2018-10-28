@@ -22,27 +22,25 @@
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
-                        <!--list of sports-->
+                          <!--list of leagues-->
                         <v-layout row>
                                 <v-flex>
                                 <v-card>
                                     <v-toolbar color="indigo" dark>
                                     <v-toolbar-side-icon></v-toolbar-side-icon>
-                                    <v-toolbar-title>Sports</v-toolbar-title>
+                                    <v-toolbar-title>Leagues</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     </v-toolbar>
                                     <v-list>
-                                    <v-list-tile     v-for="item in allSports"    :key="item.name"  @click="openLeagues()">
+                                    <v-list-tile     v-for="item in allLeages"    :key="item.description"  @click="onListTileItemClick()" >
                                     <v-list-tile-content>
-                                        <v-list-tile-title v-text="item.name"></v-list-tile-title>
+                                        <v-list-tile-title v-text="item.description"></v-list-tile-title>
                                     </v-list-tile-content>
                                     </v-list-tile>
                                 </v-list>
                                 </v-card>
                                 </v-flex>
                         </v-layout>
-
-
                     </v-card>
                 </v-flex>
                 <v-flex>
@@ -72,14 +70,11 @@
             }
         },
         computed: {
-            settings() {
-                return this.$store.state.settings;
-            },
             authStatus: function () {
                 return this.$store.state.status;
             },
-            allSports:function() {
-                return this.$store.state.sports;
+            allLeages:function() {
+                return this.$store.state.leagues;
             }
         },
         methods: {
@@ -87,9 +82,8 @@
                 this.$data.showDeleteModal = value;
             },
             openLeagues(){
-                alert("ok")
-                this.$store.dispatch("getLeagues");
-                router.push('/leagueslist');
+                this.$store.dispatch("openCreateLeague");
+                router.push('/leagues');
             },
             updateLeague(league){
                 this.$store.dispatch("openUpdateLeague", league);
