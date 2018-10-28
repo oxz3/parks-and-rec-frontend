@@ -1,0 +1,14 @@
+{
+  "async": true,
+  "crossDomain": true,
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/updateSport",
+  "method": "PUT",
+  "headers": {
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "postman-token": "49c4b958-0b33-0274-749e-7c2bb6b933f1",
+    "token": "2c04e565-c67d-4e03-8b6e-df9da128ebf8"
+  },
+  "processData": false,
+  "data": "{\n \"id\": null,   \"name\": \"Soccer\",   \"description\": \"Played by Teams\" } "
+}

@@ -22,7 +22,7 @@
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
-                          <!--list of sports-->
+                        <!--list of sports-->
                         <v-layout row>
                                 <v-flex>
                                 <v-card>
@@ -41,6 +41,8 @@
                                 </v-card>
                                 </v-flex>
                         </v-layout>
+
+
                     </v-card>
                 </v-flex>
                 <v-flex>
@@ -70,6 +72,9 @@
             }
         },
         computed: {
+            settings() {
+                return this.$store.state.settings;
+            },
             authStatus: function () {
                 return this.$store.state.status;
             },

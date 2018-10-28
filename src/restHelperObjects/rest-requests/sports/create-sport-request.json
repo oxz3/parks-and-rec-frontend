@@ -1,0 +1,14 @@
+{
+  "async": true,
+  "crossDomain": true,
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/createSport",
+  "method": "POST",
+  "headers": {
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "postman-token": "e262012f-ee6b-2e2d-c632-961d53f06955",
+    "token": "2c04e565-c67d-4e03-8b6e-df9da128ebf8"
+  },
+  "processData": false,
+  "data": "{\n \"id\": null,   \"name\": \"Soccer\",   \"description\": \"Played by Teams\" }"
+}

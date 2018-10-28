@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Logon from './views/Logon.vue'
 import Leagues from './views/Leagues.vue'
-
+import Sports from './views/Sports.vue'
 
 Vue.use(Router);
 
@@ -14,7 +14,7 @@ let router = new Router({
         {
             path: '/',
             name: 'home',
-            component: Home,
+            component: Logon,
         },
         {
             path: '/logon',
@@ -25,6 +25,11 @@ let router = new Router({
             path: '/leagues',
             name: 'leagues',
             component: Leagues
+        },
+        {
+            path: '/sports',
+            name: 'sports',
+            component: Sports
         }
     ]
 });

@@ -153,10 +153,11 @@
                 let router = this.$router;
                 store.dispatch('login', {username, password})
                     .then(function (response) {
+                        
                         console.log(response);
-                        store.dispatch('getLeagues', response)
+                        store.dispatch('getSports', response)
                             .then(function () {
-                                router.push('/');
+                                router.push('/sports');
                             })
                     }).catch(function (error) {
                     console.log(error);

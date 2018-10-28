@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import router from './router'
 import usersObject from './restHelperObjects/objects/UsersRestObject'
 import leaguesObject from './restHelperObjects/objects/LeaguesRestObject'
+import sportsObject from './restHelperObjects/objects/SportsRestObject'
 
 
 Vue.use(Vuex);
@@ -137,6 +138,9 @@ export const store = new Vuex.Store({
         GET_LEAGUES_SUCCESS(state, payload) {
             state.leagues = payload;
         },
+        GET_sportS_SUCCESS(state, payload){
+            state.sports=payload
+        },
         OPEN_CREATE_LEAGUE(state) {
             state.league = state.templateLeague;
             state.settings.createLeague = true;
@@ -209,6 +213,9 @@ export const store = new Vuex.Store({
         //leagues
         getLeagues(context, token) {
             leaguesObject.getLeagues(context, token);
+        },
+        getSports(context, token) {
+            sportsObject.getSports(context, token);
         },
         openCreateLeague(context) {
             context.commit("OPEN_CREATE_LEAGUE");
