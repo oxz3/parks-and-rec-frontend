@@ -23,7 +23,6 @@ export default {
             store.commit('AUTH_REQUEST', 'logging in');
             let loginSettings = Object.assign({}, adminLogonRequest);
             loginSettings.data = JSON.stringify(user);
-
             $.ajax(loginSettings).then(function (resp) {
                 token = resp;
                 if (token.length > 1) {
