@@ -95,6 +95,10 @@
                 <v-icon>menu</v-icon>
             </v-btn>
         </v-toolbar>
+        <v-card>
+        <v-img  src="../assets/logo.jpg">
+        </v-img>
+        </v-card>
 
         <!--Vue-Router tag that holds all views-->
         <router-view/>

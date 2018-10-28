@@ -27,7 +27,6 @@
                                 <v-flex>
                                 <v-card>
                                     <v-toolbar color="indigo" dark>
-                                    <v-toolbar-side-icon></v-toolbar-side-icon>
                                     <v-toolbar-title>Sports</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     </v-toolbar>

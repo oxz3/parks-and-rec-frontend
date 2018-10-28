@@ -4,35 +4,16 @@
             <v-layout>
                 <v-flex>
                     <v-card height="100%">
-                        <!--displays message while user is logging in-->
-                        <v-dialog
-                                v-model="authStatus"
-                                hide-overlay
-                                width="300">
-                            <v-card
-                                    dark
-                                    v-if="authStatus == 'logging in'">
-                                <v-card-text>
-                                    Logging on...
-                                    <v-progress-linear
-                                            indeterminate
-                                            color="white"
-                                            class="mb-0"
-                                    ></v-progress-linear>
-                                </v-card-text>
-                            </v-card>
-                        </v-dialog>
                           <!--list of leagues-->
                         <v-layout row>
                                 <v-flex>
                                 <v-card>
                                     <v-toolbar color="indigo" dark>
-                                    <v-toolbar-side-icon></v-toolbar-side-icon>
                                     <v-toolbar-title>Leagues</v-toolbar-title>
                                     <v-spacer></v-spacer>
                                     </v-toolbar>
                                     <v-list>
-                                    <v-list-tile     v-for="item in allLeages"    :key="item.description"  @click="onListTileItemClick()" >
+                                    <v-list-tile     v-for="item in allLeagues"    :key="item.description">
                                     <v-list-tile-content>
                                         <v-list-tile-title v-text="item.description"></v-list-tile-title>
                                     </v-list-tile-content>
@@ -73,7 +54,7 @@
             authStatus: function () {
                 return this.$store.state.status;
             },
-            allLeages:function() {
+            allLeagues: function() {
                 return this.$store.state.leagues;
             }
         },

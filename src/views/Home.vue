@@ -32,7 +32,11 @@
                                     <v-spacer></v-spacer>
                                     </v-toolbar>
                                     <v-list>
+<<<<<<< HEAD
                                     <v-list-tile     v-for="item in allSports"    :key="item.name"  @click="openLeagues()" >
+=======
+                                    <v-list-tile     v-for="item in allSports"    :key="item.name"  @click="openLeagues()">
+>>>>>>> sridhar
                                     <v-list-tile-content>
                                         <v-list-tile-title v-text="item.name"></v-list-tile-title>
                                     </v-list-tile-content>
@@ -81,7 +85,11 @@
             closeConfirmDeletePopover(value) {
                 this.$data.showDeleteModal = value;
             },
+<<<<<<< HEAD
              openLeagues(){
+=======
+           openLeagues(){
+>>>>>>> sridhar
                 this.$store.dispatch("getLeagues");
                 router.push('/leagueslist');
             },
