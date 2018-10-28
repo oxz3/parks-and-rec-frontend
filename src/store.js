@@ -18,16 +18,8 @@ export const store = new Vuex.Store({
     state: {
         //indicates the status of user logon
         status: "",
-        sports: [
-            {name: 'Soccer', description: "kick the ball", price: 20},
-            {name: 'Football', description: "score touchdowns", price: 20},
-            {name: 'Basketball', description: 'shoot the ball', price: 30}
-        ],
-        leagues: [
-            {leagueName: 'Soccer', description: "Fall Soccer League", teamMax: 20, teamMin: 18},
-            {leagueName: 'Football', description: "Fall Football League", teamMax: 50, teamMin: 0},
-            {leagueName: 'Basketball', description: "Fall Basketball League", teamMax: 30, teamMin: 25}
-        ],
+        sports: '',
+        leagues: '',
         templateLeague: {
             leagueId: 1,
             leagueName: "Test League E2",

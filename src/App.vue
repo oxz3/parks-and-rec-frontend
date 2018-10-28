@@ -76,7 +76,7 @@
                 REGISTER
             </v-btn>
             <!--go to home screen-->
-            <v-btn flat color="primary" to="/">
+            <v-btn flat color="primary" to="/home">
                 <v-icon>home</v-icon>
             </v-btn>
             <!--toggle menu-->
