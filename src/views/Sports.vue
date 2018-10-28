@@ -87,7 +87,6 @@
                 this.$data.showDeleteModal = value;
             },
             openLeagues(){
-                alert("ok")
                 this.$store.dispatch("getLeagues");
                 router.push('/leagueslist');
             },

@@ -88,6 +88,7 @@ export const store = new Vuex.Store({
         //Whether Sports or Leagues (users next?) are selected in the settings panel
         SET_MANAGED_OPTION: (state, payload) => {
             state.settings.selectedOption = payload;
+          router.push('/' + payload);
         },
         SET_SETTING_INFO: (state, payload) => {
             state.settings.info.selected = payload;
@@ -212,7 +213,6 @@ export const store = new Vuex.Store({
         },
         //leagues
         getLeagues(context, token) {
-            alert("ok")
             leaguesObject.getLeagues(context, token);
         },
         getSports(context, token) {
