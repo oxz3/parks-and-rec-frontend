@@ -68,11 +68,10 @@ export default {
             console.log('token in leagues object: ', token);
             let request = Object.assign({}, getLeaguesRequest);
             request.headers.token = localStorage.getItem('token');
-            alert("getLeagues")
-
+          
             $.ajax(request).then(function (response) {
                 resolve(response);
-                alert(response)
+              
                 console.log('leagues response: ', response);
                 store.commit('GET_LEAGUES_SUCCESS', response);
             }).catch(err => {
