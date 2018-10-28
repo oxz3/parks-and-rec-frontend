@@ -76,7 +76,7 @@
                 REGISTER
             </v-btn>
             <!--go to home screen-->
-            <v-btn flat color="primary" to="/">
+            <v-btn flat color="primary" to="/home">
                 <v-icon>home</v-icon>
             </v-btn>
             <!--toggle menu-->
@@ -95,6 +95,10 @@
                 <v-icon>menu</v-icon>
             </v-btn>
         </v-toolbar>
+        <v-card>
+        <v-img  src="../assets/logo.jpg">
+        </v-img>
+        </v-card>
 
         <!--Vue-Router tag that holds all views-->
         <router-view/>
