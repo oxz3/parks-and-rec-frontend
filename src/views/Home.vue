@@ -87,7 +87,7 @@
 
                                 <v-list-tile
                                         v-for="league in sport.leagues"
-                                        :key="league.sportId"
+                                        :key="league.leagueId"
                                         @click="">
                                     <v-list-tile-content>
                                         <v-list-tile-title>{{ league.description }}</v-list-tile-title>
@@ -122,38 +122,38 @@
 
                         <!--&lt;!&ndash;list of leagues&ndash;&gt;-->
                         <!--<v-list two-line class="pr-1" v-if="settings.selectedOption == 'leagues'">-->
-                            <!--<template v-for="league in leagues">-->
-                                <!--<v-list-tile>-->
-                                    <!--<v-list-tile-content>-->
-                                        <!--<v-list-tile-title v-html="league.leagueName"></v-list-tile-title>-->
-                                    <!--</v-list-tile-content>-->
-                                    <!--<v-list-tile-action>-->
-                                        <!--<v-btn icon @click="updateLeague(league)">-->
-                                            <!--<v-icon>-->
-                                                <!--edit-->
-                                            <!--</v-icon>-->
-                                        <!--</v-btn>-->
-                                    <!--</v-list-tile-action>-->
-                                    <!--<v-list-tile-action>-->
-                                        <!--<v-dialog-->
-                                                <!--v-model="showDeleteModal"-->
-                                                <!--width="25%"-->
-                                                <!--dark>-->
-                                            <!--<v-btn icon-->
-                                                   <!--slot="activator">-->
-                                                <!--<v-icon>-->
-                                                    <!--delete-->
-                                                <!--</v-icon>-->
-                                            <!--</v-btn>-->
-                                            <!--<delete-confirm-popover-->
-                                                    <!--v-model="showDeleteModal"-->
-                                                    <!--@close-delete-modal="closeConfirmDeletePopover">-->
-                                            <!--</delete-confirm-popover>-->
-                                        <!--</v-dialog>-->
-                                    <!--</v-list-tile-action>-->
-                                <!--</v-list-tile>-->
-                                <!--<v-divider></v-divider>-->
-                            <!--</template>-->
+                        <!--<template v-for="league in leagues">-->
+                        <!--<v-list-tile>-->
+                        <!--<v-list-tile-content>-->
+                        <!--<v-list-tile-title v-html="league.leagueName"></v-list-tile-title>-->
+                        <!--</v-list-tile-content>-->
+                        <!--<v-list-tile-action>-->
+                        <!--<v-btn icon @click="updateLeague(league)">-->
+                        <!--<v-icon>-->
+                        <!--edit-->
+                        <!--</v-icon>-->
+                        <!--</v-btn>-->
+                        <!--</v-list-tile-action>-->
+                        <!--<v-list-tile-action>-->
+                        <!--<v-dialog-->
+                        <!--v-model="showDeleteModal"-->
+                        <!--width="25%"-->
+                        <!--dark>-->
+                        <!--<v-btn icon-->
+                        <!--slot="activator">-->
+                        <!--<v-icon>-->
+                        <!--delete-->
+                        <!--</v-icon>-->
+                        <!--</v-btn>-->
+                        <!--<delete-confirm-popover-->
+                        <!--v-model="showDeleteModal"-->
+                        <!--@close-delete-modal="closeConfirmDeletePopover">-->
+                        <!--</delete-confirm-popover>-->
+                        <!--</v-dialog>-->
+                        <!--</v-list-tile-action>-->
+                        <!--</v-list-tile>-->
+                        <!--<v-divider></v-divider>-->
+                        <!--</template>-->
                         <!--</v-list>-->
 
                         <!--&lt;!&ndash;list of sports&ndash;&gt;-->
@@ -251,7 +251,6 @@
             },
             openLeagues(sport) {
                 this.$store.dispatch("openCreateLeague", sport);
-                router.push('/leagues');
             },
             updateLeague(league) {
                 this.$store.dispatch("openUpdateLeague", league);

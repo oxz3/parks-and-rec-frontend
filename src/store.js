@@ -27,9 +27,11 @@ export const store = new Vuex.Store({
             {name: 'Basketball', description: 'shoot the ball', id: 3}
         ],
         leagues: [
-            {leagueName: 'Soccer', description: "Fall Soccer League", sportId: 1},
-            {leagueName: 'Football', description: "Fall Football League", sportId: 2},
-            {leagueName: 'Basketball', description: "Fall Basketball League", sportId: 3}
+            {leagueName: 'Soccer', description: "Fall Soccer League", sportId: 1, leagueId: 999},
+            {leagueName: 'Football', description: "Fall Football League", sportId: 2, leagueId: 998},
+            {leagueName: 'Basketball', description: "Fall Basketball League", sportId: 3, leagueId: 997},
+            {leagueName: 'Soccer 2', description: "Fall Soccer League 2", sportId: 1, leagueId: 996},
+
         ],
         templateUser: templateUser,
         templateLeague: templateLeague,
@@ -42,6 +44,7 @@ export const store = new Vuex.Store({
             info: {
                 "selected": "",
             },
+            currentSport: {},
             selectedOption: "sports",
             userIsAdmin: true,
             user: {},
@@ -125,10 +128,12 @@ export const store = new Vuex.Store({
             state.leagues = payload;
         },
         OPEN_CREATE_LEAGUE(state, sport) {
+            state.settings.currentSport = sport;
             state.league = state.templateLeague;
             state.league.sportId = sport.id;
             state.settings.createLeague = true;
             state.settings.editLeague = false;
+            router.push('/leagues');
         },
         OPEN_EDIT_LEAGUE(state, payload) {
             console.log('payload in edit mutation', payload);
@@ -207,7 +212,11 @@ export const store = new Vuex.Store({
                     //determine if the league is already in the list
                     sport.leagues.forEach(function (league) {
                         if (league.leagueId !== payload.league.leagueId) {
+                            console.log('lets add this league: ', league);
                             sport.leagues.push(payload.league);
+                        }
+                        else{
+                            console.log('this league is already here, bug: ', league);
                         }
                     });
                 }

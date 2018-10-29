@@ -3,7 +3,7 @@
         <v-card-title class="justify-center">
             <div>
                 <h3 class="headline mb-0" v-if="settings.createLeague && !settings.editLeague">
-                    Create a New League</h3>
+                    Create a New {{settings.currentSport.name}} League</h3>
                 <h3 class="headline mb-0" v-if="!settings.createLeague && settings.editLeague">
                     Edit League</h3>
 
