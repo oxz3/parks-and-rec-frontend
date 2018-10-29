@@ -9,10 +9,11 @@
                             <v-toolbar-title v-if="settings.selectedOption == 'leagues'">Leagues</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-btn icon v-if="settings.selectedOption == 'leagues'"
-                            @click="openLeagues">
+                                   @click="openLeagues">
                                 <v-icon>add</v-icon>
                             </v-btn>
-                            <v-btn icon v-if="settings.selectedOption == 'sports'">
+                            <v-btn icon v-if="settings.selectedOption == 'sports'"
+                                   @click="openSports">
                                 <v-icon>add</v-icon>
                             </v-btn>
                         </v-toolbar>
@@ -79,16 +80,16 @@
 
                         <!--list of sports-->
                         <v-list two-line class="pr-1" v-if="settings.selectedOption == 'sports'">
-                            <template v-for="activity in sports">
+                            <template v-for="sport in sports">
                                 <v-list-tile>
                                     <v-list-tile-content>
-                                        <v-list-tile-title v-html="activity.name"></v-list-tile-title>
-                                        <v-list-tile-sub-title>{{activity.description}}: ${{activity.price}}
+                                        <v-list-tile-title v-html="sport.name"></v-list-tile-title>
+                                        <v-list-tile-sub-title>{{sport.description}}
                                         </v-list-tile-sub-title>
                                         <v-list-tile-sub-title></v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
-                                        <v-btn icon>
+                                        <v-btn icon @click="updateSport(sport)">
                                             <v-icon>
                                                 edit
                                             </v-icon>
@@ -159,15 +160,24 @@
             }
         },
         methods: {
+            //leagues
             closeConfirmDeletePopover(value) {
                 this.$data.showDeleteModal = value;
             },
-            openLeagues(){
+            openLeagues() {
                 this.$store.dispatch("openCreateLeague");
                 router.push('/leagues');
             },
-            updateLeague(league){
+            updateLeague(league) {
                 this.$store.dispatch("openUpdateLeague", league);
+            },
+            //sports
+            openSports() {
+                this.$store.dispatch("openCreateSport");
+                router.push('/sports');
+            },
+            updateSport(sport) {
+                this.$store.dispatch("openUpdateSport", sport);
             }
         }
     }

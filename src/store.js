@@ -4,8 +4,10 @@ import Vuex from 'vuex'
 import router from './router'
 import usersObject from './restHelperObjects/objects/UsersRestObject'
 import leaguesObject from './restHelperObjects/objects/LeaguesRestObject'
+import sportsObject from './restHelperObjects/objects/SportsRestObject'
 import templateUser from './data/template-user.json'
 import templateLeague from './data/template-league.json'
+import templateSport from './data/template-sport.json'
 
 
 Vue.use(Vuex);
@@ -31,6 +33,7 @@ export const store = new Vuex.Store({
         ],
         templateUser: templateUser,
         templateLeague: templateLeague,
+        templateSport: templateSport,
         settings: {
             options: [
                 "sports",
@@ -39,7 +42,7 @@ export const store = new Vuex.Store({
             info: {
                 "selected": "",
             },
-            selectedOption: "leagues",
+            selectedOption: "sports",
             userIsAdmin: true,
             user: {},
             league: {},
@@ -153,6 +156,43 @@ export const store = new Vuex.Store({
             console.log('updated leagues list: ', state.leagues);
             state.editLeague = false;
             state.status = 'updateLeagueSuccess';
+        },
+        //Sports
+        GET_SPORTS_SUCCESS(state, payload) {
+            state.sports = payload;
+        },
+        OPEN_CREATE_SPORT(state) {
+            state.sport = state.templateSport;
+            state.settings.createSport = true;
+            state.settings.editSport = false;
+        },
+        OPEN_EDIT_SPORT(state, payload) {
+            console.log('payload in edit mutation', payload);
+            state.settings.editSport = true;
+            state.settings.createSport = false;
+            state.settings.sport = payload;
+            router.push('/sports');
+        },
+        CANCEL_SPORTS_FORM(state) {
+            state.settings.createSport = false;
+            state.settings.editSport = false;
+            state.settings.sport = state.templateSport;
+        },
+        SPORT_CREATE_SUCCESS(state, payload) {
+            state.settings.newSport = payload.sportName;
+            state.sports.push(payload);
+            state.createsport = false;
+            state.status = 'sportCreateSuccess';
+        },
+        SPORT_UPDATE_SUCCESS(state, payload) {
+            console.log('updating sport', payload);
+            state.settings.updatedSport = payload.sportName || "sport";
+            let foundIndex = state.sports.findIndex(x => x.sportId === payload.sportId);
+            console.log('mutation update sport: ', foundIndex);
+            state.sports[foundIndex] = payload;
+            console.log('updated sports list: ', state.sports);
+            state.editsport = false;
+            state.status = 'updateSportSuccess';
         }
     },
     actions: {
@@ -209,7 +249,27 @@ export const store = new Vuex.Store({
         },
         cancelLeaguesForm(context) {
             context.commit("CANCEL_LEAGUES_FORM");
+        },
+        //Sports
+        getSports(context, token) {
+            sportsObject.getSports(context, token);
+        },
+        openCreateSport(context) {
+            context.commit("OPEN_CREATE_SPORT");
+        },
+        createSport(context, sport) {
+            sportsObject.createSport(context, sport);
+        },
+        openUpdateSport(context, sport) {
+            context.commit('OPEN_EDIT_SPORT', sport);
+        },
+        updateSport(context, sport) {
+            sportsObject.updateSport(context, sport);
+        },
+        cancelSportsForm(context) {
+            context.commit("CANCEL_SPORTS_FORM");
         }
+
     }
 
 

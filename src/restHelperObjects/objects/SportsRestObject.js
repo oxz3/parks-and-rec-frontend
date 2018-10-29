@@ -2,6 +2,7 @@ import $ from 'jquery'
 import createSportRequest from '../rest-requests/sports/create-sport-request.json'
 import updateSportRequest from '../rest-requests/sports/update-sports-request.json'
 import getSportRequest from '../rest-requests/sports/get-sports-request.json'
+import getSportByNameRequest from '../rest-requests/sports/get-sport-by-name-request.json'
 
 
 /* eslint-disable no-console */
@@ -19,9 +20,7 @@ export default {
     createSport: function (store, sport) {
         return new Promise((resolve, reject) => {
 
-            console.log("sports in object create: ", sport);
-
-            store.commit('AUTH_REQUEST', 'creatingsport');
+            store.commit('AUTH_REQUEST', 'creatingSport');
 
             let createsportSettings = Object.assign({}, createSportRequest);
             createsportSettings.headers.token = localStorage.getItem('token');
@@ -79,5 +78,23 @@ export default {
             })
         })
 
+    },
+    getSportByName: function (store, token) {
+        return new Promise((resolve, reject) => {
+            console.log('token in sports object: ', token);
+
+            store.commit('AUTH_REQUEST', 'gettingsportByName');
+            let request = Object.assign({}, getSportByNameRequest);
+            request.headers.token = localStorage.getItem('token');
+
+            $.ajax(request).then(function (response) {
+                resolve(response);
+                console.log('sport by name response: ', response);
+                store.commit('GET_SPORT_BY_NAME_SUCCESS', response);
+            }).catch(err => {
+                store.commit('AUTH_ERROR', err);
+                reject(err)
+            })
+        })
     }
 }
