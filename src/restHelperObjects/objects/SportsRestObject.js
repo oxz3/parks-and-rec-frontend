@@ -28,7 +28,7 @@ export default {
 
             $.ajax(createsportSettings).then(function (response) {
                 console.log('create sport response', response);
-                store.commit('sport_CREATE_SUCCESS', response);
+                store.commit('SPORT_CREATE_SUCCESS', response);
                 resolve(response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
@@ -53,7 +53,7 @@ export default {
             console.log(updatesportSettings, 'update sport payload');
             $.ajax(updatesportSettings).then(function (response) {
                 console.log('update sport response', response);
-                store.commit('sport_UPDATE_SUCCESS', response);
+                store.commit('SPORT_UPDATE_SUCCESS', response);
                 resolve(response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);

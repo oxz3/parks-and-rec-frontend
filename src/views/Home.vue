@@ -4,6 +4,8 @@
             <v-layout>
                 <v-flex>
                     <v-card height="100%">
+
+
                         <v-toolbar color="gray" dark>
                             <v-toolbar-title v-if="settings.selectedOption == 'sports'">sports</v-toolbar-title>
                             <v-toolbar-title v-if="settings.selectedOption == 'leagues'">Leagues</v-toolbar-title>
@@ -17,6 +19,7 @@
                                 <v-icon>add</v-icon>
                             </v-btn>
                         </v-toolbar>
+
                         <v-spacer></v-spacer>
 
                         <!--displays message while user is logging in-->
@@ -38,16 +41,56 @@
                             </v-card>
                         </v-dialog>
 
-                        <!--list of leagues-->
-                        <v-list two-line class="pr-1" v-if="settings.selectedOption == 'leagues'">
-                            <template v-for="league in leagues">
-                                <v-list-tile>
+                        <!-- sports list with nested leagues lists -->
+                        <v-list>
+                            <v-list-group
+                                    v-for="sport in sports"
+                                    no-action>
+                                <v-list-tile slot="activator">
                                     <v-list-tile-content>
-                                        <v-list-tile-title v-html="league.leagueName"></v-list-tile-title>
-                                        <v-list-tile-sub-title>
-                                            {{league.description}}: {{league.teamMin}} / {{league.teamMax}}
+                                        <v-list-tile-title>{{ sport.name }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{sport.description}}
                                         </v-list-tile-sub-title>
-                                        <v-list-tile-sub-title></v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                    <v-list-tile-action>
+                                        <v-btn icon @click="openLeagues(sport)">
+                                            <v-icon>
+                                                add
+                                            </v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                    <v-list-tile-action>
+                                        <v-btn icon @click="updateSport(sport)">
+                                            <v-icon>
+                                                edit
+                                            </v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                    <v-list-tile-action>
+                                        <v-dialog
+                                                v-model="showDeleteModal"
+                                                width="25%"
+                                                dark>
+                                            <v-btn icon
+                                                   slot="activator">
+                                                <v-icon>
+                                                    delete
+                                                </v-icon>
+                                            </v-btn>
+                                            <delete-confirm-popover
+                                                    v-model="showDeleteModal"
+                                                    @close-delete-modal="closeConfirmDeletePopover">
+                                            </delete-confirm-popover>
+                                        </v-dialog>
+                                    </v-list-tile-action>
+                                </v-list-tile>
+
+                                <v-list-tile
+                                        v-for="league in sport.leagues"
+                                        :key="league.sportId"
+                                        @click="">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{ league.description }}</v-list-tile-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
                                         <v-btn icon @click="updateLeague(league)">
@@ -74,49 +117,86 @@
                                         </v-dialog>
                                     </v-list-tile-action>
                                 </v-list-tile>
-                                <v-divider></v-divider>
-                            </template>
+                            </v-list-group>
                         </v-list>
 
-                        <!--list of sports-->
-                        <v-list two-line class="pr-1" v-if="settings.selectedOption == 'sports'">
-                            <template v-for="sport in sports">
-                                <v-list-tile>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title v-html="sport.name"></v-list-tile-title>
-                                        <v-list-tile-sub-title>{{sport.description}}
-                                        </v-list-tile-sub-title>
-                                        <v-list-tile-sub-title></v-list-tile-sub-title>
-                                    </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-btn icon @click="updateSport(sport)">
-                                            <v-icon>
-                                                edit
-                                            </v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                    <v-list-tile-action>
-                                        <v-dialog
-                                                v-model="showDeleteModal"
-                                                width="25%"
-                                                dark>
-                                            <v-btn icon
-                                                   slot="activator"
-                                                   @click="showDeleteModal = !showDeleteModal">
-                                                <v-icon>
-                                                    delete
-                                                </v-icon>
-                                            </v-btn>
-                                            <delete-confirm-popover
-                                                    v-model="showDeleteModal"
-                                                    @close-delete-modal="closeConfirmDeletePopover">
-                                            </delete-confirm-popover>
-                                        </v-dialog>
-                                    </v-list-tile-action>
-                                </v-list-tile>
-                                <v-divider></v-divider>
-                            </template>
-                        </v-list>
+                        <!--&lt;!&ndash;list of leagues&ndash;&gt;-->
+                        <!--<v-list two-line class="pr-1" v-if="settings.selectedOption == 'leagues'">-->
+                            <!--<template v-for="league in leagues">-->
+                                <!--<v-list-tile>-->
+                                    <!--<v-list-tile-content>-->
+                                        <!--<v-list-tile-title v-html="league.leagueName"></v-list-tile-title>-->
+                                    <!--</v-list-tile-content>-->
+                                    <!--<v-list-tile-action>-->
+                                        <!--<v-btn icon @click="updateLeague(league)">-->
+                                            <!--<v-icon>-->
+                                                <!--edit-->
+                                            <!--</v-icon>-->
+                                        <!--</v-btn>-->
+                                    <!--</v-list-tile-action>-->
+                                    <!--<v-list-tile-action>-->
+                                        <!--<v-dialog-->
+                                                <!--v-model="showDeleteModal"-->
+                                                <!--width="25%"-->
+                                                <!--dark>-->
+                                            <!--<v-btn icon-->
+                                                   <!--slot="activator">-->
+                                                <!--<v-icon>-->
+                                                    <!--delete-->
+                                                <!--</v-icon>-->
+                                            <!--</v-btn>-->
+                                            <!--<delete-confirm-popover-->
+                                                    <!--v-model="showDeleteModal"-->
+                                                    <!--@close-delete-modal="closeConfirmDeletePopover">-->
+                                            <!--</delete-confirm-popover>-->
+                                        <!--</v-dialog>-->
+                                    <!--</v-list-tile-action>-->
+                                <!--</v-list-tile>-->
+                                <!--<v-divider></v-divider>-->
+                            <!--</template>-->
+                        <!--</v-list>-->
+
+                        <!--&lt;!&ndash;list of sports&ndash;&gt;-->
+                        <!--<v-list two-line class="pr-1" v-if="settings.selectedOption == 'sports'">-->
+                        <!--<template v-for="sport in sports">-->
+                        <!--<v-list-tile>-->
+                        <!--<v-list-tile-content>-->
+                        <!--<v-list-tile-title v-html="sport.name"></v-list-tile-title>-->
+                        <!--<v-list-tile-sub-title>{{sport.description}}-->
+                        <!--</v-list-tile-sub-title>-->
+                        <!--<v-list-tile-sub-title></v-list-tile-sub-title>-->
+                        <!--</v-list-tile-content>-->
+                        <!--<v-list-tile-action>-->
+                        <!--<v-btn icon @click="updateSport(sport)">-->
+                        <!--<v-icon>-->
+                        <!--edit-->
+                        <!--</v-icon>-->
+                        <!--</v-btn>-->
+                        <!--</v-list-tile-action>-->
+                        <!--<v-list-tile-action>-->
+                        <!--<v-dialog-->
+                        <!--v-model="showDeleteModal"-->
+                        <!--width="25%"-->
+                        <!--dark>-->
+                        <!--<v-btn icon-->
+                        <!--slot="activator"-->
+                        <!--@click="showDeleteModal = !showDeleteModal">-->
+                        <!--<v-icon>-->
+                        <!--delete-->
+                        <!--</v-icon>-->
+                        <!--</v-btn>-->
+                        <!--<delete-confirm-popover-->
+                        <!--v-model="showDeleteModal"-->
+                        <!--@close-delete-modal="closeConfirmDeletePopover">-->
+                        <!--</delete-confirm-popover>-->
+                        <!--</v-dialog>-->
+                        <!--</v-list-tile-action>-->
+                        <!--</v-list-tile>-->
+                        <!--<v-divider></v-divider>-->
+                        <!--</template>-->
+                        <!--</v-list>-->
+
+
                     </v-card>
                 </v-flex>
                 <v-flex>
@@ -140,9 +220,13 @@
         components: {
             DeleteConfirmPopover
         },
+        created: function () {
+            this.buildSportLeaguesLists(this.sports, this.leagues);
+        },
         data: () => {
             return {
-                showDeleteModal: false
+                showDeleteModal: false,
+                sportsWithLeagues: []
             }
         },
         computed: {
@@ -151,7 +235,8 @@
             },
             authStatus: function () {
                 return this.$store.state.status;
-            },
+            }
+            ,
             sports() {
                 return this.$store.state.sports;
             },
@@ -164,8 +249,8 @@
             closeConfirmDeletePopover(value) {
                 this.$data.showDeleteModal = value;
             },
-            openLeagues() {
-                this.$store.dispatch("openCreateLeague");
+            openLeagues(sport) {
+                this.$store.dispatch("openCreateLeague", sport);
                 router.push('/leagues');
             },
             updateLeague(league) {
@@ -178,6 +263,18 @@
             },
             updateSport(sport) {
                 this.$store.dispatch("openUpdateSport", sport);
+            },
+            //match sports and leagues to show league sublists
+            buildSportLeaguesLists(sports, leagues) {
+                let store = this.$store;
+                sports.forEach(function (sport) {
+                    leagues.forEach(function (league) {
+                        if (league.sportId === sport.id) {
+                            store.dispatch("addLeagueToSportList", {sport: sport, league: league});
+                        }
+                    })
+                })
+
             }
         }
     }

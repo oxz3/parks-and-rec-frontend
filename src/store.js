@@ -22,14 +22,14 @@ export const store = new Vuex.Store({
         //indicates the status of user logon
         status: "",
         sports: [
-            {name: 'Soccer', description: "kick the ball", price: 20},
-            {name: 'Football', description: "score touchdowns", price: 20},
-            {name: 'Basketball', description: 'shoot the ball', price: 30}
+            {name: 'Soccer', description: "kick the ball", id: 1},
+            {name: 'Football', description: "score touchdowns", id: 2},
+            {name: 'Basketball', description: 'shoot the ball', id: 3}
         ],
         leagues: [
-            {leagueName: 'Soccer', description: "Fall Soccer League", teamMax: 20, teamMin: 18},
-            {leagueName: 'Football', description: "Fall Football League", teamMax: 50, teamMin: 0},
-            {leagueName: 'Basketball', description: "Fall Basketball League", teamMax: 30, teamMin: 25}
+            {leagueName: 'Soccer', description: "Fall Soccer League", sportId: 1},
+            {leagueName: 'Football', description: "Fall Football League", sportId: 2},
+            {leagueName: 'Basketball', description: "Fall Basketball League", sportId: 3}
         ],
         templateUser: templateUser,
         templateLeague: templateLeague,
@@ -124,8 +124,9 @@ export const store = new Vuex.Store({
         GET_LEAGUES_SUCCESS(state, payload) {
             state.leagues = payload;
         },
-        OPEN_CREATE_LEAGUE(state) {
+        OPEN_CREATE_LEAGUE(state, sport) {
             state.league = state.templateLeague;
+            state.league.sportId = sport.id;
             state.settings.createLeague = true;
             state.settings.editLeague = false;
         },
@@ -179,20 +180,38 @@ export const store = new Vuex.Store({
             state.settings.sport = state.templateSport;
         },
         SPORT_CREATE_SUCCESS(state, payload) {
-            state.settings.newSport = payload.sportName;
+            state.settings.newSport = payload.name;
             state.sports.push(payload);
             state.createsport = false;
             state.status = 'sportCreateSuccess';
         },
         SPORT_UPDATE_SUCCESS(state, payload) {
             console.log('updating sport', payload);
-            state.settings.updatedSport = payload.sportName || "sport";
+            state.settings.updatedSport = payload.name || "sport";
             let foundIndex = state.sports.findIndex(x => x.sportId === payload.sportId);
             console.log('mutation update sport: ', foundIndex);
             state.sports[foundIndex] = payload;
             console.log('updated sports list: ', state.sports);
             state.editsport = false;
             state.status = 'updateSportSuccess';
+        },
+        ADD_LEAGUE_TO_SPORT_LIST(state, payload) {
+            state.sports.forEach(function (sport) {
+                if (sport.id === payload.sport.id) {
+                    if (!sport.leagues) {
+                        sport.leagues = [];
+                    }
+                    if (sport.leagues.length < 1) {
+                        sport.leagues.push(payload.league);
+                    }
+                    //determine if the league is already in the list
+                    sport.leagues.forEach(function (league) {
+                        if (league.leagueId !== payload.league.leagueId) {
+                            sport.leagues.push(payload.league);
+                        }
+                    });
+                }
+            })
         }
     },
     actions: {
@@ -235,8 +254,8 @@ export const store = new Vuex.Store({
         getLeagues(context, token) {
             leaguesObject.getLeagues(context, token);
         },
-        openCreateLeague(context) {
-            context.commit("OPEN_CREATE_LEAGUE");
+        openCreateLeague(context, sport) {
+            context.commit("OPEN_CREATE_LEAGUE", sport);
         },
         createLeague(context, league) {
             leaguesObject.createLeague(context, league);
@@ -268,6 +287,10 @@ export const store = new Vuex.Store({
         },
         cancelSportsForm(context) {
             context.commit("CANCEL_SPORTS_FORM");
+        },
+        //build sport league list
+        addLeagueToSportList(context, payload) {
+            context.commit("ADD_LEAGUE_TO_SPORT_LIST", payload);
         }
 
     }

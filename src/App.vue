@@ -65,6 +65,22 @@
                 Successfully updated league: {{settings.updatedLeague}}
             </v-snackbar>
 
+            <!--show if sport is created successfully-->
+            <v-snackbar
+                    v-model="authStatus"
+                    top
+                    v-if="authStatus == 'sportCreateSuccess'">
+                Successfully created sport: {{settings.newSport}}
+            </v-snackbar>
+
+            <!--show if sport is updated successfully-->
+            <v-snackbar
+                    v-model="authStatus"
+                    top
+                    v-if="authStatus == 'updateSportSuccess'">
+                Successfully updated sport: {{settings.updatedSport}}
+            </v-snackbar>
+
             <!--if use is logged in-->
             <v-btn flat color="primary" v-if="settings.token != null" @click="logout">LOGOUT</v-btn>
             <!--go to logon screen-->
