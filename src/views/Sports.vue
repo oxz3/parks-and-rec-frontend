@@ -56,9 +56,6 @@
                 console.log('sport in logon form edit', this.sport);
             }
 
-
-            // `this` points to the vm instance
-            console.log('a is: ' + this);
             this.sport = Object.assign({}, this.$store.state.settings.sport);
             console.log('sport in create sport component', this.sport);
         }

@@ -98,9 +98,6 @@
                 console.log('league in logon form edit', this.league);
             }
 
-
-            // `this` points to the vm instance
-            console.log('a is: ' + this);
             this.league = Object.assign({}, this.$store.state.settings.league);
             console.log('league in create league component', this.league);
         }

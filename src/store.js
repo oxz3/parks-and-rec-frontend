@@ -173,7 +173,6 @@ export const store = new Vuex.Store({
             state.settings.editSport = false;
         },
         OPEN_EDIT_SPORT(state, payload) {
-            console.log('payload in edit mutation', payload);
             state.settings.editSport = true;
             state.settings.createSport = false;
             state.settings.sport = payload;
@@ -211,12 +210,8 @@ export const store = new Vuex.Store({
                     }
                     //determine if the league is already in the list
                     sport.leagues.forEach(function (league) {
-                        if (league.leagueId !== payload.league.leagueId) {
-                            console.log('lets add this league: ', league);
+                        if (league.leagueId !== payload.league.leagueId && payload.leagueId !== undefined) {
                             sport.leagues.push(payload.league);
-                        }
-                        else{
-                            console.log('this league is already here, bug: ', league);
                         }
                     });
                 }
