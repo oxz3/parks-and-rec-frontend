@@ -33,7 +33,7 @@
                         <v-select
                                 item-text="value"
                                 item-value="key"
-                                v-model="user.role_id"
+                                v-model="user.rolename"
                                 :items="roles"
                                 solo
                                 label="Role"
@@ -97,7 +97,7 @@
                         <v-select
                                 item-text="value"
                                 item-value="key"
-                                v-model="user.role_id"
+                                v-model="user.rolename"
                                 :items="roles"
                                 solo
                                 label="Role"
@@ -166,8 +166,8 @@
             isAdmin: false,
             user: {},
             roles: [
-                {key: 1, value: "Admin"},
-                {key: 2, value: "User"}
+                {key: "1", value: "Admin"},
+                {key: "2", value: "User"}
             ]
         }),
         computed: {

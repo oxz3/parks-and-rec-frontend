@@ -146,7 +146,7 @@ export const store = new Vuex.Store({
         },
         LEAGUE_UPDATE_SUCCESS(state, payload) {
             console.log('updating league', payload);
-            state.settings.updatedLeague = payload.leagueName;
+            state.settings.updatedLeague = payload.leagueName || "league";
             let foundIndex = state.leagues.findIndex(x => x.leagueId === payload.leagueId);
             console.log('mutation update league: ', foundIndex);
             state.leagues[foundIndex] = payload;

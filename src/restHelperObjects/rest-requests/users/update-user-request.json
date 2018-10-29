@@ -13,18 +13,8 @@
     "userId": 11,
     "username": "TestUserEJG61",
     "password": "updated",
-    "roles": [
-      {
-        "id": 5,
-        "role_id": 1,
-        "user_id": null
-      },
-      {
-        "id": 6,
-        "role_id": 2,
-        "user_id": null
-      }
-    ],
+    "roles": null,
+    "rolename": "Admin",
     "orgid": "aa1edef2-4fe7-4224-8885-4e738350118f",
     "orgname": "Test Org",
     "email": "ejg60Test@test.com",

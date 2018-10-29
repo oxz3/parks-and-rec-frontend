@@ -116,6 +116,9 @@
         methods: {
             createLeague: function (league) {
                 console.log(league);
+                if(!league.leagueId){
+                    league.leagueId = 1;
+                }
                 this.$store.dispatch('createLeague', league)
                     .then(() => console.log('creating league'))
                     .catch(err => console.log(err))

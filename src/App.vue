@@ -61,8 +61,8 @@
             <v-snackbar
                     v-model="authStatus"
                     top
-                    v-if="authStatus == 'leagueUpdateSuccess'">
-                Successfully created league: {{settings.updatedLeague}}
+                    v-if="authStatus == 'updateLeagueSuccess'">
+                Successfully updated league: {{settings.updatedLeague}}
             </v-snackbar>
 
             <!--if use is logged in-->
@@ -71,7 +71,7 @@
             <v-btn flat color="primary" to="/logon" v-if="settings.token == null">
                 LOGON
             </v-btn>
-            <v-btn flat color="primary" v-if="settings.token != null"
+            <v-btn flat color="primary" v-if="settings.token != null && settings.user.rolename == 'admin'"
                    @click="openRegisterForm">
                 REGISTER
             </v-btn>
