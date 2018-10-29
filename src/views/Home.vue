@@ -6,6 +6,8 @@
                     <v-card height="100%">
 
 
+
+                        USER: {{settings.user.rolename}}
                         <v-toolbar color="gray" dark>
                             <v-toolbar-title v-if="settings.selectedOption == 'sports'">Sports</v-toolbar-title>
                             <v-spacer></v-spacer>
@@ -142,9 +144,9 @@
         components: {
             DeleteConfirmPopover
         },
-        created: function () {
-            this.buildSportLeaguesLists(this.sports, this.leagues);
-        },
+//        created: function () {
+//            this.buildSportLeaguesLists(this.sports, this.leagues);
+//        },
         data: () => {
             return {
                 showDeleteModal: false,
@@ -191,7 +193,7 @@
                 sports.forEach(function (sport) {
                     leagues.forEach(function (league) {
                         if (league.sportId === sport.id) {
-                            store.dispatch("addLeagueToSportList", {sport: sport, league: league});
+                            store.dispatch("addLeagueToSportList", {sportId: sport.id, league: league});
                         }
                     })
                 })

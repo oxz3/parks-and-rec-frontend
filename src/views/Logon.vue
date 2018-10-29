@@ -164,15 +164,22 @@
 
         data: () => ({
             isAdmin: false,
-            user: {},
+            user: {username: "EGAdmin1",
+            password: "password"},
             roles: [
-                {key: "1", value: "Admin"},
-                {key: "2", value: "User"}
+                {key: "Admin", value: "Admin"},
+                {key: "User", value: "User"}
             ]
         }),
         computed: {
             settings() {
                 return this.$store.state.settings;
+            },
+            sports() {
+                return this.$store.state.sports;
+            },
+            leagues() {
+                return this.$store.state.leagues;
             }
         },
         methods: {
@@ -201,9 +208,15 @@
                                 console.log('this is the current user: ', currentUser, user);
                                 that.$store.dispatch('setUser', currentUser);
                             }).then(function () {
-                            store.dispatch('getLeagues', response)
-                                .then(function () {
-                                    router.push('/');
+                            store.dispatch('getSports', response)
+                                .then(function (sportsResult) {
+                                    console.log(sportsResult);
+                                    store.dispatch('getLeagues', response)
+                                        .then(function (leaguesResult) {
+                                            console.log(leaguesResult);
+                                            that.buildSportLeaguesLists(sportsResult, leaguesResult);
+                                            router.push('/');
+                                        })
                                 })
                         }).catch(function (error) {
                             console.log(error);
@@ -227,6 +240,24 @@
                 this.$store.dispatch('cancelLogonForm')
                     .then(() => this.$router.push('/'))
                     .catch(err => console.log(err))
+            },
+            //match sports and leagues to show league sublists
+            buildSportLeaguesLists(sports, leagues) {
+                console.log(sports, leagues);
+                let store = this.$store;
+                sports.forEach(function (sport) {
+                    leagues.forEach(function (league) {
+                        console.log(sport, league);
+                        if (league.sportId === sport.id) {
+                            console.log('match of sport/league');
+                            store.dispatch("addLeagueToSportList", {sportId: sport.id, league: league})
+                                .then(function (result) {
+                                    console.log('result of lists:', result);
+                                });
+                        }
+                    })
+                })
+
             }
         }
     }

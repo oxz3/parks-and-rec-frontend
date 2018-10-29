@@ -22,16 +22,15 @@ export const store = new Vuex.Store({
         //indicates the status of user logon
         status: "",
         sports: [
-            {name: 'Soccer', description: "kick the ball", id: 1},
-            {name: 'Football', description: "score touchdowns", id: 2},
-            {name: 'Basketball', description: 'shoot the ball', id: 3}
+            // {name: 'Soccer', description: "kick the ball", id: 1},
+            // {name: 'Football', description: "score touchdowns", id: 2},
+            // {name: 'Basketball', description: 'shoot the ball', id: 3}
         ],
         leagues: [
-            {leagueName: 'Soccer', description: "Fall Soccer League", sportId: 1, leagueId: 999},
-            {leagueName: 'Football', description: "Fall Football League", sportId: 2, leagueId: 998},
-            {leagueName: 'Basketball', description: "Fall Basketball League", sportId: 3, leagueId: 997},
-            {leagueName: 'Soccer 2', description: "Fall Soccer League 2", sportId: 1, leagueId: 996},
-
+            // {leagueName: 'Soccer', description: "Fall Soccer League", sportId: 1, leagueId: 999},
+            // {leagueName: 'Soccer 2', description: "Fall Soccer League 2", sportId: 1, leagueId: 996},
+            // {leagueName: 'Football', description: "Fall Football League", sportId: 2, leagueId: 998},
+            // {leagueName: 'Basketball', description: "Fall Basketball League", sportId: 3, leagueId: 997}
         ],
         templateUser: templateUser,
         templateLeague: templateLeague,
@@ -152,6 +151,13 @@ export const store = new Vuex.Store({
             state.leagues.push(payload);
             state.createLeague = false;
             state.status = 'leagueCreateSuccess';
+            if(!state.settings.currentSport.leagues){
+                state.settings.currentSport.leagues = [];
+            }
+            if(state.settings.currentSport.leagues){
+                state.settings.currentSport.leagues.push(payload);
+            }
+
         },
         LEAGUE_UPDATE_SUCCESS(state, payload) {
             console.log('updating league', payload);
@@ -200,21 +206,31 @@ export const store = new Vuex.Store({
             state.status = 'updateSportSuccess';
         },
         ADD_LEAGUE_TO_SPORT_LIST(state, payload) {
-            state.sports.forEach(function (sport) {
-                if (sport.id === payload.sport.id) {
-                    if (!sport.leagues) {
-                        sport.leagues = [];
-                    }
-                    if (sport.leagues.length < 1) {
-                        sport.leagues.push(payload.league);
-                    }
-                    //determine if the league is already in the list
-                    sport.leagues.forEach(function (league) {
-                        if (league.leagueId !== payload.league.leagueId && payload.leagueId !== undefined) {
+            return new Promise((resolve, reject) => {
+                console.log('debugging add leagues list: ', payload.sportId, payload.league);
+                state.sports.forEach(function (sport) {
+                    //match sport id's
+                    if (sport.id === payload.sportId) {
+                        //if sport doesn't have leagues array yet
+                        if (!sport.leagues) {
+                            console.log('sport has no leagues');
+                            sport.leagues = [];
+                        }
+                        //add to array if it is empty
+                        if (sport.leagues.length < 1) {
                             sport.leagues.push(payload.league);
                         }
-                    });
-                }
+                        //determine if the league is already in the list and add if not
+                        sport.leagues.forEach(function (league) {
+                            if (league.leagueId !== payload.league.leagueId || payload.leagueId !== undefined) {
+                                console.log("league id: ", league.leagueId, " payload league: ", payload.league.leagueId);
+                                console.log('adding league to list:', payload.league.leagueId);
+                                sport.leagues.push(payload.league);
+                            }
+                        });
+                    }
+                });
+                resolve(state.sports);
             })
         }
     },
@@ -256,7 +272,7 @@ export const store = new Vuex.Store({
         },
         //leagues
         getLeagues(context, token) {
-            leaguesObject.getLeagues(context, token);
+            return leaguesObject.getLeagues(context, token);
         },
         openCreateLeague(context, sport) {
             context.commit("OPEN_CREATE_LEAGUE", sport);
@@ -275,7 +291,7 @@ export const store = new Vuex.Store({
         },
         //Sports
         getSports(context, token) {
-            sportsObject.getSports(context, token);
+            return sportsObject.getSports(context, token);
         },
         openCreateSport(context) {
             context.commit("OPEN_CREATE_SPORT");

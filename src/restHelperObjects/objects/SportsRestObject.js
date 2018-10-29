@@ -71,7 +71,7 @@ export default {
             $.ajax(request).then(function (response) {
                 resolve(response);
                 console.log('sports response: ', response);
-                store.commit('GET_sportS_SUCCESS', response);
+                store.commit('GET_SPORTS_SUCCESS', response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
                 reject(err)
