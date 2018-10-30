@@ -62,6 +62,8 @@ export const store = new Vuex.Store({
     },
     getters: {
         isLoggedIn: state => !!state.settings.token,
+        sports: state => state.sports,
+        leagues: state => state.leagues
     },
     mutations: {
         //Whether Sports or Leagues (users next?) are selected in the settings panel
@@ -117,6 +119,8 @@ export const store = new Vuex.Store({
             state.settings.user = {};
             state.settings.editUser = false;
             state.settings.token = null
+            state.sports = [];
+            state.leagues = [];
         },
         CANCEL_LOGON_FORM(state) {
             state.settings.editUser = false;
@@ -157,6 +161,7 @@ export const store = new Vuex.Store({
             if (state.settings.currentSport.leagues) {
                 state.settings.currentSport.leagues.push(payload);
             }
+            router.push('/main');
 
         },
         LEAGUE_UPDATE_SUCCESS(state, payload) {
@@ -217,48 +222,18 @@ export const store = new Vuex.Store({
             });
         },
         ADD_LEAGUE_TO_SPORT_LIST(state, payload) {
-            console.log('debugging add leagues list: ', payload.sportId, payload.league);
             state.sports.forEach(function (sport) {
-
-                if(sport.id === payload.sportId){
-                    console.log('figure it out:', sport.id, payload.sportId);
+                if (sport.id === payload.sportId) {
                     if (!sport.leagues) {
-                        console.log('sport has no leagues');
                         sport.leagues = [];
+                        payload.league.addedToSportList = true;
+                        sport.leagues.push(payload.league);
+                    }
+                    if (sport.leagues.length > 0 && !payload.league.addedToSportList) {
+                        payload.league.addedToSportList = true;
                         sport.leagues.push(payload.league);
                     }
                 }
-                //match sport id's
-                // if (sport.id === payload.sportId) {
-                //     //if sport doesn't have leagues array yet
-                //     if (!sport.leagues) {
-                //         console.log('sport has no leagues');
-                //         sport.leagues = [];
-                //         sport.leagues.push(payload.league);
-                //     }
-                //     sport.leagues.forEach(function (league){
-                //         console.log(league);
-                //         if(league.leagueId !== payload.league.leagueId){
-                //             sport.leagues.push(payload.league);
-                //
-                //         }
-                //     })
-                //     //add to array if it is empty
-                //     // if (sport.leagues.length < 1) {
-                //     //     sport.leagues.push(payload.league);
-                //     // }
-                //     // if(sport.leagues.length > 1){
-                //     //     sport.leagues.push(payload.league);
-                //     // }
-                //     //determine if the league is already in the list and add if not
-                //     // sport.leagues.forEach(function (league) {
-                //     //     if (league.leagueId !== payload.league.leagueId || payload.leagueId !== undefined) {
-                //     //         console.log("league id: ", league.leagueId, " payload league: ", payload.league.leagueId);
-                //     //         console.log('adding league to list:', payload.league.leagueId);
-                //     //         sport.leagues.push(payload.league);
-                //     //     }
-                //     // });
-                // }
             });
         }
     },

@@ -86,7 +86,7 @@
             },
             cancel: function () {
                 this.$store.dispatch('cancelSportsForm')
-                    .then(() => this.$router.push('/'))
+                    .then(() => this.$router.push('/main'))
                     .catch(err => console.log(err))
             }
         }

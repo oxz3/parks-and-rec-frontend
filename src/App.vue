@@ -1,7 +1,18 @@
 <template>
     <v-app id="app">
         <v-toolbar>
-            <v-toolbar-title>Parks and Rec Application</v-toolbar-title>
+            <v-toolbar-title>Parks and Rec Application
+
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-title>
+                <span v-if="settings.user.username">
+                      &nbsp; {{settings.user.username}}  &nbsp;
+                </span>
+                <span v-if="settings.user.orgname">
+                    /{{settings.user.orgname}}
+                </span>
+            </v-toolbar-title>
             <v-spacer></v-spacer>
 
             <!--show if user clicks logout button-->
@@ -112,8 +123,12 @@
             </v-btn>
         </v-toolbar>
 
-        <!--Vue-Router tag that holds all views-->
-        <router-view/>
+        <transition
+                name="fade"
+                mode="out-in">
+            <!--Vue-Router tag that holds all views-->
+            <router-view/>
+        </transition>
 
         <!--menu that slides out with options-->
         <v-navigation-drawer
@@ -203,5 +218,17 @@
 
     #nav a.router-link-exact-active {
         color: #42b983;
+    }
+
+    fade-enter-active,
+    .fade-leave-active {
+        transition-duration: 0.3s;
+        transition-property: opacity;
+        transition-timing-function: ease;
+    }
+
+    .fade-enter,
+    .fade-leave-active {
+        opacity: 0
     }
 </style>

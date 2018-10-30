@@ -211,37 +211,28 @@
                                 console.log('this is the current user: ', currentUser, user);
                                 that.$store.dispatch('setUser', currentUser);
                             }).then(function () {
-                            store.dispatch('getSports', response)
-                                .then(function (sportsResult) {
-                                    console.log(sportsResult);
-                                    sportsListPromise = new Promise((resolve, reject) =>
-                                        sportsResult.forEach(function (sportResult) {
-                                            store.dispatch('getSportByName', sportResult)
-                                                .then(function (sportResult) {
-//                                        sports.push(sportResult);
-                                                    store.dispatch('addSportToList', sportResult)
-                                                        .then(function(res){
-                                                            console.log('in the promise return', res, store.state.sports);
-                                                            store.dispatch('getLeagues', store.state.sports)
-                                                                .then(function (leaguesResult) {
-                                                                    console.log(leaguesResult);
-                                                                    that.buildSportLeaguesLists(sportsResult, leaguesResult);
-                                                                    router.push('/');
-                                                                })
+                            store.dispatch('getLeagues', store.state.sports)
+                                .then(function (leaguesResult) {
+                                    console.log(leaguesResult);
+                                    store.dispatch('getSports', response)
+                                        .then(function (sportsResult) {
+                                            console.log(sportsResult);
+                                            sportsListPromise = new Promise((resolve, reject) =>
+                                                sportsResult.forEach(function (sportResult) {
+                                                    store.dispatch('getSportByName', sportResult)
+                                                        .then(function (sportResult) {
+                                                            store.dispatch('addSportToList', sportResult)
+                                                                .then(function () {
+                                                                    that.buildSportLeaguesLists(sportResult, leaguesResult);
+                                                                    setTimeout(function () {
+                                                                        router.push('/main')
+                                                                    }, 2000)
+                                                                });
                                                         });
-                                                });
-                                        }));
-                                });
-
-//                            sportsListPromise.then((resultOfPromise) => {
-//                                console.log('in the promise return', resultOfPromise);
-//                                store.dispatch('getLeagues', store.state.sports)
-//                                    .then(function (leaguesResult) {
-//                                        console.log(leaguesResult);
-//                                        that.buildSportLeaguesLists(sportsResult, leaguesResult);
-//                                        router.push('/');
-//                                    })
-//                            })
+                                                })
+                                            );
+                                        });
+                                })
                         }).catch(function (error) {
                             console.log(error);
                         })
@@ -252,37 +243,29 @@
             register: function (user) {
                 console.log(user);
                 this.$store.dispatch('register', user)
-                    .then(() => this.$router.push('/'))
+                    .then(() => this.$router.push('/main'))
                     .catch(err => console.log(err))
             },
             updateUser: function (updateUser) {
                 this.$store.dispatch('updateUser', updateUser)
-                    .then(() => this.$router.push('/'))
+                    .then(() => this.$router.push('/main'))
                     .catch(err => console.log(err))
             },
             cancel: function () {
                 this.$store.dispatch('cancelLogonForm')
-                    .then(() => this.$router.push('/'))
+                    .then(() => this.$router.push('/main'))
                     .catch(err => console.log(err))
             },
             //match sports and leagues to show league sublists
             buildSportLeaguesLists(sports, leagues) {
-                console.log(sports, leagues);
                 let store = this.$store;
                 sports.forEach(function (sport) {
                     leagues.forEach(function (league) {
-                        console.log(sport, league);
-                        if (league.sportId === sport.id) {
-                            console.log('match of sport/league');
+                        if (league.sportId === sport.id && !league.addedToSportList) {
                             store.dispatch("addLeagueToSportList", {sportId: sport.id, league: league});
-                            console.log("sports with leagues?: ", store.state.sports);
-//                                .then(function (result) {
-//                                    console.log('result of lists:', result);
-//                                });
                         }
                     })
                 })
-
             }
         }
     }
