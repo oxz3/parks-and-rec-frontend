@@ -86,6 +86,7 @@
                                     </v-list-tile-action>
                                 </v-list-tile>
 
+                                <!--nested leagues list for sport-->
                                 <v-list-tile
                                         v-for="league in sport.leagues"
                                         :key="league.leagueId"

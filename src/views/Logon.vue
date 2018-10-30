@@ -164,8 +164,10 @@
 
         data: () => ({
             isAdmin: false,
-            user: {username: "EGAdmin1",
-            password: "password"},
+            user: {
+                username: "Admin",
+                password: "Admin"
+            },
             roles: [
                 {key: "Admin", value: "Admin"},
                 {key: "User", value: "User"}
@@ -190,6 +192,7 @@
                 let store = this.$store;
                 let router = this.$router;
                 let that = this;
+                let sportsListPromise = undefined;
                 store.dispatch('login', {username, password})
                     .then(function (response) {
                         console.log(response);
@@ -211,13 +214,34 @@
                             store.dispatch('getSports', response)
                                 .then(function (sportsResult) {
                                     console.log(sportsResult);
-                                    store.dispatch('getLeagues', response)
-                                        .then(function (leaguesResult) {
-                                            console.log(leaguesResult);
-                                            that.buildSportLeaguesLists(sportsResult, leaguesResult);
-                                            router.push('/');
-                                        })
-                                })
+                                    sportsListPromise = new Promise((resolve, reject) =>
+                                        sportsResult.forEach(function (sportResult) {
+                                            store.dispatch('getSportByName', sportResult)
+                                                .then(function (sportResult) {
+//                                        sports.push(sportResult);
+                                                    store.dispatch('addSportToList', sportResult)
+                                                        .then(function(res){
+                                                            console.log('in the promise return', res, store.state.sports);
+                                                            store.dispatch('getLeagues', store.state.sports)
+                                                                .then(function (leaguesResult) {
+                                                                    console.log(leaguesResult);
+                                                                    that.buildSportLeaguesLists(sportsResult, leaguesResult);
+                                                                    router.push('/');
+                                                                })
+                                                        });
+                                                });
+                                        }));
+                                });
+
+//                            sportsListPromise.then((resultOfPromise) => {
+//                                console.log('in the promise return', resultOfPromise);
+//                                store.dispatch('getLeagues', store.state.sports)
+//                                    .then(function (leaguesResult) {
+//                                        console.log(leaguesResult);
+//                                        that.buildSportLeaguesLists(sportsResult, leaguesResult);
+//                                        router.push('/');
+//                                    })
+//                            })
                         }).catch(function (error) {
                             console.log(error);
                         })
@@ -250,10 +274,11 @@
                         console.log(sport, league);
                         if (league.sportId === sport.id) {
                             console.log('match of sport/league');
-                            store.dispatch("addLeagueToSportList", {sportId: sport.id, league: league})
-                                .then(function (result) {
-                                    console.log('result of lists:', result);
-                                });
+                            store.dispatch("addLeagueToSportList", {sportId: sport.id, league: league});
+                            console.log("sports with leagues?: ", store.state.sports);
+//                                .then(function (result) {
+//                                    console.log('result of lists:', result);
+//                                });
                         }
                     })
                 })

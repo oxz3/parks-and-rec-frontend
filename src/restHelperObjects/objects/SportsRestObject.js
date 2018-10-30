@@ -79,18 +79,22 @@ export default {
         })
 
     },
-    getSportByName: function (store, token) {
+    getSportByName: function (store, sport) {
         return new Promise((resolve, reject) => {
-            console.log('token in sports object: ', token);
 
-            store.commit('AUTH_REQUEST', 'gettingsportByName');
+            store.commit('AUTH_REQUEST', 'gettingSportByName');
             let request = Object.assign({}, getSportByNameRequest);
             request.headers.token = localStorage.getItem('token');
 
+            let url = request.url.substr(0, request.url.lastIndexOf("sportName=") + 10);
+            request.url = url + sport.name;
+            console.log(request.url);
+            request.url = request.url + "&orgId=" + sport.orgid;
+             console.log(request.url);
             $.ajax(request).then(function (response) {
                 resolve(response);
                 console.log('sport by name response: ', response);
-                store.commit('GET_SPORT_BY_NAME_SUCCESS', response);
+                //store.commit('GET_SPORT_BY_NAME_SUCCESS', response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
                 reject(err)

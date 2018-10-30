@@ -151,10 +151,10 @@ export const store = new Vuex.Store({
             state.leagues.push(payload);
             state.createLeague = false;
             state.status = 'leagueCreateSuccess';
-            if(!state.settings.currentSport.leagues){
+            if (!state.settings.currentSport.leagues) {
                 state.settings.currentSport.leagues = [];
             }
-            if(state.settings.currentSport.leagues){
+            if (state.settings.currentSport.leagues) {
                 state.settings.currentSport.leagues.push(payload);
             }
 
@@ -205,33 +205,61 @@ export const store = new Vuex.Store({
             state.editsport = false;
             state.status = 'updateSportSuccess';
         },
+        ADD_SPORT_TO_LIST(state, sport) {
+            console.log('adding sport to sports list in store', sport);
+            state.sports.forEach(function (s) {
+                console.log(s, sport[0]);
+                if (sport[0].name.includes(s.name) && s.orgid === sport[0].orgid) {
+                    console.log('match of sports: ', s, sport[0]);
+                    s.id = sport[0].id;
+                    return s;
+                }
+            });
+        },
         ADD_LEAGUE_TO_SPORT_LIST(state, payload) {
-            return new Promise((resolve, reject) => {
-                console.log('debugging add leagues list: ', payload.sportId, payload.league);
-                state.sports.forEach(function (sport) {
-                    //match sport id's
-                    if (sport.id === payload.sportId) {
-                        //if sport doesn't have leagues array yet
-                        if (!sport.leagues) {
-                            console.log('sport has no leagues');
-                            sport.leagues = [];
-                        }
-                        //add to array if it is empty
-                        if (sport.leagues.length < 1) {
-                            sport.leagues.push(payload.league);
-                        }
-                        //determine if the league is already in the list and add if not
-                        sport.leagues.forEach(function (league) {
-                            if (league.leagueId !== payload.league.leagueId || payload.leagueId !== undefined) {
-                                console.log("league id: ", league.leagueId, " payload league: ", payload.league.leagueId);
-                                console.log('adding league to list:', payload.league.leagueId);
-                                sport.leagues.push(payload.league);
-                            }
-                        });
+            console.log('debugging add leagues list: ', payload.sportId, payload.league);
+            state.sports.forEach(function (sport) {
+
+                if(sport.id === payload.sportId){
+                    console.log('figure it out:', sport.id, payload.sportId);
+                    if (!sport.leagues) {
+                        console.log('sport has no leagues');
+                        sport.leagues = [];
+                        sport.leagues.push(payload.league);
                     }
-                });
-                resolve(state.sports);
-            })
+                }
+                //match sport id's
+                // if (sport.id === payload.sportId) {
+                //     //if sport doesn't have leagues array yet
+                //     if (!sport.leagues) {
+                //         console.log('sport has no leagues');
+                //         sport.leagues = [];
+                //         sport.leagues.push(payload.league);
+                //     }
+                //     sport.leagues.forEach(function (league){
+                //         console.log(league);
+                //         if(league.leagueId !== payload.league.leagueId){
+                //             sport.leagues.push(payload.league);
+                //
+                //         }
+                //     })
+                //     //add to array if it is empty
+                //     // if (sport.leagues.length < 1) {
+                //     //     sport.leagues.push(payload.league);
+                //     // }
+                //     // if(sport.leagues.length > 1){
+                //     //     sport.leagues.push(payload.league);
+                //     // }
+                //     //determine if the league is already in the list and add if not
+                //     // sport.leagues.forEach(function (league) {
+                //     //     if (league.leagueId !== payload.league.leagueId || payload.leagueId !== undefined) {
+                //     //         console.log("league id: ", league.leagueId, " payload league: ", payload.league.leagueId);
+                //     //         console.log('adding league to list:', payload.league.leagueId);
+                //     //         sport.leagues.push(payload.league);
+                //     //     }
+                //     // });
+                // }
+            });
         }
     },
     actions: {
@@ -293,6 +321,9 @@ export const store = new Vuex.Store({
         getSports(context, token) {
             return sportsObject.getSports(context, token);
         },
+        getSportByName(context, sport) {
+            return sportsObject.getSportByName(context, sport);
+        },
         openCreateSport(context) {
             context.commit("OPEN_CREATE_SPORT");
         },
@@ -307,6 +338,9 @@ export const store = new Vuex.Store({
         },
         cancelSportsForm(context) {
             context.commit("CANCEL_SPORTS_FORM");
+        },
+        addSportToList(context, sport) {
+            context.commit("ADD_SPORT_TO_LIST", sport);
         },
         //build sport league list
         addLeagueToSportList(context, payload) {
