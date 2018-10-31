@@ -217,20 +217,29 @@
                                     store.dispatch('getSports', response)
                                         .then(function (sportsResult) {
                                             console.log(sportsResult);
-                                            sportsListPromise = new Promise((resolve, reject) =>
-                                                sportsResult.forEach(function (sportResult) {
-                                                    store.dispatch('getSportByName', sportResult)
-                                                        .then(function (sportResult) {
-                                                            store.dispatch('addSportToList', sportResult)
-                                                                .then(function () {
-                                                                    that.buildSportLeaguesLists(sportResult, leaguesResult);
-                                                                    setTimeout(function () {
-                                                                        router.push('/main')
-                                                                    }, 2000)
+                                            if (sportsResult.length > 0) {
+                                                sportsListPromise = new Promise((resolve, reject) =>
+//                                                if(sportsResult.length > 0) {
+                                                        sportsResult.forEach(function (sportResult) {
+                                                            store.dispatch('getSportByName', sportResult)
+                                                                .then(function (sportNameResult) {
+                                                                    console.log('sport by name result:', sportNameResult);
+                                                                    store.dispatch('addSportToList', sportNameResult)
+                                                                        .then(function (result) {
+                                                                            console.log('result of sports in login:', result);
+                                                                            that.buildSportLeaguesLists(sportsResult, leaguesResult);
+                                                                            setTimeout(function () {
+                                                                                console.log('in timeout');
+                                                                                router.push('/main')
+                                                                            }, 2000)
+                                                                        });
                                                                 });
-                                                        });
-                                                })
-                                            );
+                                                        })
+                                                );
+                                            }
+                                            else {
+                                                router.push('/main')
+                                            }
                                         });
                                 })
                         }).catch(function (error) {

@@ -32,6 +32,7 @@ export const store = new Vuex.Store({
             // {leagueName: 'Football', description: "Fall Football League", sportId: 2, leagueId: 998},
             // {leagueName: 'Basketball', description: "Fall Basketball League", sportId: 3, leagueId: 997}
         ],
+        userSports: [],
         templateUser: templateUser,
         templateLeague: templateLeague,
         templateSport: templateSport,
@@ -118,22 +119,26 @@ export const store = new Vuex.Store({
             state.status = "logged off";
             state.settings.user = {};
             state.settings.editUser = false;
-            state.settings.token = null
+            state.settings.createUser = false;
+            state.settings.token = null;
             state.sports = [];
+            state.userSports = [];
             state.leagues = [];
+            router.push("/main");
         },
         CANCEL_LOGON_FORM(state) {
             state.settings.editUser = false;
             state.settings.registerUser = false;
-            //state.settings.user = state.templateUser;
+            router.push("/main");
         },
         GET_LEAGUES_SUCCESS(state, payload) {
             state.leagues = payload;
         },
         OPEN_CREATE_LEAGUE(state, sport) {
+            console.log(sport);
             state.settings.currentSport = sport;
-            state.league = state.templateLeague;
-            state.league.sportId = sport.id;
+            state.settings.league = state.templateLeague;
+            state.settings.league.sportId = sport.id;
             state.settings.createLeague = true;
             state.settings.editLeague = false;
             router.push('/leagues');
@@ -149,6 +154,7 @@ export const store = new Vuex.Store({
             state.settings.createLeague = false;
             state.settings.editLeague = false;
             state.settings.league = state.templateLeague;
+            router.push("/main");
         },
         LEAGUE_CREATE_SUCCESS(state, payload) {
             state.settings.newLeague = payload.leagueName;
@@ -173,6 +179,7 @@ export const store = new Vuex.Store({
             console.log('updated leagues list: ', state.leagues);
             state.editLeague = false;
             state.status = 'updateLeagueSuccess';
+            router.push("/main");
         },
         //Sports
         GET_SPORTS_SUCCESS(state, payload) {
@@ -193,36 +200,41 @@ export const store = new Vuex.Store({
             state.settings.createSport = false;
             state.settings.editSport = false;
             state.settings.sport = state.templateSport;
+            router.push("/main");
         },
         SPORT_CREATE_SUCCESS(state, payload) {
             state.settings.newSport = payload.name;
             state.sports.push(payload);
+            state.userSports.push(payload);
             state.createsport = false;
             state.status = 'sportCreateSuccess';
+            router.push("/main");
         },
         SPORT_UPDATE_SUCCESS(state, payload) {
             console.log('updating sport', payload);
             state.settings.updatedSport = payload.name || "sport";
-            let foundIndex = state.sports.findIndex(x => x.sportId === payload.sportId);
+            let foundIndex = state.userSports.findIndex(x => x.sportId === payload.sportId);
             console.log('mutation update sport: ', foundIndex);
-            state.sports[foundIndex] = payload;
-            console.log('updated sports list: ', state.sports);
+            state.userSports[foundIndex] = payload;
+            console.log('updated sports list: ', state.userSports);
             state.editsport = false;
             state.status = 'updateSportSuccess';
+            router.push("/main");
         },
         ADD_SPORT_TO_LIST(state, sport) {
             console.log('adding sport to sports list in store', sport);
+            console.log(state.sports);
             state.sports.forEach(function (s) {
                 console.log(s, sport[0]);
-                if (sport[0].name.includes(s.name) && s.orgid === sport[0].orgid) {
-                    console.log('match of sports: ', s, sport[0]);
-                    s.id = sport[0].id;
-                    return s;
+                if (sport[0].name.includes(s.name) && s.orgid === sport[0].orgid && sport[0].orgid === state.settings.user.orgid) {
+                        console.log('match of sports: ', s, sport[0]);
+                        s.id = sport[0].id;
+                        state.userSports.push(s);
                 }
             });
         },
         ADD_LEAGUE_TO_SPORT_LIST(state, payload) {
-            state.sports.forEach(function (sport) {
+            state.userSports.forEach(function (sport) {
                 if (sport.id === payload.sportId) {
                     if (!sport.leagues) {
                         sport.leagues = [];

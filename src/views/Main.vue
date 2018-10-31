@@ -42,7 +42,7 @@
                         <v-list>
                             <v-divider></v-divider>
                             <v-list-group
-                                    v-for="sport in sports"
+                                    v-for="sport in userSports"
                                     no-action>
                                 <v-list-tile slot="activator">
                                     <v-list-tile-content>
@@ -64,23 +64,23 @@
                                             </v-icon>
                                         </v-btn>
                                     </v-list-tile-action>
-                                    <v-list-tile-action>
-                                        <v-dialog
-                                                v-model="showDeleteModal"
-                                                width="25%"
-                                                dark>
-                                            <v-btn icon
-                                                   slot="activator">
-                                                <v-icon>
-                                                    delete
-                                                </v-icon>
-                                            </v-btn>
-                                            <delete-confirm-popover
-                                                    v-model="showDeleteModal"
-                                                    @close-delete-modal="closeConfirmDeletePopover">
-                                            </delete-confirm-popover>
-                                        </v-dialog>
-                                    </v-list-tile-action>
+                                    <!--<v-list-tile-action>-->
+                                    <!--<v-dialog-->
+                                    <!--v-model="showDeleteModal"-->
+                                    <!--width="25%"-->
+                                    <!--dark>-->
+                                    <!--<v-btn icon-->
+                                    <!--slot="activator">-->
+                                    <!--<v-icon>-->
+                                    <!--delete-->
+                                    <!--</v-icon>-->
+                                    <!--</v-btn>-->
+                                    <!--<delete-confirm-popover-->
+                                    <!--v-model="showDeleteModal"-->
+                                    <!--@close-delete-modal="closeConfirmDeletePopover">-->
+                                    <!--</delete-confirm-popover>-->
+                                    <!--</v-dialog>-->
+                                    <!--</v-list-tile-action>-->
                                 </v-list-tile>
                                 <v-divider></v-divider>
 
@@ -99,23 +99,23 @@
                                             </v-icon>
                                         </v-btn>
                                     </v-list-tile-action>
-                                    <v-list-tile-action>
-                                        <v-dialog
-                                                v-model="showDeleteModal"
-                                                width="25%"
-                                                dark>
-                                            <v-btn icon
-                                                   slot="activator">
-                                                <v-icon>
-                                                    delete
-                                                </v-icon>
-                                            </v-btn>
-                                            <delete-confirm-popover
-                                                    v-model="showDeleteModal"
-                                                    @close-delete-modal="closeConfirmDeletePopover">
-                                            </delete-confirm-popover>
-                                        </v-dialog>
-                                    </v-list-tile-action>
+                                    <!--<v-list-tile-action>-->
+                                    <!--<v-dialog-->
+                                    <!--v-model="showDeleteModal"-->
+                                    <!--width="25%"-->
+                                    <!--dark>-->
+                                    <!--<v-btn icon-->
+                                    <!--slot="activator">-->
+                                    <!--<v-icon>-->
+                                    <!--delete-->
+                                    <!--</v-icon>-->
+                                    <!--</v-btn>-->
+                                    <!--<delete-confirm-popover-->
+                                    <!--v-model="showDeleteModal"-->
+                                    <!--@close-delete-modal="closeConfirmDeletePopover">-->
+                                    <!--</delete-confirm-popover>-->
+                                    <!--</v-dialog>-->
+                                    <!--</v-list-tile-action>-->
                                 </v-list-tile>
                                 <v-divider></v-divider>
                             </v-list-group>
@@ -159,10 +159,13 @@
             }
             ,
             sports: function () {
-                return this.$store.getters.sports;
+                return this.$store.state.sports;
+            },
+            userSports: function () {
+                return this.$store.state.userSports;
             },
             leagues: function () {
-                return this.$store.getters.leagues;
+                return this.$store.state.leagues;
             }
         },
         methods: {

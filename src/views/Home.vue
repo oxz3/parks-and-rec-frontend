@@ -3,13 +3,11 @@
         <v-container>
             <v-layout>
                 <v-flex>
-                    <card>
-                        <v-card>
-                            <h1>
-                                Welcome to Parks and Rec.  Loading Sports and Leagues...
-                            </h1>
-                        </v-card>
-                    </card>
+                    <v-card>
+                        <h1>
+                            Welcome to Parks and Rec.  Loading Sports and Leagues...
+                        </h1>
+                    </v-card>
                 </v-flex>
             </v-layout>
             <v-layout>
@@ -30,11 +28,9 @@
 
     export default {
         name: 'home',
-        components: {
-        },
+        components: {},
         data: () => {
-            return {
-            }
+            return {}
         },
         computed: {
             settings() {

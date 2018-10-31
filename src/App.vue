@@ -10,7 +10,7 @@
                       &nbsp; {{settings.user.username}}  &nbsp;
                 </span>
                 <span v-if="settings.user.orgname">
-                    /{{settings.user.orgname}}
+                    {{settings.user.orgname}}
                 </span>
             </v-toolbar-title>
             <v-spacer></v-spacer>

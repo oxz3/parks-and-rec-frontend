@@ -90,7 +90,7 @@
         created: function () {
 
             if (this.$store.state.settings.createLeague) {
-                this.league = Object.assign({}, this.$store.state.settings.templateLeague);
+                this.league = Object.assign({}, this.$store.state.settings.league);
                 console.log('league in logon form create', this.league);
             }
             if (this.$store.state.settings.editLeague) {
