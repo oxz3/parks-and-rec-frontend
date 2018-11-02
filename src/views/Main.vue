@@ -64,23 +64,23 @@
                                             </v-icon>
                                         </v-btn>
                                     </v-list-tile-action>
-                                    <!--<v-list-tile-action>-->
-                                    <!--<v-dialog-->
-                                    <!--v-model="showDeleteModal"-->
-                                    <!--width="25%"-->
-                                    <!--dark>-->
-                                    <!--<v-btn icon-->
-                                    <!--slot="activator">-->
-                                    <!--<v-icon>-->
-                                    <!--delete-->
-                                    <!--</v-icon>-->
-                                    <!--</v-btn>-->
-                                    <!--<delete-confirm-popover-->
-                                    <!--v-model="showDeleteModal"-->
-                                    <!--@close-delete-modal="closeConfirmDeletePopover">-->
-                                    <!--</delete-confirm-popover>-->
-                                    <!--</v-dialog>-->
-                                    <!--</v-list-tile-action>-->
+                                    <v-list-tile-action>
+                                        <v-dialog
+                                                v-model="showDeleteModal"
+                                                width="25%"
+                                                dark>
+                                            <v-btn icon
+                                                   slot="activator">
+                                                <v-icon>
+                                                    delete
+                                                </v-icon>
+                                            </v-btn>
+                                            <delete-confirm-popover
+                                                    v-model="showDeleteModal"
+                                                    @close-delete-modal="closeConfirmDeletePopover">
+                                            </delete-confirm-popover>
+                                        </v-dialog>
+                                    </v-list-tile-action>
                                 </v-list-tile>
                                 <v-divider></v-divider>
 
@@ -99,23 +99,23 @@
                                             </v-icon>
                                         </v-btn>
                                     </v-list-tile-action>
-                                    <!--<v-list-tile-action>-->
-                                    <!--<v-dialog-->
-                                    <!--v-model="showDeleteModal"-->
-                                    <!--width="25%"-->
-                                    <!--dark>-->
-                                    <!--<v-btn icon-->
-                                    <!--slot="activator">-->
-                                    <!--<v-icon>-->
-                                    <!--delete-->
-                                    <!--</v-icon>-->
-                                    <!--</v-btn>-->
-                                    <!--<delete-confirm-popover-->
-                                    <!--v-model="showDeleteModal"-->
-                                    <!--@close-delete-modal="closeConfirmDeletePopover">-->
-                                    <!--</delete-confirm-popover>-->
-                                    <!--</v-dialog>-->
-                                    <!--</v-list-tile-action>-->
+                                    <v-list-tile-action>
+                                        <v-dialog
+                                                v-model="showDeleteModal"
+                                                width="25%"
+                                                dark>
+                                            <v-btn icon
+                                                   slot="activator">
+                                                <v-icon>
+                                                    delete
+                                                </v-icon>
+                                            </v-btn>
+                                            <delete-confirm-popover
+                                                    v-model="showDeleteModal"
+                                                    @close-delete-modal="closeConfirmDeletePopover">
+                                            </delete-confirm-popover>
+                                        </v-dialog>
+                                    </v-list-tile-action>
                                 </v-list-tile>
                                 <v-divider></v-divider>
                             </v-list-group>

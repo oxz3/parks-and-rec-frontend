@@ -3,7 +3,7 @@
     <v-card>
         <v-card-text>
             <span>
-                Are you sure you want to delete this<span> {{settings.selectedOption | singular}}?</span>
+                Are you sure you want to delete?</span>
             </span>
         </v-card-text>
 
