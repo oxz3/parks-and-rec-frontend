@@ -141,7 +141,7 @@
                 <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
                        @click="updateUser(user)">UPDATE
                 </v-btn>
-                <v-btn @click="cancel">cancel</v-btn>
+              
             </div>
         </form>
     </v-card>
@@ -165,8 +165,8 @@
         data: () => ({
             isAdmin: false,
             user: {
-                username: "Admin",
-                password: "Admin"
+                username: "",
+                password: ""
             },
             roles: [
                 {key: "Admin", value: "Admin"},
@@ -251,14 +251,26 @@
             },
             register: function (user) {
                 console.log(user);
-                this.$store.dispatch('register', user)
+                 if ( this.$store.state.settings.token != null) {
+                     this.$store.dispatch('register', user)
                     .then(() => this.$router.push('/main'))
                     .catch(err => console.log(err))
+                 }else{
+                    this.$router.push('/logon')
+                 }
+
+                
             },
             updateUser: function (updateUser) {
-                this.$store.dispatch('updateUser', updateUser)
+
+                if ( this.$store.state.settings.token != null) {
+                    this.$store.dispatch('updateUser', updateUser)
                     .then(() => this.$router.push('/main'))
                     .catch(err => console.log(err))
+                 }else{
+                    this.$router.push('/logon')
+                 }
+                
             },
             cancel: function () {
                 this.$store.dispatch('cancelLogonForm')

@@ -102,10 +102,10 @@
                    @click="openRegisterForm">
                 REGISTER
             </v-btn>
-            <!--go to home screen-->
-            <v-btn flat color="primary" to="/">
-                <v-icon>home</v-icon>
+             <v-btn flat color="primary"    @click="homePage">
+               <v-icon>home</v-icon>
             </v-btn>
+
             <!--toggle menu-->
             <v-btn
                     color="primary"
@@ -183,11 +183,20 @@
                 this.$store.dispatch('logout')
                     .then(() => {
                         //after logout, send the user to the login page for now
-                        this.$router.push('/logon')
+                        this.$router.push('/logon');
+                         
                     })
             },
             openRegisterForm: function () {
                 this.$store.dispatch('openRegisterForm');
+            },
+             homePage: function () {
+                 if ( this.$store.state.settings.token != null) {
+                     this.$router.push('/main')
+                 }else{
+                    this.$router.push('/logon')
+             }
+                
             }
         }
     }
