@@ -65,21 +65,11 @@
                                         </v-btn>
                                     </v-list-tile-action>
                                     <v-list-tile-action>
-                                        <v-dialog
-                                                v-model="showDeleteModal"
-                                                width="25%"
-                                                dark>
-                                            <v-btn icon
-                                                   slot="activator">
-                                                <v-icon>
-                                                    delete
-                                                </v-icon>
-                                            </v-btn>
-                                            <delete-confirm-popover
-                                                    v-model="showDeleteModal"
-                                                    @close-delete-modal="closeConfirmDeletePopover">
-                                            </delete-confirm-popover>
-                                        </v-dialog>
+                                       <v-btn icon @click="deleteSport(sport)">
+                                            <v-icon>
+                                                delete
+                                            </v-icon>
+                                        </v-btn>
                                     </v-list-tile-action>
                                 </v-list-tile>
                                 <v-divider></v-divider>
@@ -186,6 +176,9 @@
             },
             updateSport(sport) {
                 this.$store.dispatch("openUpdateSport", sport);
+            },
+             deleteSport(sport) {
+                this.$store.dispatch("deleteSport", sport);
             }
         }
     }

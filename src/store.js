@@ -202,6 +202,12 @@ export const store = new Vuex.Store({
             state.settings.sport = state.templateSport;
             router.push("/main");
         },
+        DELETE_SPORTS_SUCCESS(state, payload) {
+            state.userSports = payload;
+        },
+        GET_ALL_SPORTS_SUCCESS(state, payload) {
+            state.userSports = payload;
+        },
         SPORT_CREATE_SUCCESS(state, payload) {
             state.settings.newSport = payload.name;
             state.sports.push(payload);
@@ -308,6 +314,9 @@ export const store = new Vuex.Store({
         getSports(context, token) {
             return sportsObject.getSports(context, token);
         },
+        getAllSports(context, token) {
+            return sportsObject.getAllSports(context);
+        },
         getSportByName(context, sport) {
             return sportsObject.getSportByName(context, sport);
         },
@@ -318,10 +327,15 @@ export const store = new Vuex.Store({
             sportsObject.createSport(context, sport);
         },
         openUpdateSport(context, sport) {
+            
             context.commit('OPEN_EDIT_SPORT', sport);
         },
         updateSport(context, sport) {
+            
             sportsObject.updateSport(context, sport);
+        },
+        deleteSport(context, sport) {
+            sportsObject.deleteSport(context, sport);
         },
         cancelSportsForm(context) {
             context.commit("CANCEL_SPORTS_FORM");

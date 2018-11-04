@@ -185,6 +185,7 @@
             }
         },
         methods: {
+            /*
             login: function (user) {
                 console.log('user in form: ', user);
                 let username = user.username;
@@ -248,7 +249,46 @@
                     }).catch(function (error) {
                     console.log(error);
                 })
-            },
+            }, */
+           
+           login: function (user) {
+               console.log('user in form: ', user);
+                let username = user.username;
+                let password = user.password;
+                let store = this.$store;
+                let router = this.$router;
+                let that = this;
+                let sportsListPromise = undefined;
+                          store.dispatch('login', {username, password})
+                    .then(function (response) {
+                        console.log(response);
+                        //get user info
+                        //perform Get first then use the result for the update payload
+                        that.$store.dispatch('getUser', user.username)
+                            .then(function (result) {
+                                //set data to the result of the GetUser
+                                console.log('result in logon: ', result[0]);
+                                let currentUser = result[0];
+                                Object.keys(user).forEach(function (key) {
+                                    if (user[key].length > 0) {
+                                        currentUser[key] = user[key];
+                                    }
+                                });
+                                console.log('this is the current user: ', currentUser, user);
+                                that.$store.dispatch('setUser', currentUser);
+                            }).then(function () {
+                                 store.dispatch('getAllSports', response)
+                                        .then(function (sportsResult) {
+                                            console.log(sportsResult);
+                                             router.push('/main')
+                                        });
+                            }).catch(function (error) {
+                            console.log(error);
+                        })
+                    }).catch(function (error) {
+                    console.log(error);
+                })
+           },
             register: function (user) {
                 console.log(user);
                  if ( this.$store.state.settings.token != null) {
