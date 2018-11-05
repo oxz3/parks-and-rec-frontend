@@ -90,21 +90,11 @@
                                         </v-btn>
                                     </v-list-tile-action>
                                     <v-list-tile-action>
-                                        <v-dialog
-                                                v-model="showDeleteModal"
-                                                width="25%"
-                                                dark>
-                                            <v-btn icon
-                                                   slot="activator">
-                                                <v-icon>
-                                                    delete
-                                                </v-icon>
-                                            </v-btn>
-                                            <delete-confirm-popover
-                                                    v-model="showDeleteModal"
-                                                    @close-delete-modal="closeConfirmDeletePopover">
-                                            </delete-confirm-popover>
-                                        </v-dialog>
+                                        <v-btn icon @click="deleteLeague(league)">
+                                            <v-icon>
+                                                delete
+                                            </v-icon>
+                                        </v-btn>
                                     </v-list-tile-action>
                                 </v-list-tile>
                                 <v-divider></v-divider>
@@ -169,6 +159,10 @@
             updateLeague(league) {
                 this.$store.dispatch("openUpdateLeague", league);
             },
+            deleteLeague: function(league) {
+                this.$store.dispatch("deleteLeague", league);
+                this.$store.dispatch("getAllSports")
+            },
             //sports
             openSports() {
                 this.$store.dispatch("openCreateSport");
@@ -177,8 +171,12 @@
             updateSport(sport) {
                 this.$store.dispatch("openUpdateSport", sport);
             },
-             deleteSport(sport) {
-                this.$store.dispatch("deleteSport", sport);
+            deleteSport: function(sport) {
+                this.$store.dispatch("deleteSport", sport) .then(function (result) {
+                    $store.dispatch('getAllSports');
+                    router.push('/main');
+                    
+                });
             }
         }
     }

@@ -51,7 +51,6 @@ export default {
         })
     },
     updateSport: function (store, sport) {
-        alert('update sport')
         return new Promise((resolve, reject) => {
 
             console.log("sport in object update: ", sport);
@@ -130,5 +129,5 @@ export default {
             })
         })
 
-    },
+    }
 }

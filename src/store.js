@@ -181,6 +181,9 @@ export const store = new Vuex.Store({
             state.status = 'updateLeagueSuccess';
             router.push("/main");
         },
+         DELETE_LEAGUES_SUCCESS(state, payload) {
+            state.leagues = payload;
+        },
         //Sports
         GET_SPORTS_SUCCESS(state, payload) {
             state.sports = payload;
@@ -310,11 +313,14 @@ export const store = new Vuex.Store({
         cancelLeaguesForm(context) {
             context.commit("CANCEL_LEAGUES_FORM");
         },
+        deleteLeague(context, league) {
+            return leaguesObject.deleteLeague(context, league);
+        },
         //Sports
         getSports(context, token) {
             return sportsObject.getSports(context, token);
         },
-        getAllSports(context, token) {
+        getAllSports(context) {
             return sportsObject.getAllSports(context);
         },
         getSportByName(context, sport) {
@@ -335,7 +341,7 @@ export const store = new Vuex.Store({
             sportsObject.updateSport(context, sport);
         },
         deleteSport(context, sport) {
-            sportsObject.deleteSport(context, sport);
+            return sportsObject.deleteSport(context, sport);
         },
         cancelSportsForm(context) {
             context.commit("CANCEL_SPORTS_FORM");

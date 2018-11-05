@@ -141,6 +141,13 @@
                 <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
                        @click="updateUser(user)">UPDATE
                 </v-btn>
+               <v-btn v-if="settings.registerUser && !settings.editUser" color="primary" to="/" type="submit"
+                       @click="cancel">
+                    CANCEL
+                </v-btn>
+                <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
+                       @click="cancel">CANCEL
+                </v-btn>
               
             </div>
         </form>
@@ -277,7 +284,7 @@
                                 console.log('this is the current user: ', currentUser, user);
                                 that.$store.dispatch('setUser', currentUser);
                             }).then(function () {
-                                 store.dispatch('getAllSports', response)
+                                 store.dispatch('getAllSports')
                                         .then(function (sportsResult) {
                                             console.log(sportsResult);
                                              router.push('/main')
@@ -298,8 +305,6 @@
                  }else{
                     this.$router.push('/logon')
                  }
-
-                
             },
             updateUser: function (updateUser) {
 
