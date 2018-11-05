@@ -83,8 +83,9 @@
                 <v-layout pb-3>
                     <v-flex pr-3>
                         <v-text-field
-                                label="Enter Username"
+                                label="Username"
                                 required
+                                readonly
                                 v-model="user.username">
                         </v-text-field>
                         <v-text-field
@@ -113,6 +114,7 @@
                     <v-flex pl-3>
                         <v-text-field
                                 label="Enter New Email"
+                                type="email"
                                 required
                                 v-model="user.email">
                         </v-text-field>

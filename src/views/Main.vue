@@ -83,7 +83,7 @@
                                         <v-list-tile-title>{{ league.description }}</v-list-tile-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
-                                        <v-btn icon @click="updateLeague(league)">
+                                        <v-btn icon @click="updateLeague(league, sport)">
                                             <v-icon>
                                                 edit
                                             </v-icon>
@@ -156,8 +156,8 @@
             openLeagues(sport) {
                 this.$store.dispatch("openCreateLeague", sport);
             },
-            updateLeague(league) {
-                this.$store.dispatch("openUpdateLeague", league);
+            updateLeague(league, currentSport) {
+                this.$store.dispatch("openUpdateLeague", {league: league, currentSport: currentSport});
             },
             deleteLeague: function(league) {
                 this.$store.dispatch("deleteLeague", league);

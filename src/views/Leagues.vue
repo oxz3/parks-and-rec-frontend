@@ -17,6 +17,7 @@
                         <v-text-field
                                 label="League Name"
                                 required
+
                                 v-model="league.leagueName">
                         </v-text-field>
                         <v-text-field
@@ -27,16 +28,19 @@
                         <v-text-field
                                 label="Sport"
                                 required
-                                v-model="league.sportId">
+                                readonly
+                                v-model="settings.currentSport.name">
                         </v-text-field>
                         <v-text-field
                                 label="Age Min"
                                 required
+                                mask="##"
                                 v-model="league.ageMin">
                         </v-text-field>
                         <v-text-field
                                 label="Age Max"
                                 required
+                                mask="##"
                                 v-model="league.ageMax">
                         </v-text-field>
                     </v-flex>
@@ -47,11 +51,13 @@
                             <v-text-field
                                     label="Minimum Teams"
                                     required
+                                    mask="##"
                                     v-model="league.teamMin">
                             </v-text-field>
                             <v-text-field
                                     label="Maximum Teams"
                                     required
+                                    mask="##"
                                     v-model="league.teamMax">
                             </v-text-field>
                         </v-flex>
@@ -71,11 +77,11 @@
             </div>
             <div class="pb-4">
                 <v-btn v-if="!settings.editLeague && settings.createLeague" color="primary" to="/" type="submit"
-                       @click="createLeague(league)">
+                       @click="createLeague(league, settings.currentSport)">
                     CREATE LEAGUE
                 </v-btn>
                 <v-btn v-if="settings.editLeague && !settings.createLeague" color="primary" to="/" type="submit"
-                       @click="updateLeague(league)">
+                       @click="updateLeague(league, settings.currentSport)">
                     EDIT LEAGUE
                 </v-btn>
                 <v-btn @click="cancel">cancel</v-btn>
@@ -111,8 +117,9 @@
             }
         },
         methods: {
-            createLeague: function (league) {
+            createLeague: function (league, currentSport) {
                 console.log(league);
+                league.sportId = currentSport.id;
                 if(!league.leagueId){
                     league.leagueId = 1;
                 }
