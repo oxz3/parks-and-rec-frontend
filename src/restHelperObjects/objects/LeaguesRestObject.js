@@ -70,6 +70,7 @@ export default {
             request.headers.token = localStorage.getItem('token');
             $.ajax(request).then(function (response) {
                 resolve(response);
+              
                 console.log('leagues response: ', response);
                 store.commit('GET_LEAGUES_SUCCESS', response);
             }).catch(err => {

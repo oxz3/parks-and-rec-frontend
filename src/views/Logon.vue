@@ -7,9 +7,12 @@
                     Register a New User</h3>
                 <h3 class="headline mb-0" v-if="settings.token && settings.editUser && !settings.registerUser">
                     Edit User</h3>
-
             </div>
         </v-card-title>
+        <v-card>
+            <img alt="Vue logo"  class="ma-3" height="200px" width="900px" src="../assets/logo.jpg">
+        </v-card>
+
         <!--@submit.prevent associates login to the form-->
         <form class="ma-3" @submit.prevent="login">
             <v-checkbox label="New to Parks and Rec?" v-model="settings.registerUser"
