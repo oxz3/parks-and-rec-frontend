@@ -9,5 +9,5 @@
     "token": "546ce251-9009-445c-a69b-dd4c69b91aaf"
   },
   "processData": false,
-  "data": {"userId":3,"username":"TestUserEJG60","password":null,"roles":[{"id":1,"role_id":1,"user_id":null},{"id":2,"role_id":2,"user_id":null}],"orgid":"a5559589-c925-4e45-9320-c5b8495b3b2d","orgname":"Test Org","email":"ejg60Test@test.com","address":"TestUserEJG60","phone":"222-333-4444"}
+  "data": {"userId":3,"username":"TestUserEJG60","password":null,"roles":null, "rolename": "Admin", "orgid":"a5559589-c925-4e45-9320-c5b8495b3b2d","orgname":"Test Org","email":"ejg60Test@test.com","address":"TestUserEJG60","phone":"222-333-4444"}
 }

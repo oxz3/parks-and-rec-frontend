@@ -28,6 +28,17 @@
                                 required
                                 v-model="user.password">
                         </v-text-field>
+
+                        <!--roles dropdown-->
+                        <v-select
+                                item-text="value"
+                                item-value="key"
+                                v-model="user.rolename"
+                                :items="roles"
+                                solo
+                                label="Role"
+                        ></v-select>
+
                         <v-text-field
                                 label="Enter Organization Name"
                                 required
@@ -81,6 +92,17 @@
                                 required
                                 v-model="user.password">
                         </v-text-field>
+
+                        <!--roles dropdown-->
+                        <v-select
+                                item-text="value"
+                                item-value="key"
+                                v-model="user.rolename"
+                                :items="roles"
+                                solo
+                                label="Role"
+                        ></v-select>
+
                         <v-text-field
                                 label="Enter a New Organization Name"
                                 required
@@ -119,7 +141,14 @@
                 <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
                        @click="updateUser(user)">UPDATE
                 </v-btn>
-                <v-btn @click="cancel">cancel</v-btn>
+               <v-btn v-if="settings.registerUser && !settings.editUser" color="primary" to="/" type="submit"
+                       @click="cancel">
+                    CANCEL
+                </v-btn>
+                <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
+                       @click="cancel">CANCEL
+                </v-btn>
+              
             </div>
         </form>
     </v-card>
@@ -127,72 +156,183 @@
 
 <script>
     export default {
+
+        created: function () {
+            console.log('a is: ' + this);
+            if (this.$store.state.settings.registerUser) {
+                this.user = Object.assign({}, this.$store.state.settings.templateUser);
+                console.log('user in logon form register', this.user);
+            }
+            if (this.$store.state.settings.editUser) {
+                this.user = Object.assign({}, this.$store.state.settings.user);
+                console.log('user in logon form edit', this.user);
+            }
+        },
+
         data: () => ({
             isAdmin: false,
             user: {
-                username: "Admin",
-                password: "Admin",
-                email: "",
-                phone: "",
-                orgname: "",
-                address: "",
-                role_id: 1
-            }
+                username: "",
+                password: ""
+            },
+            roles: [
+                {key: "Admin", value: "Admin"},
+                {key: "User", value: "User"}
+            ]
         }),
         computed: {
             settings() {
                 return this.$store.state.settings;
+            },
+            sports() {
+                return this.$store.state.sports;
+            },
+            leagues() {
+                return this.$store.state.leagues;
             }
         },
         methods: {
+            /*
             login: function (user) {
                 console.log('user in form: ', user);
                 let username = user.username;
                 let password = user.password;
                 let store = this.$store;
                 let router = this.$router;
+                let that = this;
+                let sportsListPromise = undefined;
                 store.dispatch('login', {username, password})
                     .then(function (response) {
                         
                         console.log(response);
-                        store.dispatch('getSports', response)
-                            .then(function () {
-                                router.push('/sports');
-                            })
+                        //get user info
+                        //perform Get first then use the result for the update payload
+                        that.$store.dispatch('getUser', user.username)
+                            .then(function (result) {
+                                //set data to the result of the GetUser
+                                console.log('result in logon: ', result[0]);
+                                let currentUser = result[0];
+                                Object.keys(user).forEach(function (key) {
+                                    if (user[key].length > 0) {
+                                        currentUser[key] = user[key];
+                                    }
+                                });
+                                console.log('this is the current user: ', currentUser, user);
+                                that.$store.dispatch('setUser', currentUser);
+                            }).then(function () {
+                            store.dispatch('getLeagues', store.state.sports)
+                                .then(function (leaguesResult) {
+                                    console.log(leaguesResult);
+                                    store.dispatch('getSports', response)
+                                        .then(function (sportsResult) {
+                                            console.log(sportsResult);
+                                            if (sportsResult.length > 0) {
+                                                sportsListPromise = new Promise((resolve, reject) =>
+//                                                if(sportsResult.length > 0) {
+                                                        sportsResult.forEach(function (sportResult) {
+                                                            store.dispatch('getSportByName', sportResult)
+                                                                .then(function (sportNameResult) {
+                                                                    console.log('sport by name result:', sportNameResult);
+                                                                    store.dispatch('addSportToList', sportNameResult)
+                                                                        .then(function (result) {
+                                                                            console.log('result of sports in login:', result);
+                                                                            that.buildSportLeaguesLists(sportsResult, leaguesResult);
+                                                                            setTimeout(function () {
+                                                                                console.log('in timeout');
+                                                                                router.push('/main')
+                                                                            }, 2000)
+                                                                        });
+                                                                });
+                                                        })
+                                                );
+                                            }
+                                            else {
+                                                router.push('/main')
+                                            }
+                                        });
+                                })
+                        }).catch(function (error) {
+                            console.log(error);
+                        })
                     }).catch(function (error) {
                     console.log(error);
                 })
-            },
+            }, */
+           
+           login: function (user) {
+               console.log('user in form: ', user);
+                let username = user.username;
+                let password = user.password;
+                let store = this.$store;
+                let router = this.$router;
+                let that = this;
+                let sportsListPromise = undefined;
+                          store.dispatch('login', {username, password})
+                    .then(function (response) {
+                        console.log(response);
+                        //get user info
+                        //perform Get first then use the result for the update payload
+                        that.$store.dispatch('getUser', user.username)
+                            .then(function (result) {
+                                //set data to the result of the GetUser
+                                console.log('result in logon: ', result[0]);
+                                let currentUser = result[0];
+                                Object.keys(user).forEach(function (key) {
+                                    if (user[key].length > 0) {
+                                        currentUser[key] = user[key];
+                                    }
+                                });
+                                console.log('this is the current user: ', currentUser, user);
+                                that.$store.dispatch('setUser', currentUser);
+                            }).then(function () {
+                                 store.dispatch('getAllSports')
+                                        .then(function (sportsResult) {
+                                            console.log(sportsResult);
+                                             router.push('/main')
+                                        });
+                            }).catch(function (error) {
+                            console.log(error);
+                        })
+                    }).catch(function (error) {
+                    console.log(error);
+                })
+           },
             register: function (user) {
                 console.log(user);
-                this.$store.dispatch('register', user)
-                    .then(() => this.$router.push('/'))
+                 if ( this.$store.state.settings.token != null) {
+                     this.$store.dispatch('register', user)
+                    .then(() => this.$router.push('/main'))
                     .catch(err => console.log(err))
+                 }else{
+                    this.$router.push('/logon')
+                 }
             },
-            updateUser: function (user) {
+            updateUser: function (updateUser) {
 
-                //perform Get first then use the result for the update payload
-                let that = this;
-                that.$store.dispatch('getUser', user.username)
-                    .then(function (result) {
-                        //set data to the result of the GetUser
-                        console.log('result in logon: ', result[0]);
-                        let updateUser = result[0];
-                        Object.keys(user).forEach(function (key) {
-                            if (user[key].length > 0) {
-                                updateUser[key] = user[key];
-                            }
-                        });
-                        that.$store.dispatch('updateUser', updateUser)
-                            .then(() => that.$router.push('/'))
-                            .catch(err => console.log(err))
-                    })
-
+                if ( this.$store.state.settings.token != null) {
+                    this.$store.dispatch('updateUser', updateUser)
+                    .then(() => this.$router.push('/main'))
+                    .catch(err => console.log(err))
+                 }else{
+                    this.$router.push('/logon')
+                 }
+                
             },
             cancel: function () {
                 this.$store.dispatch('cancelLogonForm')
-                    .then(() => this.$router.push('/'))
+                    .then(() => this.$router.push('/main'))
                     .catch(err => console.log(err))
+            },
+            //match sports and leagues to show league sublists
+            buildSportLeaguesLists(sports, leagues) {
+                let store = this.$store;
+                sports.forEach(function (sport) {
+                    leagues.forEach(function (league) {
+                        if (league.sportId === sport.id && !league.addedToSportList) {
+                            store.dispatch("addLeagueToSportList", {sportId: sport.id, league: league});
+                        }
+                    })
+                })
             }
         }
     }

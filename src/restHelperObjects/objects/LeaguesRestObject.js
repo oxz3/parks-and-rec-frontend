@@ -2,7 +2,7 @@ import $ from 'jquery'
 import createLeagueRequest from '../rest-requests/leagues/create-league-request.json'
 import updateLeagueRequest from '../rest-requests/leagues/update-league-request.json'
 import getLeaguesRequest from '../rest-requests/leagues/get-leagues-request.json'
-
+import deleteLeagueById from '../rest-requests/leagues/delete-league-request.json'
 
 /* eslint-disable no-console */
 /**
@@ -68,11 +68,28 @@ export default {
             console.log('token in leagues object: ', token);
             let request = Object.assign({}, getLeaguesRequest);
             request.headers.token = localStorage.getItem('token');
-
             $.ajax(request).then(function (response) {
                 resolve(response);
                 console.log('leagues response: ', response);
                 store.commit('GET_LEAGUES_SUCCESS', response);
+            }).catch(err => {
+                store.commit('AUTH_ERROR', err);
+                reject(err)
+            })
+        })
+
+    },
+    deleteLeague: function (store, league) {
+        return new Promise((resolve, reject) => {
+            store.commit('AUTH_REQUEST', 'deletingLeague');
+            let request = Object.assign({}, deleteLeagueById);
+            request.headers.token = localStorage.getItem('token');
+            let param='?id='+league.leagueId
+             request.url=request.url+param;
+            //request.url='http://localhost:8081/parksrec/services/v1/deleteLeague'+ param;
+            $.ajax(request).then(function (response) {
+                resolve(response);
+                //store.commit('DELETE_LEAGUES_SUCCESS', response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
                 reject(err)

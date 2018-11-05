@@ -1,7 +1,18 @@
 <template>
     <v-app id="app">
         <v-toolbar>
-            <v-toolbar-title>Parks and Rec Application</v-toolbar-title>
+            <v-toolbar-title>Parks and Rec Application
+
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-title>
+                <span v-if="settings.user.username">
+                      &nbsp; {{settings.user.username}}  &nbsp;
+                </span>
+                <span v-if="settings.user.orgname">
+                    {{settings.user.orgname}}
+                </span>
+            </v-toolbar-title>
             <v-spacer></v-spacer>
 
             <!--show if user clicks logout button-->
@@ -61,8 +72,24 @@
             <v-snackbar
                     v-model="authStatus"
                     top
-                    v-if="authStatus == 'leagueUpdateSuccess'">
-                Successfully created league: {{settings.updatedLeague}}
+                    v-if="authStatus == 'updateLeagueSuccess'">
+                Successfully updated league: {{settings.updatedLeague}}
+            </v-snackbar>
+
+            <!--show if sport is created successfully-->
+            <v-snackbar
+                    v-model="authStatus"
+                    top
+                    v-if="authStatus == 'sportCreateSuccess'">
+                Successfully created sport: {{settings.newSport}}
+            </v-snackbar>
+
+            <!--show if sport is updated successfully-->
+            <v-snackbar
+                    v-model="authStatus"
+                    top
+                    v-if="authStatus == 'updateSportSuccess'">
+                Successfully updated sport: {{settings.updatedSport}}
             </v-snackbar>
 
             <!--if use is logged in-->
@@ -71,14 +98,14 @@
             <v-btn flat color="primary" to="/logon" v-if="settings.token == null">
                 LOGON
             </v-btn>
-            <v-btn flat color="primary" v-if="settings.token != null"
+            <v-btn flat color="primary" v-if="settings.token != null && settings.user.rolename == 'admin'"
                    @click="openRegisterForm">
                 REGISTER
             </v-btn>
-            <!--go to home screen-->
-            <v-btn flat color="primary" to="/">
-                <v-icon>home</v-icon>
+             <v-btn flat color="primary"    @click="homePage">
+               <v-icon>home</v-icon>
             </v-btn>
+
             <!--toggle menu-->
             <v-btn
                     color="primary"
@@ -96,8 +123,12 @@
             </v-btn>
         </v-toolbar>
 
-        <!--Vue-Router tag that holds all views-->
-        <router-view/>
+        <transition
+                name="fade"
+                mode="out-in">
+            <!--Vue-Router tag that holds all views-->
+            <router-view/>
+        </transition>
 
         <!--menu that slides out with options-->
         <v-navigation-drawer
@@ -152,12 +183,20 @@
                 this.$store.dispatch('logout')
                     .then(() => {
                         //after logout, send the user to the login page for now
-                        this.$router.push('/logon')
+                        this.$router.push('/logon');
+                         
                     })
             },
             openRegisterForm: function () {
                 this.$store.dispatch('openRegisterForm');
-                this.$router.push('/logon');
+            },
+             homePage: function () {
+                 if ( this.$store.state.settings.token != null) {
+                     this.$router.push('/main')
+                 }else{
+                    this.$router.push('/logon')
+             }
+                
             }
         }
     }
@@ -188,5 +227,17 @@
 
     #nav a.router-link-exact-active {
         color: #42b983;
+    }
+
+    fade-enter-active,
+    .fade-leave-active {
+        transition-duration: 0.3s;
+        transition-property: opacity;
+        transition-timing-function: ease;
+    }
+
+    .fade-enter,
+    .fade-leave-active {
+        opacity: 0
     }
 </style>

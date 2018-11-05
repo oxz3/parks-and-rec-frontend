@@ -2,6 +2,9 @@ import $ from 'jquery'
 import createSportRequest from '../rest-requests/sports/create-sport-request.json'
 import updateSportRequest from '../rest-requests/sports/update-sports-request.json'
 import getSportRequest from '../rest-requests/sports/get-sports-request.json'
+import getSportByNameRequest from '../rest-requests/sports/get-sport-by-name-request.json'
+import deleteSportById from '../rest-requests/sports/delete-sport-request.json'
+import getAllSports from '../rest-requests/sports/getAllsports.json'
 
 
 /* eslint-disable no-console */
@@ -16,20 +19,30 @@ export default {
      * @param sport sport who logs in
      * @returns {Promise}
      */
+    getAllSports :function (store) {
+        return new Promise((resolve, reject) => {
+            store.commit('AUTH_REQUEST', 'getAllSports');
+            let getAllSportsSettings = Object.assign({}, getAllSports);
+            getAllSportsSettings.headers.token = localStorage.getItem('token');
+            $.ajax(getAllSportsSettings).then(function (response) {
+                store.commit('GET_ALL_SPORTS_SUCCESS', response);
+                resolve(response);
+            }).catch(err => {
+                store.commit('AUTH_ERROR', err);
+                reject(err)
+            })
+        })
+    },
     createSport: function (store, sport) {
         return new Promise((resolve, reject) => {
-
-            console.log("sports in object create: ", sport);
-
-            store.commit('AUTH_REQUEST', 'creatingsport');
-
+            store.commit('AUTH_REQUEST', 'creatingSport');
             let createsportSettings = Object.assign({}, createSportRequest);
             createsportSettings.headers.token = localStorage.getItem('token');
             createsportSettings.data = JSON.stringify(sport);
 
             $.ajax(createsportSettings).then(function (response) {
                 console.log('create sport response', response);
-                store.commit('sport_CREATE_SUCCESS', response);
+                store.commit('SPORT_CREATE_SUCCESS', response);
                 resolve(response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
@@ -54,7 +67,7 @@ export default {
             console.log(updatesportSettings, 'update sport payload');
             $.ajax(updatesportSettings).then(function (response) {
                 console.log('update sport response', response);
-                store.commit('sport_UPDATE_SUCCESS', response);
+                store.commit('SPORT_UPDATE_SUCCESS', response);
                 resolve(response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
@@ -72,7 +85,44 @@ export default {
             $.ajax(request).then(function (response) {
                 resolve(response);
                 console.log('sports response: ', response);
-                store.commit('GET_sportS_SUCCESS', response);
+                store.commit('GET_SPORTS_SUCCESS', response);
+            }).catch(err => {
+                store.commit('AUTH_ERROR', err);
+                reject(err)
+            })
+        })
+
+    },
+    getSportByName: function (store, sport) {
+        return new Promise((resolve, reject) => {
+
+            store.commit('AUTH_REQUEST', 'gettingSportByName');
+            let request = Object.assign({}, getSportByNameRequest);
+            request.headers.token = localStorage.getItem('token');
+
+            let url = request.url.substr(0, request.url.lastIndexOf("sportName=") + 10);
+            request.url = url + sport.name;
+            request.url = request.url;
+            $.ajax(request).then(function (response) {
+                resolve(response);
+               // store.commit('GET_SPORT_BY_NAME_SUCCESS', response);
+            }).catch(err => {
+                store.commit('AUTH_ERROR', err);
+                reject(err)
+            })
+        })
+    },
+    deleteSport: function (store, sport) {
+        return new Promise((resolve, reject) => {
+            store.commit('AUTH_REQUEST', 'deletingSport');
+            let request = Object.assign({}, deleteSportById);
+            request.headers.token = localStorage.getItem('token');
+            let param='?id='+sport.id;
+             request.url=request.url+param;
+            //request.url='http://localhost:8081/parksrec/services/v1/deleteSport'+param;
+            $.ajax(request).then(function (response) {
+                resolve(response);
+                store.commit('DELETE_SPORTS_SUCCESS', response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
                 reject(err)
