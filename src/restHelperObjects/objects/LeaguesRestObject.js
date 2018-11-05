@@ -89,7 +89,7 @@ export default {
             //request.url='http://localhost:8081/parksrec/services/v1/deleteLeague'+ param;
             $.ajax(request).then(function (response) {
                 resolve(response);
-                store.commit('DELETE_SPORTS_SUCCESS', response);
+                //store.commit('DELETE_LEAGUES_SUCCESS', response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
                 reject(err)

@@ -162,6 +162,7 @@
             deleteLeague: function(league) {
                 this.$store.dispatch("deleteLeague", league);
                 this.$store.dispatch("getAllSports")
+                 
             },
             //sports
             openSports() {
