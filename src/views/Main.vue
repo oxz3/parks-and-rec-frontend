@@ -7,11 +7,7 @@
                         <v-toolbar color="gray" dark>
                             <v-toolbar-title v-if="settings.selectedOption == 'sports'">Sports</v-toolbar-title>
                             <v-spacer></v-spacer>
-                            <v-btn icon v-if="settings.selectedOption == 'leagues'"
-                                   @click="openLeagues">
-                                <v-icon>add</v-icon>
-                            </v-btn>
-                            <v-btn icon v-if="settings.selectedOption == 'sports'"
+                            <v-btn icon v-if="settings.user.rolename != 'User'"
                                    @click="openSports">
                                 <v-icon>add</v-icon>
                             </v-btn>
@@ -50,22 +46,22 @@
                                         <v-list-tile-sub-title>{{sport.description}}
                                         </v-list-tile-sub-title>
                                     </v-list-tile-content>
-                                    <v-list-tile-action>
+                                    <v-list-tile-action v-if="settings.user.rolename != 'User'">
                                         <v-btn icon @click="openLeagues(sport)">
                                             <v-icon>
                                                 add
                                             </v-icon>
                                         </v-btn>
                                     </v-list-tile-action>
-                                    <v-list-tile-action>
+                                    <v-list-tile-action v-if="settings.user.rolename != 'User'">
                                         <v-btn icon @click="updateSport(sport)">
                                             <v-icon>
                                                 edit
                                             </v-icon>
                                         </v-btn>
                                     </v-list-tile-action>
-                                    <v-list-tile-action>
-                                       <v-btn icon @click="deleteSport(sport)">
+                                    <v-list-tile-action v-if="settings.user.rolename != 'User'">
+                                        <v-btn icon @click="deleteSport(sport)">
                                             <v-icon>
                                                 delete
                                             </v-icon>
@@ -82,14 +78,14 @@
                                     <v-list-tile-content>
                                         <v-list-tile-title>{{ league.description }}</v-list-tile-title>
                                     </v-list-tile-content>
-                                    <v-list-tile-action>
+                                    <v-list-tile-action v-if="settings.user.rolename != 'User'">
                                         <v-btn icon @click="updateLeague(league, sport)">
                                             <v-icon>
                                                 edit
                                             </v-icon>
                                         </v-btn>
                                     </v-list-tile-action>
-                                    <v-list-tile-action>
+                                    <v-list-tile-action v-if="settings.user.rolename != 'User'">
                                         <v-btn icon @click="deleteLeague(league)">
                                             <v-icon>
                                                 delete
@@ -159,10 +155,10 @@
             updateLeague(league, currentSport) {
                 this.$store.dispatch("openUpdateLeague", {league: league, currentSport: currentSport});
             },
-            deleteLeague: function(league) {
+            deleteLeague: function (league) {
                 this.$store.dispatch("deleteLeague", league);
                 this.$store.dispatch("getAllSports")
-                 
+
             },
             //sports
             openSports() {
@@ -172,11 +168,11 @@
             updateSport(sport) {
                 this.$store.dispatch("openUpdateSport", sport);
             },
-            deleteSport: function(sport) {
-                this.$store.dispatch("deleteSport", sport) .then(function (result) {
+            deleteSport: function (sport) {
+                this.$store.dispatch("deleteSport", sport).then(function (result) {
                     $store.dispatch('getAllSports');
                     router.push('/main');
-                    
+
                 });
             }
         }

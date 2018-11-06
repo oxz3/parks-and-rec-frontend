@@ -38,11 +38,20 @@
                                 solo
                                 label="Role"
                         ></v-select>
-
+                        <!--if the user being registered role is Admin-->
                         <v-text-field
+                                v-if="user.rolename !== 'User'"
                                 label="Enter Organization Name"
                                 required
                                 v-model="user.orgname">
+                        </v-text-field>
+                        <!-- if user being registered is a User (set orgid to that of Admin creating the user)-->
+                        <v-text-field
+                                v-if="user.rolename == 'User'"
+                                label="Organization Name"
+                                required
+                                readonly
+                                v-model="settings.user.orgname">
                         </v-text-field>
                     </v-flex>
                     <v-divider vertical></v-divider>
@@ -143,14 +152,14 @@
                 <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
                        @click="updateUser(user)">UPDATE
                 </v-btn>
-               <v-btn v-if="settings.registerUser && !settings.editUser" color="primary" to="/" type="submit"
+                <v-btn v-if="settings.registerUser && !settings.editUser" color="primary" to="/" type="submit"
                        @click="cancel">
                     CANCEL
                 </v-btn>
                 <v-btn v-if="settings.editUser && !settings.registerUser" color="primary" to="/" type="submit"
                        @click="cancel">CANCEL
                 </v-btn>
-              
+
             </div>
         </form>
     </v-card>
@@ -259,16 +268,16 @@
                     console.log(error);
                 })
             }, */
-           
-           login: function (user) {
-               console.log('user in form: ', user);
+
+            login: function (user) {
+                console.log('user in form: ', user);
                 let username = user.username;
                 let password = user.password;
                 let store = this.$store;
                 let router = this.$router;
                 let that = this;
                 let sportsListPromise = undefined;
-                          store.dispatch('login', {username, password})
+                store.dispatch('login', {username, password})
                     .then(function (response) {
                         console.log(response);
                         //get user info
@@ -286,38 +295,42 @@
                                 console.log('this is the current user: ', currentUser, user);
                                 that.$store.dispatch('setUser', currentUser);
                             }).then(function () {
-                                 store.dispatch('getAllSports')
-                                        .then(function (sportsResult) {
-                                            console.log(sportsResult);
-                                             router.push('/main')
-                                        });
-                            }).catch(function (error) {
+                            store.dispatch('getAllSports')
+                                .then(function (sportsResult) {
+                                    console.log(sportsResult);
+                                    router.push('/main')
+                                });
+                        }).catch(function (error) {
                             console.log(error);
                         })
                     }).catch(function (error) {
                     console.log(error);
                 })
-           },
+            },
             register: function (user) {
-                console.log(user);
-                 if ( this.$store.state.settings.token != null) {
-                     this.$store.dispatch('register', user)
-                    .then(() => this.$router.push('/main'))
-                    .catch(err => console.log(err))
-                 }else{
+                if (user.rolename === 'User') {
+                    user.orgid = this.$store.state.settings.user.orgid;
+                    user.orgname = this.$store.state.settings.user.orgname;
+                }
+                console.log('user to register: ', user);
+                if (this.$store.state.settings.token !== null) {
+                    this.$store.dispatch('register', user)
+                        .then(() => this.$router.push('/main'))
+                        .catch(err => console.log(err))
+                } else {
                     this.$router.push('/logon')
-                 }
+                }
             },
             updateUser: function (updateUser) {
 
-                if ( this.$store.state.settings.token != null) {
+                if (this.$store.state.settings.token !== null) {
                     this.$store.dispatch('updateUser', updateUser)
-                    .then(() => this.$router.push('/main'))
-                    .catch(err => console.log(err))
-                 }else{
+                        .then(() => this.$router.push('/main'))
+                        .catch(err => console.log(err))
+                } else {
                     this.$router.push('/logon')
-                 }
-                
+                }
+
             },
             cancel: function () {
                 this.$store.dispatch('cancelLogonForm')

@@ -86,6 +86,7 @@ export const store = new Vuex.Store({
         REGISTER(state) {
             state.settings.registerUser = true;
             state.user = state.templateUser;
+            state.newRegisteredUser = {};
             router.push('/logon')
         },
         //Set status to
@@ -100,6 +101,7 @@ export const store = new Vuex.Store({
             state.settings.authenticatedUser = payload.user;
         },
         REGISTRATION_SUCCESS(state, payload) {
+            console.log('registeration success: ', payload);
             state.settings.newRegisteredUser = payload.username;
             state.settings.registerUser = false;
             state.status = 'registrationSuccess';
@@ -124,7 +126,6 @@ export const store = new Vuex.Store({
             state.sports = [];
             state.userSports = [];
             state.leagues = [];
-            router.push("/main");
         },
         CANCEL_LOGON_FORM(state) {
             state.settings.editUser = false;
