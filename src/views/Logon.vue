@@ -11,7 +11,7 @@
             </div>
         </v-card-title>
         <!--@submit.prevent associates login to the form-->
-        <form class="ma-3" @submit.prevent="login">
+        <form class="ma-3" @submit.prevent="login" v-model="valid" ref="form">
             <v-checkbox label="New to Parks and Rec?" v-model="settings.registerUser"
                         v-if="settings.registerUser && !settings.editUser"></v-checkbox>
             <!--Register User-->
@@ -26,6 +26,7 @@
                         <v-text-field
                                 label="Create New Password"
                                 required
+                                :type="'password'"
                                 v-model="user.password">
                         </v-text-field>
 
@@ -59,11 +60,14 @@
                         <v-text-field
                                 label="Create New Email"
                                 required
+                                :rules="emailRules"
                                 v-model="user.email">
                         </v-text-field>
                         <v-text-field
                                 label="Create New Phone"
                                 required
+                                mask="(###) ### - ####"
+                                :rules="phoneRules"
                                 v-model="user.phone">
                         </v-text-field>
                         <v-text-field
@@ -84,6 +88,7 @@
                 <v-text-field
                         label="Enter Password"
                         required
+                        :type="'password'"
                         v-model="user.password">
                 </v-text-field>
             </div>
@@ -100,6 +105,7 @@
                         <v-text-field
                                 label="Enter a New Password"
                                 required
+                                :type="'password'"
                                 v-model="user.password">
                         </v-text-field>
 
@@ -123,13 +129,15 @@
                     <v-flex pl-3>
                         <v-text-field
                                 label="Enter New Email"
-                                type="email"
                                 required
+                                :rules="emailRules"
                                 v-model="user.email">
                         </v-text-field>
                         <v-text-field
                                 label="Enter New Phone"
                                 required
+                                mask="(###) ### - ####"
+                                :rules="phoneRules"
                                 v-model="user.phone">
                         </v-text-field>
                         <v-text-field
@@ -182,6 +190,7 @@
 
         data: () => ({
             isAdmin: false,
+            valid: false,
             user: {
                 username: "",
                 password: ""
@@ -189,6 +198,14 @@
             roles: [
                 {key: "Admin", value: "Admin"},
                 {key: "User", value: "User"}
+            ],
+            emailRules: [
+                (v) => !!v || 'E-mail is required',
+                (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+            ],
+            phoneRules: [
+                (v) => !!v || 'Phone Number is required',
+                (v) => /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(v) || 'Phone Number must be valid'
             ]
         }),
         computed: {
@@ -322,7 +339,6 @@
                 }
             },
             updateUser: function (updateUser) {
-
                 if (this.$store.state.settings.token !== null) {
                     this.$store.dispatch('updateUser', updateUser)
                         .then(() => this.$router.push('/main'))
