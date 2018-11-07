@@ -7,10 +7,7 @@
             <v-spacer></v-spacer>
             <v-toolbar-title>
                 <span v-if="settings.user.username">
-                      &nbsp; {{settings.user.username}}  &nbsp;
-                </span>
-                <span v-if="settings.user.orgname">
-                    {{settings.user.orgname}}
+                      &nbsp; {{settings.user.username}}
                 </span>
             </v-toolbar-title>
             <v-spacer></v-spacer>

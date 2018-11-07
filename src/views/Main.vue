@@ -5,7 +5,12 @@
                 <v-flex>
                     <v-card height="100%">
                         <v-toolbar color="gray" dark>
-                            <v-toolbar-title v-if="settings.selectedOption == 'sports'">Sports</v-toolbar-title>
+                            <v-toolbar-title v-if="settings.selectedOption == 'sports'">
+                                 <span v-if="settings.user.orgname">
+                                    {{settings.user.orgname}}
+                                </span>
+                                Sports
+                            </v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-btn icon v-if="settings.user.rolename != 'User'"
                                    @click="openSports">
