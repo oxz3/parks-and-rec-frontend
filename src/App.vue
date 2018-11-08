@@ -7,10 +7,7 @@
             <v-spacer></v-spacer>
             <v-toolbar-title>
                 <span v-if="settings.user.username">
-                      &nbsp; {{settings.user.username}}  &nbsp;
-                </span>
-                <span v-if="settings.user.orgname">
-                    {{settings.user.orgname}}
+                      &nbsp; {{settings.user.username}}
                 </span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
@@ -98,12 +95,13 @@
             <v-btn flat color="primary" to="/logon" v-if="settings.token == null">
                 LOGON
             </v-btn>
-            <v-btn flat color="primary" v-if="settings.token != null && settings.user.rolename == 'admin'"
+            <v-btn flat color="primary"
+                   v-if="settings.token != null && (settings.user.rolename == 'admin' || settings.user.rolename == 'Admin')"
                    @click="openRegisterForm">
                 REGISTER
             </v-btn>
-             <v-btn flat color="primary"    @click="homePage">
-               <v-icon>home</v-icon>
+            <v-btn flat color="primary" @click="homePage">
+                <v-icon>home</v-icon>
             </v-btn>
 
             <!--toggle menu-->
@@ -184,19 +182,19 @@
                     .then(() => {
                         //after logout, send the user to the login page for now
                         this.$router.push('/logon');
-                         
+
                     })
             },
             openRegisterForm: function () {
                 this.$store.dispatch('openRegisterForm');
             },
-             homePage: function () {
-                 if ( this.$store.state.settings.token != null) {
-                     this.$router.push('/main')
-                 }else{
+            homePage: function () {
+                if (this.$store.state.settings.token != null) {
+                    this.$router.push('/main')
+                } else {
                     this.$router.push('/logon')
-             }
-                
+                }
+
             }
         }
     }

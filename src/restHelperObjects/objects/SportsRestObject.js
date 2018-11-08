@@ -25,6 +25,7 @@ export default {
             let getAllSportsSettings = Object.assign({}, getAllSports);
             getAllSportsSettings.headers.token = localStorage.getItem('token');
             $.ajax(getAllSportsSettings).then(function (response) {
+                console.log(response, 'get all sports');
                 store.commit('GET_ALL_SPORTS_SUCCESS', response);
                 resolve(response);
             }).catch(err => {
@@ -51,7 +52,6 @@ export default {
         })
     },
     updateSport: function (store, sport) {
-        alert('update sport')
         return new Promise((resolve, reject) => {
 
             console.log("sport in object update: ", sport);
@@ -130,5 +130,5 @@ export default {
             })
         })
 
-    },
+    }
 }
