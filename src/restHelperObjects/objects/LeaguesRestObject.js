@@ -46,8 +46,6 @@ export default {
 
             let updateLeagueSettings = Object.assign({}, updateLeagueRequest);
             updateLeagueSettings.headers.token = localStorage.getItem('token');
-            // //TODO: update when backend bug is fixed for get leagues API
-            // league.orgid = "9bbeb119-659e-495b-a04e-2a84a4ba3a03";
             updateLeagueSettings.data = JSON.stringify(league);
 
 
