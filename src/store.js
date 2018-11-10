@@ -87,6 +87,7 @@ export const store = new Vuex.Store({
         REGISTER(state) {
             state.settings.registerUser = true;
             state.user = state.templateUser;
+            state.newRegisteredUser = {};
             router.push('/logon')
         },
         //Set status to
@@ -101,6 +102,7 @@ export const store = new Vuex.Store({
             state.settings.authenticatedUser = payload.user;
         },
         REGISTRATION_SUCCESS(state, payload) {
+            console.log('registeration success: ', payload);
             state.settings.newRegisteredUser = payload.username;
             state.settings.registerUser = false;
             state.status = 'registrationSuccess';
@@ -125,7 +127,6 @@ export const store = new Vuex.Store({
             state.sports = [];
             state.userSports = [];
             state.leagues = [];
-            router.push("/main");
         },
         CANCEL_LOGON_FORM(state) {
             state.settings.editUser = false;
@@ -146,9 +147,10 @@ export const store = new Vuex.Store({
         },
         OPEN_EDIT_LEAGUE(state, payload) {
             console.log('payload in edit mutation', payload);
+            state.settings.currentSport = payload.currentSport;
             state.settings.editLeague = true;
             state.settings.createLeague = false;
-            state.settings.league = payload;
+            state.settings.league = payload.league;
             router.push('/leagues');
         },
         CANCEL_LEAGUES_FORM(state) {
@@ -174,10 +176,9 @@ export const store = new Vuex.Store({
         LEAGUE_UPDATE_SUCCESS(state, payload) {
             console.log('updating league', payload);
             state.settings.updatedLeague = payload.leagueName || "league";
-            let foundIndex = state.leagues.findIndex(x => x.leagueId === payload.leagueId);
-            console.log('mutation update league: ', foundIndex);
-            state.leagues[foundIndex] = payload;
-            console.log('updated leagues list: ', state.leagues);
+            state.settings.league = payload;
+            let leagueToUpdate = state.settings.currentSport.leagues.map(function(x) {return x.leagueId; }).indexOf(payload.leagueId);
+            state.settings.currentSport.leagues[leagueToUpdate] = payload;
             state.editLeague = false;
             state.status = 'updateLeagueSuccess';
             router.push("/main");

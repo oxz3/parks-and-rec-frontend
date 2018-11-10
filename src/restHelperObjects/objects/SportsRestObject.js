@@ -25,6 +25,7 @@ export default {
             let getAllSportsSettings = Object.assign({}, getAllSports);
             getAllSportsSettings.headers.token = localStorage.getItem('token');
             $.ajax(getAllSportsSettings).then(function (response) {
+                console.log(response, 'get all sports');
                 store.commit('GET_ALL_SPORTS_SUCCESS', response);
                 resolve(response);
             }).catch(err => {
