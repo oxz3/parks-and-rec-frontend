@@ -57,15 +57,12 @@ export default {
     register: function (store, user) {
 
         console.log('registering new user: ', user);
-
         return new Promise((resolve, reject) => {
 
             let registerSettings = Object.assign({}, registerUserRequest);
             registerSettings.headers.token = localStorage.getItem('token');
             registerSettings.data = JSON.stringify(user);
-
             console.log('new user: ', registerSettings.data);
-
             $.ajax(registerSettings).then(function (resp) {
                 store.commit('REGISTRATION_SUCCESS', resp);
                 resolve(resp)

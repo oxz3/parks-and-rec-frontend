@@ -78,6 +78,12 @@
                                 required
                                 v-model="user.address">
                         </v-text-field>
+
+                        <v-text-field
+                                label="Org Id"
+                                required
+                                v-model="user.orgid">
+                        </v-text-field>
                     </v-flex>
                 </v-layout>
             </div>
