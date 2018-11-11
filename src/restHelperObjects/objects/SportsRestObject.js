@@ -5,7 +5,7 @@ import getSportRequest from '../rest-requests/sports/get-sports-request.json'
 import getSportByNameRequest from '../rest-requests/sports/get-sport-by-name-request.json'
 import deleteSportById from '../rest-requests/sports/delete-sport-request.json'
 import getAllSports from '../rest-requests/sports/getAllsports.json'
-
+import getAllTeams from '../rest-requests/sports/getAllteams.json'
 
 /* eslint-disable no-console */
 /**
@@ -31,6 +31,23 @@ export default {
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
                 reject(err)
+            })
+        })
+    },
+    getAllTeams: function (store) {
+        return new Promise((resolve, reject) => {
+            store.commit('AUTH_REQUEST', 'getAllTeams');
+            let getAllTeamsSettings = Object.assign({}, getAllTeams);
+            getAllTeamsSettings.headers.token = localStorage.getItem('token');
+            $.ajax(getAllTeamsSettings).then(function (response) {
+              console.log("Hello");
+              console.log(response, 'get all teams');
+              store.commit('GET_ALL_TEAMS_SUCCESS', response);
+              resolve(response);
+            }).catch(err => {
+              console.log("Hello world")
+              store.commit('AUTH_ERROR', err);
+              reject(err)
             })
         })
     },

@@ -324,6 +324,9 @@ export const store = new Vuex.Store({
         getAllSports(context) {
             return sportsObject.getAllSports(context);
         },
+        getAllTeams(context) {
+            return sportsObject.getAllTeams(context);
+        },
         getSportByName(context, sport) {
             return sportsObject.getSportByName(context, sport);
         },
@@ -354,8 +357,5 @@ export const store = new Vuex.Store({
         addLeagueToSportList(context, payload) {
             context.commit("ADD_LEAGUE_TO_SPORT_LIST", payload);
         }
-
     }
-
-
 });

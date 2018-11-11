@@ -1,0 +1,12 @@
+{
+  "async": true,
+  "crossDomain": true,
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/getAllTeams",
+  "method": "GET",
+  "headers": {
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "postman-token": "e036ef72-46dd-611c-2615-410e50700afd",
+    "token": "c13aa503-0be0-4770-9975-99589692eaa6"
+  }
+}
