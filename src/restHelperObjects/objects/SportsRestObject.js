@@ -19,7 +19,7 @@ export default {
      * @param sport sport who logs in
      * @returns {Promise}
      */
-    getAllSports :function (store) {
+    getAllSports: function (store) {
         return new Promise((resolve, reject) => {
             store.commit('AUTH_REQUEST', 'getAllSports');
             let getAllSportsSettings = Object.assign({}, getAllSports);
@@ -40,14 +40,14 @@ export default {
             let getAllTeamsSettings = Object.assign({}, getAllTeams);
             getAllTeamsSettings.headers.token = localStorage.getItem('token');
             $.ajax(getAllTeamsSettings).then(function (response) {
-              console.log("Hello");
-              console.log(response, 'get all teams');
-              store.commit('GET_ALL_TEAMS_SUCCESS', response);
-              resolve(response);
+                console.log("Hello");
+                console.log(response, 'get all teams');
+                store.commit('GET_ALL_TEAMS_SUCCESS', response);
+                resolve(response);
             }).catch(err => {
-              console.log("Hello world")
-              store.commit('AUTH_ERROR', err);
-              reject(err)
+                console.log("Hello world")
+                store.commit('AUTH_ERROR', err);
+                reject(err)
             })
         })
     },
@@ -123,7 +123,7 @@ export default {
             request.url = request.url;
             $.ajax(request).then(function (response) {
                 resolve(response);
-               // store.commit('GET_SPORT_BY_NAME_SUCCESS', response);
+                // store.commit('GET_SPORT_BY_NAME_SUCCESS', response);
             }).catch(err => {
                 store.commit('AUTH_ERROR', err);
                 reject(err)
@@ -135,15 +135,15 @@ export default {
             store.commit('AUTH_REQUEST', 'deletingSport');
             let request = Object.assign({}, deleteSportById);
             request.headers.token = localStorage.getItem('token');
-            let param='?id='+sport.id;
-             request.url=request.url+param;
+            let param = '?id=' + sport.id;
+            request.url = request.url + param;
             //request.url='http://localhost:8081/parksrec/services/v1/deleteSport'+param;
             $.ajax(request).then(function (response) {
                 resolve(response);
                 store.commit('DELETE_SPORTS_SUCCESS', response);
             }).catch(err => {
-                store.commit('AUTH_ERROR', err);
-                reject(err)
+                //store.commit('AUTH_ERROR', err);
+                //reject(err)
             })
         })
 

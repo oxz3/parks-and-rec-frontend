@@ -159,6 +159,7 @@ export const store = new Vuex.Store({
             router.push("/main");
         },
         LEAGUE_CREATE_SUCCESS(state, payload) {
+            console.log('leagues? ', state.leagues);
             state.settings.newLeague = payload.leagueName;
             state.leagues.push(payload);
             state.createLeague = false;
@@ -184,6 +185,7 @@ export const store = new Vuex.Store({
         },
          DELETE_LEAGUES_SUCCESS(state, payload) {
             state.leagues = payload;
+            state.status = 'deleteLeagueSuccess';
         },
         //Sports
         GET_SPORTS_SUCCESS(state, payload) {
@@ -208,6 +210,7 @@ export const store = new Vuex.Store({
         },
         DELETE_SPORTS_SUCCESS(state, payload) {
             state.userSports = payload;
+            state.status = 'deleteSportSuccess';
         },
         GET_ALL_SPORTS_SUCCESS(state, payload) {
             state.userSports = payload;
