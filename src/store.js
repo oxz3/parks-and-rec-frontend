@@ -213,6 +213,9 @@ export const store = new Vuex.Store({
         GET_ALL_SPORTS_SUCCESS(state, payload) {
             state.userSports = payload;
         },
+        GET_ALL_TEAMS_SUCCESS(state, payload) {
+            state.teams = payload;
+        },
         SPORT_CREATE_SUCCESS(state, payload) {
             state.settings.newSport = payload.name;
             state.sports.push(payload);
@@ -325,6 +328,9 @@ export const store = new Vuex.Store({
         getAllSports(context) {
             return sportsObject.getAllSports(context);
         },
+        getAllTeams(context, leagueId) {
+            return sportsObject.getAllTeams(context, leagueId);
+        },
         getSportByName(context, sport) {
             return sportsObject.getSportByName(context, sport);
         },
@@ -355,8 +361,5 @@ export const store = new Vuex.Store({
         addLeagueToSportList(context, payload) {
             context.commit("ADD_LEAGUE_TO_SPORT_LIST", payload);
         }
-
     }
-
-
 });

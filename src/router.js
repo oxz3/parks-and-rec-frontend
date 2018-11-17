@@ -5,6 +5,7 @@ import Main from './views/Main.vue'
 import Logon from './views/Logon.vue'
 import Leagues from './views/Leagues.vue'
 import Sports from './views/Sports.vue'
+import Teams from './views/Teams.vue'
 
 Vue.use(Router);
 
@@ -36,6 +37,16 @@ let router = new Router({
             path: '/sports',
             name: 'sports',
             component: Sports
+        },
+        {
+            path: '/home',
+            name: 'home',
+            component: Home,
+        },
+        {
+            path: '/leagues/:id/teams',
+            name: 'teams',
+            component: Teams
         }
     ]
 });
