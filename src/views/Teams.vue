@@ -24,7 +24,17 @@
                           </div>
 
                           <div v-if="teams" class="content">
-                            Teams loaded
+                            <v-list-group
+                                    v-for="team in teams"
+                                    no-action>
+                                <v-list-tile slot="activator">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{ team.teamName }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{team.description}}
+                                        </v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </v-list-group>
                           </div>
                         </v-list>
                     </v-card>
@@ -58,11 +68,14 @@
       },
       methods: {
         fetchData () {
-          this.error = this.teams = null
-          this.loading = true
+          this.error = this.teams = null;
+          this.loading = true;
           // replace `getteams` with your data fetching util / API wrapper
-          this.$store.dispatch("getAllTeams").then(() => {
-            this.loading = false
+          var leagueId = this.$route.params.id;
+          var that = this;
+          this.$store.dispatch("getAllTeams", leagueId).then(() => {
+            that.loading = false;
+            that.teams = this.$store.state.teams;
           })
         }
       }

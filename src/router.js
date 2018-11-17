@@ -44,7 +44,7 @@ let router = new Router({
             component: Home,
         },
         {
-            path: '/teams',
+            path: '/leagues/:id/teams',
             name: 'teams',
             component: Teams
         }

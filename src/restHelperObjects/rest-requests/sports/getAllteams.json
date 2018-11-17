@@ -1,7 +1,7 @@
 {
   "async": true,
   "crossDomain": true,
-  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/getAllTeams",
+  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/getAllTeams?leagueId=",
   "method": "GET",
   "headers": {
     "cache-control": "no-cache",

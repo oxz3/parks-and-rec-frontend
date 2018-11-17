@@ -34,11 +34,12 @@ export default {
             })
         })
     },
-    getAllTeams: function (store) {
+    getAllTeams: function (store, leagueId) {
         return new Promise((resolve, reject) => {
             store.commit('AUTH_REQUEST', 'getAllTeams');
             let getAllTeamsSettings = Object.assign({}, getAllTeams);
             getAllTeamsSettings.headers.token = localStorage.getItem('token');
+            getAllTeamsSettings.url = getAllTeamsSettings.url + leagueId
             $.ajax(getAllTeamsSettings).then(function (response) {
               console.log("Hello");
               console.log(response, 'get all teams');
