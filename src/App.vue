@@ -89,6 +89,22 @@
                 Successfully updated sport: {{settings.updatedSport}}
             </v-snackbar>
 
+            <!--show if sport is deleted successfully-->
+            <v-snackbar
+                    v-model="authStatus"
+                    top
+                    v-if="authStatus == 'deleteSportSuccess'">
+                Successfully deleted sport
+            </v-snackbar>
+
+            <!--show if sport is deleted successfully-->
+            <v-snackbar
+                    v-model="authStatus"
+                    top
+                    v-if="authStatus == 'deleteLeagueSuccess'">
+                Successfully deleted league
+            </v-snackbar>
+
             <!--if use is logged in-->
             <v-btn flat color="primary" v-if="settings.token != null" @click="logout">LOGOUT</v-btn>
             <!--go to logon screen-->

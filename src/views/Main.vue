@@ -81,7 +81,9 @@
                                         :key="league.leagueId"
                                         @click="">
                                     <v-list-tile-content>
-                                      <v-list-tile-title @click=""><router-link v-bind:to="'/leagues/' + league.leagueId + '/teams'">{{ league.description }}</router-link></v-list-tile-title>
+                                        <v-list-tile-title @click="">{{ league.leagueName }}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{league.description}}
+                                        </v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action v-if="settings.user.rolename != 'User'">
                                         <v-btn icon @click="updateLeague(league, sport)">
@@ -173,7 +175,7 @@
             updateSport(sport) {
                 this.$store.dispatch("openUpdateSport", sport);
             },
-            deleteSport: function (sport) {
+            deleteSport: function (sport) {;
                 this.$store.dispatch("deleteSport", sport).then(function (result) {
                     $store.dispatch('getAllSports');
                     router.push('/main');

@@ -14,7 +14,7 @@
             <v-btn
                     color="red"
                     flat
-                    @click="closeModal">
+                    @click="deleteItem">
                 DELETE
             </v-btn>
             <v-btn
@@ -43,6 +43,22 @@
             closeModal: function (event) {
                 console.log('closing', event);
                 this.$emit('close-delete-modal', false);
+            },
+            deleteItem: function (object) {
+                console.log(object);
+//                if (object.leagueId) {
+//                    //delete league
+//                    this.$store.dispatch("deleteLeague", league);
+//                    this.$store.dispatch("getAllSports")
+//                }
+//                else {
+//                    //delete sport
+//                    this.$store.dispatch("deleteSport", sport).then(function (result) {
+//                        $store.dispatch('getAllSports');
+//                        router.push('/main');
+//
+//                    });
+//                }
             }
         },
         filters: {

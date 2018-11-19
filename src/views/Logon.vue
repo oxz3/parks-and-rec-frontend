@@ -201,8 +201,8 @@
             isAdmin: false,
             valid: false,
             user: {
-                username: "",
-                password: ""
+                username: "Admin11153",
+                password: "password"
             },
             roles: [
                 {key: "Admin", value: "Admin"},
