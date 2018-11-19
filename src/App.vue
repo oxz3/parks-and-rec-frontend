@@ -96,8 +96,13 @@
                 LOGON
             </v-btn>
             <v-btn flat color="primary"
-                   v-if="settings.token != null && (settings.user.rolename == 'admin' || settings.user.rolename == 'Admin')"
+                   v-if="settings.token != null && (settings.user.rolename == 'admin' || settings.user.rolename == 'Admin') && this.$router.currentRoute.name != 'logon'"
                    @click="openRegisterForm">
+                REGISTER
+            </v-btn>
+            <v-btn flat color="primary"
+                   v-if="settings.token != null && (settings.user.rolename == 'admin' || settings.user.rolename == 'Admin') &&
+this.$router.currentRoute.name == 'logon'">
                 REGISTER
             </v-btn>
             <v-btn flat color="primary" @click="homePage">
@@ -111,6 +116,7 @@
                     @click.stop="settingsMenuOpen = !settingsMenuOpen"
                     v-if="this.$router.currentRoute.name != 'logon'">
                 <v-icon>menu</v-icon>
+                !logon
             </v-btn>
             <!--placehoolder menu button if logon form is open so user can't access settings-->
             <v-btn
@@ -118,6 +124,7 @@
                     flat
                     v-if="this.$router.currentRoute.name == 'logon'">
                 <v-icon>menu</v-icon>
+                logon
             </v-btn>
         </v-toolbar>
 
@@ -130,6 +137,7 @@
 
         <!--menu that slides out with options-->
         <v-navigation-drawer
+                v-if="this.$router.currentRoute.name != 'logon'"
                 v-model="settingsMenuOpen"
                 absolute
                 temporary
@@ -137,6 +145,7 @@
                 right>
             <!--Menu component-->
             <settings-menu
+                    v-if="this.$router.currentRoute.name != 'logon'"
                     v-model="settingsMenuOpen"
                     @close-settings-menu="closeSettingsMenu">
             </settings-menu>
