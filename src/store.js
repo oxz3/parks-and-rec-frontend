@@ -82,10 +82,12 @@ export const store = new Vuex.Store({
         EDIT_USER: (state, payload) => {
             state.settings.user = payload;
             state.settings.editUser = true;
+            state.settings.registerUser = false;
             router.push('/logon')
         },
         REGISTER(state) {
             state.settings.registerUser = true;
+            state.settings.updatedUser = false;
             state.user = state.templateUser;
             state.newRegisteredUser = {};
             router.push('/logon')
