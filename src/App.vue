@@ -181,6 +181,8 @@
                 this.$store.dispatch('logout')
                     .then(() => {
                         //after logout, send the user to the login page for now
+                        this.$store.state.settings.registerUser=false
+                        this.$store.state.settings.editUser=false
                         this.$router.push('/logon');
 
                     })

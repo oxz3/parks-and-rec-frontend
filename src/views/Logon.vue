@@ -12,8 +12,10 @@
         </v-card-title>
         <!--@submit.prevent associates login to the form-->
         <form class="ma-3" @submit.prevent="login" v-model="valid" ref="form">
+            <!--
             <v-checkbox label="New to Parks and Rec?" v-model="settings.registerUser"
                         v-if="settings.registerUser && !settings.editUser"></v-checkbox>
+                        -->
             <!--Register User-->
             <div v-if="settings.registerUser && !settings.editUser">
                 <v-layout pb-3>
