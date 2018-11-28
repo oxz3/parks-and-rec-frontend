@@ -116,7 +116,6 @@ this.$router.currentRoute.name == 'logon'">
                     @click.stop="settingsMenuOpen = !settingsMenuOpen"
                     v-if="this.$router.currentRoute.name != 'logon'">
                 <v-icon>menu</v-icon>
-                !logon
             </v-btn>
             <!--placehoolder menu button if logon form is open so user can't access settings-->
             <v-btn
@@ -124,7 +123,6 @@ this.$router.currentRoute.name == 'logon'">
                     flat
                     v-if="this.$router.currentRoute.name == 'logon'">
                 <v-icon>menu</v-icon>
-                logon
             </v-btn>
         </v-toolbar>
 
