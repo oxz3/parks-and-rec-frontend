@@ -79,6 +79,7 @@
                         </v-text-field>
 
                         <v-text-field
+                                v-if="user.rolename != 'User'"
                                 label="Org Id"
                                 required
                                 v-model="user.orgid">
