@@ -17,7 +17,8 @@
                         v-if="settings.registerUser && !settings.editUser"></v-checkbox>
                         -->
             <!--Register User-->
-            <div v-if="settings.registerUser && !settings.editUser">
+            
+            <div v-if="settings.registerUser">
                 <v-layout pb-3>
                     <v-flex pr-3>
                         <v-text-field
@@ -102,7 +103,7 @@
                 </v-text-field>
             </div>
             <!--Update User-->
-            <div v-if="settings.editUser && !settings.registerUser">
+            <div v-if="settings.editUser">
                 <v-layout pb-3>
                     <v-flex pr-3>
                         <v-text-field

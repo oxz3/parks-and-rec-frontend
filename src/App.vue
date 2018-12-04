@@ -96,20 +96,22 @@
                 LOGON
             </v-btn>
             <v-btn flat color="primary"
-                   v-if="settings.token != null && (settings.user.rolename == 'admin' || settings.user.rolename == 'Admin') && this.$router.currentRoute.name != 'logon'"
+                   v-if="settings.token != null"
                    @click="openRegisterForm">
                 REGISTER
             </v-btn>
-            <v-btn flat color="primary"
-                   v-if="settings.token != null && (settings.user.rolename == 'admin' || settings.user.rolename == 'Admin') &&
-this.$router.currentRoute.name == 'logon'">
-                REGISTER
-            </v-btn>
-            <v-btn flat color="primary" @click="homePage">
+            <v-btn flat color="primary"  v-if="settings.token != null" @click="homePage">
                 <v-icon>home</v-icon>
             </v-btn>
 
+            <v-btn flat color="primary"
+                   v-if="settings.token != null"
+                   @click="openEditUserForm(settings.user)">
+                EDIT USER
+            </v-btn>
+
             <!--toggle menu-->
+            <!--
             <v-btn
                     color="primary"
                     flat
@@ -117,13 +119,13 @@ this.$router.currentRoute.name == 'logon'">
                     v-if="this.$router.currentRoute.name != 'logon'">
                 <v-icon>menu</v-icon>
             </v-btn>
-            <!--placehoolder menu button if logon form is open so user can't access settings-->
             <v-btn
                     color="primary"
                     flat
                     v-if="this.$router.currentRoute.name == 'logon'">
                 <v-icon>menu</v-icon>
             </v-btn>
+            -->
         </v-toolbar>
 
         <transition
@@ -134,6 +136,7 @@ this.$router.currentRoute.name == 'logon'">
         </transition>
 
         <!--menu that slides out with options-->
+        <!--
         <v-navigation-drawer
                 v-if="this.$router.currentRoute.name != 'logon'"
                 v-model="settingsMenuOpen"
@@ -141,13 +144,14 @@ this.$router.currentRoute.name == 'logon'">
                 temporary
                 height="50%"
                 right>
-            <!--Menu component-->
+           
             <settings-menu
                     v-if="this.$router.currentRoute.name != 'logon'"
                     v-model="settingsMenuOpen"
                     @close-settings-menu="closeSettingsMenu">
             </settings-menu>
         </v-navigation-drawer>
+        -->
 
         <v-footer app>
             <span>&copy; SWENG 894 Group 7 2018</span>
@@ -195,15 +199,26 @@ this.$router.currentRoute.name == 'logon'">
                     })
             },
             openRegisterForm: function () {
+                 this.$store.state.settings.registerUser=true
+                 this.$store.state.settings.editUser=false
                 this.$store.dispatch('openRegisterForm');
             },
             homePage: function () {
+                 this.$store.state.settings.registerUser=false
+                 this.$store.state.settings.editUser=false
+                 this.$router.push('/main')
+                 /*
                 if (this.$store.state.settings.token != null) {
                     this.$router.push('/main')
                 } else {
                     this.$router.push('/logon')
-                }
+                }*/
 
+            },
+             openEditUserForm: function (user) {
+                  this.$store.state.settings.registerUser=false
+                 this.$store.state.settings.editUser=true
+                this.$store.dispatch("editUser", user);
             }
         }
     }
