@@ -1,7 +1,7 @@
 {
   "async": true,
   "crossDomain": true,
-  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/getSportByName?sportName=Test%201029&orgId=1",
+  "url": "http://localhost:8080/parksrec/services/v1/getSportByName?sportName=Test%201029&orgId=1",
   "method": "GET",
   "headers": {
     "cache-control": "no-cache",
