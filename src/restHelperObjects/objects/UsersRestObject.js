@@ -62,6 +62,7 @@ export default {
             let registerSettings = Object.assign({}, registerUserRequest);
             registerSettings.headers.token = localStorage.getItem('token');
             registerSettings.data = JSON.stringify(user);
+            alert(registerSettings.headers.token)
             console.log('new user: ', registerSettings.data);
             $.ajax(registerSettings).then(function (resp) {
                 store.commit('REGISTRATION_SUCCESS', resp);

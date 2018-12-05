@@ -1,7 +1,7 @@
 {
   "async": true,
   "crossDomain": true,
-  "url": "https://parks-and-rec-app.herokuapp.com/parksrec/services/v1/deleteSport",
+  "url": "http://localhost:8080/parksrec/services/v1/deleteSport",
   "method": "DELETE",
   "headers": {
     "cache-control": "no-cache",
