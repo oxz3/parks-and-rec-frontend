@@ -107,7 +107,7 @@
             <v-btn flat color="primary"
                    v-if="settings.token != null"
                    @click="openEditUserForm(settings.user)">
-                EDIT USER
+                 <v-icon dark>build</v-icon>
             </v-btn>
 
             <!--toggle menu-->
