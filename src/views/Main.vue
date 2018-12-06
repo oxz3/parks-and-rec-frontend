@@ -81,14 +81,11 @@
                                         v-for="league in sport.leagues"
                                         :key="league.leagueId"
                                         @click="">
-                                    <v-list-tile-content>
-                                      <v-list-tile-title @click=""><router-link v-bind:to="'/leagues/' + league.leagueId + '/teams'">{{ league.description }}</router-link></v-list-tile-title>
-                                        <v-list-tile-sub-title>{{league.description}}
-                                        </v-list-tile-sub-title>
-                                      <!--<v-list-tile-title @click=""><router-link v-bind:to="'/leagues/' + league.leagueId + '/teams'">{{ league.description }}</router-link></v-list-tile-title>-->
-                                        <v-list-tile-title>{{ league.description }}</v-list-tile-title>
-
-                                    </v-list-tile-content>
+                            <v-list-tile-content>
+                                    <v-list-tile-title>{{ league.leagueName }}</v-list-tile-title>
+                                     <v-list-tile-sub-title>{{league.description}}
+                                      </v-list-tile-sub-title>
+                                </v-list-tile-content>
                                     <v-list-tile-action v-if="settings.user.rolename != 'User'">
                                         <v-btn icon @click="updateLeague(league, sport)">
                                             <v-icon>
