@@ -9,10 +9,11 @@
                     Edit User</h3>
             </div>
         </v-card-title>
+        <!--
         <v-card>
             <img alt="Vue logo"  class="ma-3" height="200px" width="900px" src="../assets/logo.jpg">
         </v-card>
-
+        -->
         <!--@submit.prevent associates login to the form-->
         <form class="ma-3" @submit.prevent="login" v-model="valid" ref="form">
             <!--
